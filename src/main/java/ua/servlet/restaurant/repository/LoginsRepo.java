@@ -58,8 +58,8 @@ public class LoginsRepo {
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 user = Logins.builder()
-                        .setId(rs.getLong(1))
-                        .setLogin(login)
+                        .id(rs.getLong(1))
+                        .login(login)
                         .build();
             }
             rs.close();
@@ -80,9 +80,9 @@ public class LoginsRepo {
             rs = pstmt.executeQuery();
             while (rs.next()) {
                 list.add(Logins.builder()
-                        .setId(rs.getLong(1))
-                        .setLogin(rs.getString(3))
-                        .setEmail(rs.getString(2))
+                        .id(rs.getLong(1))
+                        .login(rs.getString(3))
+                        .email(rs.getString(2))
                         .build());
             }
             rs.close();

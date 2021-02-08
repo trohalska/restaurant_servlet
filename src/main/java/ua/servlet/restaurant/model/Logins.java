@@ -104,23 +104,23 @@ public class Logins {
         private Builder() {
             // private constructor
         }
-        public Builder setId(Long userId) {
+        public Builder id(Long userId) {
             Logins.this.id = userId;
             return this;
         }
-        public Builder setLogin(String login) {
+        public Builder login(String login) {
             Logins.this.login = login;
             return this;
         }
-        public Builder setPassword(String password) {
+        public Builder password(String password) {
             Logins.this.password = password;
             return this;
         }
-        public Builder setEmail(String email) {
+        public Builder email(String email) {
             Logins.this.email = email;
             return this;
         }
-        public Builder setRole(RoleType role) {
+        public Builder role(RoleType role) {
             Logins.this.role = role;
             return this;
         }

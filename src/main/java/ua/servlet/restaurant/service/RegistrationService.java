@@ -1,5 +1,7 @@
 package ua.servlet.restaurant.service;
 
+import ua.servlet.restaurant.dao.DaoFactory;
+import ua.servlet.restaurant.dao.LoginsDao;
 import ua.servlet.restaurant.model.RoleType;
 import ua.servlet.restaurant.repository.LoginsRepo;
 import ua.servlet.restaurant.model.Logins;
@@ -23,9 +25,26 @@ public class RegistrationService {
         System.err.println(loginsRepo.get("ww"));
     }
 
-    public List<Logins> getAll() {
-        return loginsRepo.getAll();
+//    public List<Logins> getAll() {
+//        return loginsRepo.getAll();
+//    }
+
+    DaoFactory daoFactory = DaoFactory.getInstance();
+
+    public List<Logins> getAll(){
+        try (LoginsDao dao = daoFactory.createLoginsDao()) {
+            return dao.findAll();
+        }
     }
+
+
+//    public Optional<Teacher> login(String name){
+//        Optional<Teacher> result; //= Optional.empty();
+//        try(TeacherDao teacherDao = daoFactory.createTeacherDao()){
+//            result = teacherDao.findByName(name);
+//        }
+//        return result;
+//    }
 
 
 }

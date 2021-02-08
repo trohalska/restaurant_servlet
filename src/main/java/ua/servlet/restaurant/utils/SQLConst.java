@@ -3,7 +3,7 @@ package ua.servlet.restaurant.utils;
 public interface SQLConst {
 //     String PROP_FILE = "application.properties";
      String PROP_FILE = "app.properties";
-     String CONN_PROP = "connection.url";
+     String CONN_PROP = "connection.url.full";
 
      String ID = "id";
      String USER_LOGIN = "login";
