@@ -1,6 +1,7 @@
 package ua.servlet.restaurant.dao.impl;
 
 import ua.servlet.restaurant.dao.DaoFactory;
+import ua.servlet.restaurant.dao.DishesDao;
 import ua.servlet.restaurant.dao.LoginsDao;
 
 import javax.sql.DataSource;
@@ -15,14 +16,11 @@ public class JDBCDaoFactory extends DaoFactory {
         return new JDBCLoginsDao(getConnection());
     }
 
-//    @Override
-//    public TeacherDao createTeacherDao() {
-//        return new JDBCTeacherDao(getConnection());
-//    }
-//    @Override
-//    public StudentDao createStudentDao() {
-//        return new JDBCStudentDao(getConnection());
-//    }
+    @Override
+    public DishesDao createDishesDao() {
+        return new JDBCDishesDao(getConnection());
+    }
+
 
     private Connection getConnection(){
         try {

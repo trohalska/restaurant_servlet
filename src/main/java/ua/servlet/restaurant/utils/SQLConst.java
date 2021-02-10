@@ -11,7 +11,6 @@ public interface SQLConst {
 
 
      String SQL_INSERT_TEAM = "INSERT INTO teams (name) VALUES (?)";
-
      String SQL_GET_TEAM = "SELECT id FROM teams WHERE name=?";
      String SQL_GET_TEAMS_BY_USER = "SELECT teams.id, teams.name FROM users_teams RIGHT JOIN teams " +
             "ON users_teams.team_id=teams.id WHERE user_id=?";

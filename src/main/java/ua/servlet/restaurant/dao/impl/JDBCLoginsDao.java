@@ -1,10 +1,9 @@
 package ua.servlet.restaurant.dao.impl;
 
-import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.LoginsDao;
 import ua.servlet.restaurant.dao.mapper.LoginsMapper;
-import ua.servlet.restaurant.model.Logins;
-import ua.servlet.restaurant.model.RoleType;
+import ua.servlet.restaurant.dao.entity.Logins;
+import ua.servlet.restaurant.dao.entity.RoleType;
 import ua.servlet.restaurant.utils.Prop;
 
 import java.sql.*;
@@ -33,6 +32,7 @@ public class JDBCLoginsDao implements LoginsDao {
             pstmt.setString(k++, RoleType.ROLE_CUSTOMER.name());
             pstmt.setTimestamp(k, Timestamp.valueOf(LocalDateTime.now()));
 
+            connection.setAutoCommit(false);
             if (pstmt.executeUpdate() > 0) {
                 rs = pstmt.getGeneratedKeys();
                 if (rs.next()) {
@@ -40,10 +40,18 @@ public class JDBCLoginsDao implements LoginsDao {
                 }
                 rs.close();
             }
+            connection.commit();
             result = Optional.of(entity);
         } catch (SQLException ex) {
             ex.printStackTrace();
             System.err.println(Prop.getDBProperty("create.user.dbe") + entity.getLogin());
+            try {
+                System.err.println("Transaction is being rolled back");
+                connection.rollback();
+            } catch (SQLException e) {
+                // TODO logger
+                System.err.println("Error in transaction rollback");
+            }
         }
         return result;
     }

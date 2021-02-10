@@ -1,7 +1,7 @@
 package ua.servlet.restaurant.command;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ua.servlet.restaurant.model.Logins;
+import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.service.LoginsService;
 import ua.servlet.restaurant.utils.ParseJsonBody;
 import ua.servlet.restaurant.utils.Prop;
@@ -33,7 +33,7 @@ public class RegistrationController implements Command {
 //            e.toString();
             // TODO error msg in request
             request.setAttribute("errorMsg", "User with same login exists!");
-            System.out.println("User with same login exists!");
+            logger.error("User with same login exists!");
         }
         return "/registration.jsp";
     }

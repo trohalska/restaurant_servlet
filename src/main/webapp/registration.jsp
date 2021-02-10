@@ -71,7 +71,7 @@
             <div class="frame">
                 <form id="formSignUp" class="form-signup">
 
-                    <label id="errorMsg" style="color: #ff0000">${requestScope.errorMsg}</label>
+<%--                    <label id="errorMsg" style="color: #ff0000">${requestScope.errorMsg}</label>--%>
 
 <%--                    <input class="form-styling" style="display: none" type="text" placeholder="" value="not verificated"/>--%>
 

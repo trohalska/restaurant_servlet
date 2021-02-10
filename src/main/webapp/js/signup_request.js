@@ -58,8 +58,8 @@ angular.module("get_form", [])
                 // if (errorMsg !== undefined) {
                 //     alert(errorMsg);
                 // } else {
-                //     alert('Success!')
-                //     location.replace('/restaurant/app/login');
+                    alert('Success!')
+                    location.replace('/restaurant/app/login');
                 // }
             }, function (response) {
                 alertErrors(response);

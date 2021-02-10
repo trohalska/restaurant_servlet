@@ -21,9 +21,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
 
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<%--    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>--%>
 
-    <script src="${pageContext.request.contextPath}/js/general.js"></script>
+<%--    <script src="${pageContext.request.contextPath}/js/general.js"></script>--%>
 <%--    <script src="${pageContext.request.contextPath}/js/main_request.js"></script>--%>
 
 </head>
@@ -81,82 +81,14 @@
         <a><h2><fmt:message key="main.header"/></h2></a>
     </header>
 
+<%--    <br>--%>
+<%--    <a class="button" href="${pageContext.request.contextPath}/app/exception">Exception</a>--%>
     <br>
-    <a class="button" href="${pageContext.request.contextPath}/app/exception">Exception</a>
     <br>
     <a class="button" href="${pageContext.request.contextPath}/app/manager/getAll">Watch all users</a>
-
-
-    <section class="section4"
-             ng-app="get_form" ng-controller="GetController" data-ng-init="getItems()">
-        <div class="page_head">
-<%--            <div>--%>
-<%--                <h2 th:text="#{main.menu}"></h2>--%>
-<%--            </div>--%>
-
-<%--            <div ng-model="categories">--%>
-<%--                <label for="categories_filter"></label>--%>
-<%--                <select id="categories_filter" class="form-styling">--%>
-<%--                    <option th:text="#{menu.filter.name}"></option>--%>
-<%--                    <option value="0" th:text="#{menu.filter.all}"></option>--%>
-<%--                    <option ng-repeat="c in categories" value="{{c.id}}">{{c.category}}</option>--%>
-<%--                </select>--%>
-<%--                <script type="text/javascript">--%>
-<%--                    $(document).ready(function() {--%>
-<%--                        $("#categories_filter").change(function () {--%>
-<%--                            category = $('#categories_filter').val();--%>
-<%--                            page = 1;--%>
-<%--                            replace();--%>
-<%--                        });--%>
-<%--                    });--%>
-<%--                </script>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-
-<%--        <div id="dishes_block">--%>
-<%--            <div>--%>
-<%--                <table id="table" ng-model="dishes">--%>
-<%--                    <tr>--%>
-<%--                        <th columns="0" onclick="sorting('id')">№</th>--%>
-<%--                        <th columns="1" onclick="sorting('name', this)" th:text="#{menu.dish}"></th>--%>
-<%--                        <th columns="2" onclick="sorting('price')" th:text="#{menu.price}"></th>--%>
-<%--                        <th columns="3" onclick="sorting('categories')" th:text="#{menu.category}"></th>--%>
-<%--                    </tr>--%>
-<%--                    <tbody id="dishes_table">--%>
-<%--                    <tr ng-repeat="i in dishes" class="rows" checked=false>--%>
-<%--                        <td>{{i.id}}</td>--%>
-<%--                        <td>{{i.name}}</td>--%>
-<%--                        <td>{{i.price}}</td>--%>
-<%--                        <td>{{i.category}}</td>--%>
-<%--                    </tr>--%>
-<%--                    </tbody>--%>
-<%--                </table>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-
-<%--        <div class="pages" ng-model="pageable">--%>
-<%--            <div th:text="#{page.current} + ' {{pageable.page}}'"></div>--%>
-
-<%--            <div class="pagination">--%>
-<%--                <a ng-repeat="x in [].constructor(pageable.totalPages) track by $index"--%>
-<%--                   class="abutton"--%>
-<%--                   href="/?page={{$index+1}}&sort={{pageable.sortField}}&direct={{pageable.sortDirection}}&category={{pageable.categoryId}}">{{ $index+1 }}</a>--%>
-<%--            </div>--%>
-
-<%--            <div th:text="#{page.total} + ' {{pageable.totalPages}}'"></div>--%>
-<%--        </div>--%>
-
-<%--        <div class="page_head" sec:authorize="isAuthenticated()">--%>
-<%--            <div style="margin: 20px 0;">--%>
-<%--                <label for="addDish" th:text="#{main.addDishId}"></label>--%>
-<%--                <input id="addDish" ng-model="dishId"/>--%>
-<%--            </div>--%>
-<%--            <div>--%>
-<%--                <a class="button" ng-click="postdata(dishId)" th:text="#{button.add}"></a>--%>
-<%--            </div>--%>
-        </div>
-
-    </section>
+    <br>
+    <br>
+    <a class="button" href="${pageContext.request.contextPath}/app/menu">MENU</a>
 
 </div>
 </body>

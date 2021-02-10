@@ -1,4 +1,4 @@
-package ua.servlet.restaurant.model;
+package ua.servlet.restaurant.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -62,7 +62,6 @@ public class Logins {
         this.role = role;
     }
 
-    // TODO how set time
     public LocalDateTime getTime() {
         return time;
     }

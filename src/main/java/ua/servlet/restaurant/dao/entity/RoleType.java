@@ -1,4 +1,4 @@
-package ua.servlet.restaurant.model;
+package ua.servlet.restaurant.dao.entity;
 
 public enum RoleType {
     ROLE_ADMIN,

@@ -1,7 +1,7 @@
 package ua.servlet.restaurant.dao.mapper;
 
-import ua.servlet.restaurant.model.Logins;
-import ua.servlet.restaurant.model.RoleType;
+import ua.servlet.restaurant.dao.entity.Logins;
+import ua.servlet.restaurant.dao.entity.RoleType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

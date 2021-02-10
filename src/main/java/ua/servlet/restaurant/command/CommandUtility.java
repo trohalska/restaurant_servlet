@@ -1,6 +1,6 @@
 package ua.servlet.restaurant.command;
 
-import ua.servlet.restaurant.model.RoleType;
+import ua.servlet.restaurant.dao.entity.RoleType;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;

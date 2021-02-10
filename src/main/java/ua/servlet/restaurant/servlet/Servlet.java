@@ -21,9 +21,11 @@ public class Servlet extends HttpServlet {
         commands.put("logout", new LogOutController());
         commands.put("login", new LoginController());
         commands.put("registration", new RegistrationController());
+        commands.put("menu", new MainController());
+
         commands.put("exception" , new ExceptionController());
 
-        commands.put("manager/getAll", new GetAllLogins());
+        commands.put("getAll", new GetAllLogins());
     }
 
     public void doGet(HttpServletRequest request,
@@ -41,19 +43,15 @@ public class Servlet extends HttpServlet {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
-
         System.out.println(path);
-        path = path.replaceAll(".*/app/" , "");  // ".*/app/((manager|customer)/)?"
+        path = path.replaceAll(".*/app/((manager|customer)/)?" , "");  // ".*/app/((manager|customer)/)?"
         System.out.println(path);
-
-//        response.getWriter().print("Hello from servlet");
 
         Command command = commands.getOrDefault(path,
                 (r)->"/index.jsp");
-        System.out.println(command.getClass().getName());
-
         String page = command.execute(request);
 
+        System.out.println(command.getClass().getName());
         System.out.println(request.getServletContext().getAttribute("loggedUsers"));
 
         if (page.contains("redirect:")) {

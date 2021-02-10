@@ -1,8 +1,8 @@
 package ua.servlet.restaurant.command;
 
 import org.mindrot.jbcrypt.BCrypt;
-import ua.servlet.restaurant.model.Logins;
-import ua.servlet.restaurant.model.RoleType;
+import ua.servlet.restaurant.dao.entity.Logins;
+import ua.servlet.restaurant.dao.entity.RoleType;
 import ua.servlet.restaurant.service.LoginsService;
 
 import javax.servlet.http.HttpServletRequest;

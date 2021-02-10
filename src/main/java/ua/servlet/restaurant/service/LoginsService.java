@@ -3,7 +3,7 @@ package ua.servlet.restaurant.service;
 import org.mindrot.jbcrypt.BCrypt;
 import ua.servlet.restaurant.dao.DaoFactory;
 import ua.servlet.restaurant.dao.LoginsDao;
-import ua.servlet.restaurant.model.Logins;
+import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.utils.Prop;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package ua.servlet.restaurant.filters;
 
-import ua.servlet.restaurant.model.Logins;
-import ua.servlet.restaurant.model.RoleType;
+import ua.servlet.restaurant.dao.entity.RoleType;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -45,13 +44,15 @@ public class AuthFilter implements Filter {
                 return;
             }
         }
-
+        // TODO in one if
         // customer access
         if (path.contains("manager") &&
                 session.getAttribute("role").equals(RoleType.ROLE_CUSTOMER)) {
             servletResponse.getWriter().append("AccessDenied! Forbidden page!");
             return;
         }
+
+        // TODO admin (login page, main, registration)
 
         filterChain.doFilter(servletRequest,servletResponse);
 

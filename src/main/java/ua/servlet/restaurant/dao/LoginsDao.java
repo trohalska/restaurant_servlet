@@ -1,6 +1,6 @@
 package ua.servlet.restaurant.dao;
 
-import ua.servlet.restaurant.model.Logins;
+import ua.servlet.restaurant.dao.entity.Logins;
 
 import java.util.Optional;
 
