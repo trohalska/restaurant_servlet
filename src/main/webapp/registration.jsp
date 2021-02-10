@@ -44,7 +44,7 @@
                 $("#locales").change(function () {
                     let selectedOption = $('#locales').val();
                     if (selectedOption !== ''){
-                        window.location.replace('?sessionLocale=' + selectedOption);
+                        window.location.replace('?locale=' + selectedOption);
                     }
                 });
             });

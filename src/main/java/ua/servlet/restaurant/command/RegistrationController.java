@@ -21,6 +21,7 @@ public class RegistrationController implements Command {
 //        String email = request.getParameter("email");
         try {
 //            String json = request.getParameter("data");
+            // TODO validation
             String json = ParseJsonBody.getBody(request);
 //            System.out.println(json);
             Logins logins = new ObjectMapper().readValue(json, Logins.class);
@@ -31,7 +32,7 @@ public class RegistrationController implements Command {
             loginsService.create(logins);
         } catch (Exception e) {
 //            e.toString();
-            // TODO error msg in request
+            // TODO error msg in response
             request.setAttribute("errorMsg", "User with same login exists!");
             logger.error("User with same login exists!");
         }
