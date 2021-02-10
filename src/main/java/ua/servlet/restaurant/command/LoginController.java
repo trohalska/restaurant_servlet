@@ -1,53 +1,49 @@
 package ua.servlet.restaurant.command;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.mindrot.jbcrypt.BCrypt;
+import ua.servlet.restaurant.model.Logins;
+import ua.servlet.restaurant.model.RoleType;
+import ua.servlet.restaurant.service.LoginsService;
 
 import javax.servlet.http.HttpServletRequest;
 
 public class LoginController implements Command {
-    private static final Logger logger = LogManager.getLogger(LoginController.class);
+    private final LoginsService loginsService;
+    public LoginController() {
+        this.loginsService = new LoginsService();
+    }
 
     @Override
     public String execute(HttpServletRequest request) {
-        String name = request.getParameter("name");
-        String pass = request.getParameter("pass");
-        System.out.println(name + " " + pass);
+        String login = request.getParameter("username");
+        String password = request.getParameter("password");
 
-        logger.info(name + " " + pass);
+        System.out.println(login + " " + password);
+        logger.info(login + " " + password);
 
-
-        if ( name == null || name.equals("")
-                || pass == null || pass.equals("") ){
+        if ( login == null || login.equals("") || password == null || password.equals("") ){
             return "/login.jsp";
         }
-        // TODO go to Service
+
+        Logins user = loginsService.findByLogin(login);
+
+        if (BCrypt.checkpw(password, user.getPassword())) {
+            if (CommandUtility.checkUserIsLogged(request, login)) {
+                return "/WEB-INF/error.jsp";
+            }
+            logger.info("User "+ login + " logged successfully.");
+
+            if (user.getRole().equals(RoleType.ROLE_MANAGER)){
+                CommandUtility.setUserRole(request, RoleType.ROLE_MANAGER, login);
+                return "redirect:/app/manager/";
+            } else if(user.getRole().equals(RoleType.ROLE_CUSTOMER)) {
+                CommandUtility.setUserRole(request, RoleType.ROLE_CUSTOMER, login);
+                return "redirect:/app/customer/";
+            }
+        }
+        // TODO set error msg
+        logger.info("Invalid attempt of login user:" + login);
         return "/login.jsp";
     }
-
-//    private TeacherService teacherService ;
-//
-//    public LoginTeacherCommand(TeacherService teacherService) {
-//        this.teacherService = teacherService;
-//    }
-//
-//    @Override
-//    public String execute(HttpServletRequest request) {
-//        String name = request.getParameter("name");
-//        String pass = request.getParameter("pass");
-//        if( name == null || name.equals("") || pass == null || pass.equals("")  ){
-//            return "/login.jsp";
-//        }
-//        Optional<Teacher> teacher = teacherService.login(name);
-//        if( teacher.isPresent() && teacher.get().getPassHash()
-//                == pass.hashCode()){
-//            request.getSession().setAttribute("teacher" , teacher.get());
-//            logger.info("Teacher "+ name+" logged successfully.");
-//            return "/WEB-INF/studentlist.jsp";
-//
-//        }
-//        logger.info("Invalid attempt of login user:'"+ name+"'");
-//        return "/login.jsp";
-//    }
 
 }

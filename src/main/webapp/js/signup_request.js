@@ -51,10 +51,16 @@ angular.module("get_form", [])
                 },
                 data: JSON.stringify(object)
             }).then(function (response) {
-                if (response.data) {
-                    alert('Success')
-                    location.replace('/api/app/login');
-                }
+                // let errorMsg = document.querySelector('#errorMsg').value;
+                // console.log(errorMsg);
+                console.log(response);
+                //
+                // if (errorMsg !== undefined) {
+                //     alert(errorMsg);
+                // } else {
+                //     alert('Success!')
+                //     location.replace('/restaurant/app/login');
+                // }
             }, function (response) {
                 alertErrors(response);
             });

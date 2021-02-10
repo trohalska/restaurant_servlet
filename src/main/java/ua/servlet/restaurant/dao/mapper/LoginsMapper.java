@@ -1,6 +1,7 @@
 package ua.servlet.restaurant.dao.mapper;
 
 import ua.servlet.restaurant.model.Logins;
+import ua.servlet.restaurant.model.RoleType;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ public class LoginsMapper implements ObjectMappers<Logins> {
                 .login(rs.getString("login"))
                 .password(rs.getString("password"))
                 .email(rs.getString("email"))
+                .role(RoleType.valueOf(rs.getString("role")))
                 .build();
     }
 

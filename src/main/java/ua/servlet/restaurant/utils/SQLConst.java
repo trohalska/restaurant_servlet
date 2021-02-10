@@ -1,22 +1,13 @@
 package ua.servlet.restaurant.utils;
 
 public interface SQLConst {
-//     String PROP_FILE = "application.properties";
-     String PROP_FILE = "app.properties";
-     String CONN_PROP = "connection.url.full";
-
      String ID = "id";
      String USER_LOGIN = "login";
      String TEAM_NAME = "name";
 
-     // DBLogins
-     String SQL_INSERT_USER = "INSERT INTO login (login) VALUES (?)";
-     String DBE_INSERT_USER = "Cannot insert user ";
-
-     String SQL_GET_USER = "SELECT id FROM login WHERE login=?";
      String DBE_GET_USER = "Cannot get user ";
 
-     String SQL_GET_All_USERS = "SELECT * FROM login";
+//     String SQL_GET_All_USERS = "SELECT * FROM login";
 
 
      String SQL_INSERT_TEAM = "INSERT INTO teams (name) VALUES (?)";

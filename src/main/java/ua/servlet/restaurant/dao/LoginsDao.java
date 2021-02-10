@@ -2,6 +2,8 @@ package ua.servlet.restaurant.dao;
 
 import ua.servlet.restaurant.model.Logins;
 
+import java.util.Optional;
+
 public interface LoginsDao extends GenericDao<Logins> {
-//    Optional<Teacher> findByName(String name);
+    Optional<Logins> findByLogin(String login);
 }
