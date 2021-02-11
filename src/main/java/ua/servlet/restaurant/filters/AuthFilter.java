@@ -1,5 +1,9 @@
 package ua.servlet.restaurant.filters;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ua.servlet.restaurant.command.Command;
+import ua.servlet.restaurant.command.CommandUtility;
 import ua.servlet.restaurant.dao.entity.RoleType;
 
 import javax.servlet.*;
@@ -13,8 +17,10 @@ import java.io.IOException;
  *      - guest -> access to basic pages
  *      - customer -> access to basic and customer pages
  *      - manager -> access everywhere
+ *      - customer and manager -> cant access to login and registration (till logout)
  */
 public class AuthFilter implements Filter {
+    Logger logger = LogManager.getLogger(AuthFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -25,34 +31,44 @@ public class AuthFilter implements Filter {
                          ServletResponse servletResponse,
                          FilterChain filterChain) throws IOException, ServletException {
 
-        final HttpServletRequest request = (HttpServletRequest) servletRequest;
-        final HttpServletResponse response = (HttpServletResponse) servletResponse;
-
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpSession session = request.getSession();
         ServletContext context = servletRequest.getServletContext();
 
-        System.out.println(session);
-        System.out.println(session.getAttribute("role"));
-        System.out.println(context.getAttribute("loggedUsers"));
+        if (session.getAttribute("role") == null) {
+            CommandUtility.setUserRole(request, RoleType.ROLE_GUEST, "guest");
+        }
+
+        logger.info(session);
+        logger.info(session.getAttribute("role"));
+        logger.info(context.getAttribute("loggedUsers"));
 
         String path = request.getRequestURI();
 
-        // guest access
-        if (path.contains("customer") || path.contains("manager")) {
-            if (session.getAttribute("role") == null) {
+        Object role = session.getAttribute("role");
+
+        if (path.contains("customer")) {
+            if (role.equals(RoleType.ROLE_GUEST)) {
+
                 servletResponse.getWriter().append("AccessDenied! You need to authorize!");
                 return;
             }
+        } else if (path.contains("manager")) {
+            if (role.equals(RoleType.ROLE_GUEST)
+                    || role.equals(RoleType.ROLE_CUSTOMER)) {
+
+                servletResponse.getWriter().append("AccessDenied! Forbidden page!");
+                return;
+            }
         }
-        // TODO in one if
-        // customer access
-        if (path.contains("manager") &&
-                session.getAttribute("role").equals(RoleType.ROLE_CUSTOMER)) {
-            servletResponse.getWriter().append("AccessDenied! Forbidden page!");
+        if ((path.contains("login")
+                || (path.contains("registration")))
+            && (role.equals(RoleType.ROLE_CUSTOMER)
+                || role.equals(RoleType.ROLE_MANAGER))) {
+
+            servletResponse.getWriter().append("AccessDenied! You need to logout first!");
             return;
         }
-
-        // TODO admin (login page, main, registration)
 
         filterChain.doFilter(servletRequest,servletResponse);
 

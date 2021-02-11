@@ -12,7 +12,7 @@ import java.util.HashSet;
  * session has current user role
  */
 public class CommandUtility {
-    static void setUserRole(HttpServletRequest request,
+    public static void setUserRole(HttpServletRequest request,
                             RoleType role, String name) {
         HttpSession session = request.getSession();
         ServletContext context = request.getServletContext();
@@ -26,10 +26,7 @@ public class CommandUtility {
         HashSet<String> loggedUsers = (HashSet<String>) context.getAttribute("loggedUsers");
 
         loggedUsers.remove(userName);
-        System.out.println(userName);
-//        session.setAttribute("loggedUsers", loggedUsers);
         context.setAttribute("loggedUsers", loggedUsers);
-
     }
 
 

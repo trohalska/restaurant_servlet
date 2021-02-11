@@ -1,24 +1,27 @@
 package ua.servlet.restaurant.dao.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.LoginsDao;
 import ua.servlet.restaurant.dao.mapper.LoginsMapper;
 import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.entity.RoleType;
 import ua.servlet.restaurant.utils.Prop;
-
+;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class JDBCLoginsDao implements LoginsDao {
+    Logger log = LogManager.getLogger(JDBCLoginsDao.class);
     private final Connection connection;
     public JDBCLoginsDao(Connection connection) {
         this.connection = connection;
     }
 
     @Override
-    public Optional<Logins> create(Logins entity) {
-        Optional<Logins> result = Optional.empty();
+    public Optional<Logins> create(Logins entity) throws DBException {
         ResultSet rs;
 
         final String query = Prop.getDBProperty("create.user");
@@ -32,7 +35,6 @@ public class JDBCLoginsDao implements LoginsDao {
             pstmt.setString(k++, RoleType.ROLE_CUSTOMER.name());
             pstmt.setTimestamp(k, Timestamp.valueOf(LocalDateTime.now()));
 
-            connection.setAutoCommit(false);
             if (pstmt.executeUpdate() > 0) {
                 rs = pstmt.getGeneratedKeys();
                 if (rs.next()) {
@@ -40,20 +42,14 @@ public class JDBCLoginsDao implements LoginsDao {
                 }
                 rs.close();
             }
-            connection.commit();
-            result = Optional.of(entity);
+            return Optional.of(entity);
         } catch (SQLException ex) {
             ex.printStackTrace();
-            System.err.println(Prop.getDBProperty("create.user.dbe") + entity.getLogin());
-            try {
-                System.err.println("Transaction is being rolled back");
-                connection.rollback();
-            } catch (SQLException e) {
-                // TODO logger
-                System.err.println("Error in transaction rollback");
-            }
+
+            String errorMsg = Prop.getDBProperty("create.user.dbe") + entity.getLogin();
+            log.error(errorMsg);
+            throw new DBException(errorMsg);
         }
-        return result;
     }
 
     @Override
@@ -62,7 +58,7 @@ public class JDBCLoginsDao implements LoginsDao {
     }
 
     @Override
-    public List<Logins> findAll() {
+    public List<Logins> findAll() throws DBException {
         Map<Long, Logins> users = new HashMap<>();
 
         final String query = Prop.getDBProperty("select.all.logins");
@@ -77,8 +73,10 @@ public class JDBCLoginsDao implements LoginsDao {
             return new ArrayList<>(users.values());
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println(Prop.getDBProperty("select.all.logins.dbe"));
-            return null;
+
+            String errorMsg = Prop.getDBProperty("select.all.logins.dbe");
+            log.error(errorMsg);
+            throw new DBException(errorMsg);
         }
     }
 
@@ -103,25 +101,7 @@ public class JDBCLoginsDao implements LoginsDao {
         }
     }
 
-//    @Override
-//    public Optional<Teacher> findByName(String name) {
-//
-//        Optional<Teacher> result = Optional.empty();
-//        try(PreparedStatement ps = connection.prepareCall("SELECT * FROM teacher WHERE name = ?")){
-//            ps.setString( 1, name);
-//            ResultSet rs;
-//            rs = ps.executeQuery();
-//            TeacherMapper mapper = new TeacherMapper();
-//            if (rs.next()){
-//                result = Optional.of(mapper.extractFromResultSet(rs));
-//            }//TODO : ask question how avoid two teachers with the same name
-//        }catch (Exception ex){
-//            throw new RuntimeException(ex);
-//        }
-//        return result;
-//    }
-
-    public Optional<Logins> findByLogin(String login) {
+    public Optional<Logins> findByLogin(String login) throws DBException {
         Optional<Logins> result = Optional.empty();
 
         try (PreparedStatement pstmt =
@@ -132,15 +112,59 @@ public class JDBCLoginsDao implements LoginsDao {
                 result = Optional.of(new LoginsMapper().extractFromResultSet(rs));
             }
             rs.close();
+            return result;
         } catch (SQLException ex) {
             ex.printStackTrace();
-            System.err.println(Prop.getDBProperty("select.login.byLogin.dbe") + login);
+
+            String errorMsg = Prop.getDBProperty("select.login.byLogin.dbe") + login;
+            log.error(errorMsg);
+            throw new DBException(errorMsg);
         }
-        return result;
     }
 
 
 
+
+    /**
+     * transaction example
+     */
+//    public Optional<Logins> create(Logins entity) {
+//        Optional<Logins> result = Optional.empty();
+//        ResultSet rs;
+//
+//        final String query = Prop.getDBProperty("create.user");
+//        try (PreparedStatement pstmt =
+//                     connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+//
+//            int k = 1;
+//            pstmt.setString(k++, entity.getLogin());
+//            pstmt.setString(k++, entity.getEmail());
+//            pstmt.setString(k++, entity.getPassword());
+//            pstmt.setString(k++, RoleType.ROLE_CUSTOMER.name());
+//            pstmt.setTimestamp(k, Timestamp.valueOf(LocalDateTime.now()));
+//
+//            connection.setAutoCommit(false);
+//            if (pstmt.executeUpdate() > 0) {
+//                rs = pstmt.getGeneratedKeys();
+//                if (rs.next()) {
+//                    entity.setId(rs.getLong(1));
+//                }
+//                rs.close();
+//            }
+//            connection.commit();
+//            result = Optional.of(entity);
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//            System.err.println(Prop.getDBProperty("create.user.dbe") + entity.getLogin());
+//            try {
+//                System.err.println("Transaction is being rolled back");
+//                connection.rollback();
+//            } catch (SQLException e) {
+//                System.err.println("Error in transaction rollback");
+//            }
+//        }
+//        return result;
+//    }
 
     /**
      * Insert team into table teams.

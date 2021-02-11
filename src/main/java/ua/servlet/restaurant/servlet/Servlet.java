@@ -25,11 +25,10 @@ public class Servlet extends HttpServlet {
 
         commands.put("exception" , new ExceptionController());
 
-        commands.put("getAll", new GetAllLogins());
+//        commands.put("getAll", new GetAllLogins());
     }
 
-    public void doGet(HttpServletRequest request,
-                      HttpServletResponse response)
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         processRequest(request, response);
     }

@@ -34,7 +34,7 @@
     <section class="section1">
         <a id="authorizedLogin">${sessionScope.userName}</a>
         <c:choose>
-            <c:when test="${sessionScope.userName==null}">
+            <c:when test="${sessionScope.role=='ROLE_GUEST'}">
                 <a class="abutton" href="${pageContext.request.contextPath}/app/login">
                     <fmt:message key="sign.in"/></a>
                 <a class="abutton" href="${pageContext.request.contextPath}/app/registration">

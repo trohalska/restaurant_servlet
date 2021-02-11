@@ -1,5 +1,8 @@
 package ua.servlet.restaurant.dao.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.DishesDao;
 import ua.servlet.restaurant.dao.mapper.DishesMapper;
 import ua.servlet.restaurant.dao.entity.Dishes;
@@ -9,6 +12,7 @@ import java.sql.*;
 import java.util.*;
 
 public class JDBCDishesDao implements DishesDao {
+    Logger log = LogManager.getLogger(JDBCDishesDao.class);
     private final Connection connection;
     public JDBCDishesDao(Connection connection) {
         this.connection = connection;
@@ -25,7 +29,7 @@ public class JDBCDishesDao implements DishesDao {
     }
 
     @Override
-    public List<Dishes> findAll() {
+    public List<Dishes> findAll() throws DBException {
         Map<Long, Dishes> users = new HashMap<>();
 
         final String query = Prop.getDBProperty("select.all.dishes");
@@ -40,8 +44,10 @@ public class JDBCDishesDao implements DishesDao {
             return new ArrayList<>(users.values());
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println(Prop.getDBProperty("select.all.dishes.dbe"));
-            return null;
+
+            String errorMsg = Prop.getDBProperty("select.all.dishes.dbe");
+            log.error(errorMsg);
+            throw new DBException(errorMsg);
         }
     }
 

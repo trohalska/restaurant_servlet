@@ -69,11 +69,8 @@
     <section class="section4" ng-app="get_form" ng-controller="GetController">
         <main>
             <div class="frame">
+                <label style="color: red;">${requestScope.errorMsg}</label>
                 <form id="formSignUp" class="form-signup">
-
-<%--                    <label id="errorMsg" style="color: #ff0000">${requestScope.errorMsg}</label>--%>
-
-<%--                    <input class="form-styling" style="display: none" type="text" placeholder="" value="not verificated"/>--%>
 
                     <label for="login"><fmt:message key="sign.username"/></label>
                     <input id="login" class="form-styling" type="text" required autofocus/>

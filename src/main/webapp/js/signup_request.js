@@ -53,13 +53,21 @@ angular.module("get_form", [])
             }).then(function (response) {
                 // let errorMsg = document.querySelector('#errorMsg').value;
                 // console.log(errorMsg);
-                console.log(response);
+                console.log(response.data);
+
+                if (response.data.match(/invalid email/ig)) {
+                    alert('Invalid email');
+                }
+
+                // response.text().then(function (text) {
+                //     response.data.match(/invalid email/g);
+                // });
                 //
                 // if (errorMsg !== undefined) {
                 //     alert(errorMsg);
                 // } else {
-                    alert('Success!')
-                    location.replace('/restaurant/app/login');
+                //     alert('Success!')
+                //     location.replace('/restaurant/app/login');
                 // }
             }, function (response) {
                 alertErrors(response);

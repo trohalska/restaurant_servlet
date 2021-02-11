@@ -1,5 +1,6 @@
 package ua.servlet.restaurant.command;
 
+import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.entity.Dishes;
 import ua.servlet.restaurant.service.DishesService;
 
@@ -14,9 +15,13 @@ public class MainController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-
-        List<Dishes> list = dishesService.getAll();
-        request.setAttribute("dishes", list);
+        try {
+            List<Dishes> list = dishesService.getAll();
+            request.setAttribute("dishes", list);
+        } catch (DBException e) {
+            logger.info(e.getMessage());
+            request.setAttribute("errorMsg", e.getMessage());
+        }
 
         return "/WEB-INF/menu.jsp";
     }

@@ -1,38 +1,38 @@
 package ua.servlet.restaurant.service;
 
 import org.mindrot.jbcrypt.BCrypt;
+import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.DaoFactory;
 import ua.servlet.restaurant.dao.LoginsDao;
 import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.utils.Prop;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class LoginsService {
     DaoFactory daoFactory = DaoFactory.getInstance();
 
-    public Logins create(Logins user) {
+    public Logins create(Logins user) throws DBException {
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
 
         try (LoginsDao dao = daoFactory.createLoginsDao()) {
             return dao.create(user).orElseThrow(
-                    () -> new NoSuchElementException(
+                    () -> new DBException(
                             Prop.getDBProperty("create.user.dbe") + user.getLogin())
             );
         }
     }
 
-    public Logins findByLogin(String login) {
+    public Logins findByLogin(String login) throws DBException {
         try (LoginsDao dao = daoFactory.createLoginsDao()) {
             return dao.findByLogin(login).orElseThrow(
-                    () -> new NoSuchElementException(
+                    () -> new DBException(
                             Prop.getDBProperty("select.login.byLogin.dbe") + login)
             );
         }
     }
 
-    public List<Logins> getAll(){
+    public List<Logins> getAll() throws DBException {
         try (LoginsDao dao = daoFactory.createLoginsDao()) {
             return dao.findAll();
         }
