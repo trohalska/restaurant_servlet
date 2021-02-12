@@ -42,8 +42,10 @@
     <div class="body-block shadow-large page_width">
 
         <section class="section1">
-            <a class="abutton" href="${pageContext.request.contextPath}/app/registration"><fmt:message key="sign.up"/></a>
-            <a class="abutton" href="${pageContext.request.contextPath}"><fmt:message key="main.menu"/></a>
+            <a class="abutton" href="${pageContext.request.contextPath}/app/registration">
+                <fmt:message key="sign.up"/></a>
+            <a class="abutton" href="${pageContext.request.contextPath}">
+                <fmt:message key="main.main"/></a>
 
             <select class="abutton" id="locales">
                 <option value=""><fmt:message key="lang.change"/></option>

@@ -1,7 +1,9 @@
 package ua.servlet.restaurant.command;
 
 import ua.servlet.restaurant.dao.DBException;
-import ua.servlet.restaurant.dao.entity.Dishes;
+import ua.servlet.restaurant.dto.DishesDTO;
+import ua.servlet.restaurant.dto.DishesDTOMapper;
+import ua.servlet.restaurant.filters.SessionLocaleFilter;
 import ua.servlet.restaurant.service.DishesService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +18,10 @@ public class MainController implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         try {
-            List<Dishes> list = dishesService.getAll();
+            List<DishesDTO> list =
+                    DishesDTOMapper.convertList(
+                            dishesService.getAll(),
+                            SessionLocaleFilter.getLocale(request));
             request.setAttribute("dishes", list);
         } catch (DBException e) {
             logger.info(e.getMessage());

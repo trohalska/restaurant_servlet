@@ -14,9 +14,14 @@ public class SessionLocaleFilter implements Filter {
 
         if (req.getParameter("locale") != null) {
             req.getSession().setAttribute("lang", req.getParameter("locale"));
+            req.getServletContext().setAttribute("lang", req.getParameter("locale"));
         }
         chain.doFilter(request, response);
     }
     public void destroy() {}
     public void init(FilterConfig arg0) throws ServletException {}
+
+    public static String getLocale(HttpServletRequest request) {
+        return (String)request.getServletContext().getAttribute("lang");
+    }
 }

@@ -31,8 +31,10 @@
 <div class="body-block shadow-large page_width">
 
     <section class="section1">
-        <a class="abutton" href="${pageContext.request.contextPath}/app/login"><fmt:message key="sign.in"/></a>
-        <a class="abutton" href="${pageContext.request.contextPath}"><fmt:message key="main.menu"/></a>
+        <a class="abutton" href="${pageContext.request.contextPath}/app/login">
+            <fmt:message key="sign.in"/></a>
+        <a class="abutton" href="${pageContext.request.contextPath}">
+            <fmt:message key="main.main"/></a>
 
         <select class="abutton" id="locales">
             <option value=""><fmt:message key="lang.change"/></option>
@@ -69,7 +71,7 @@
     <section class="section4" ng-app="get_form" ng-controller="GetController">
         <main>
             <div class="frame">
-                <label style="color: red;">${requestScope.errorMsg}</label>
+                <label id="errorMsg" style="color: red;">${requestScope.errorMsg}</label>
                 <form id="formSignUp" class="form-signup">
 
                     <label for="login"><fmt:message key="sign.username"/></label>

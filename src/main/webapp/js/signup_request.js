@@ -22,8 +22,6 @@ function checkPasswordMatch() {
     }
 }
 
-// let token = document.querySelector('meta[name="_csrf"]').content;
-
 angular.module("get_form", [])
     .controller("GetController", ["$scope", "$http", function ($scope, $http) {
 
@@ -38,37 +36,20 @@ angular.module("get_form", [])
                 'time': null
             }
             console.log(object);
-            // let str = JSON.stringify(object)
-            // console.log(str);
-            // let data = str;
             $http({
                 method: "POST",
                 url: url,
                 headers: {
                     "Content-Type": "application/json"
-                    // ,
-                    // 'X-CSRF-TOKEN': token
                 },
                 data: JSON.stringify(object)
             }).then(function (response) {
-                // let errorMsg = document.querySelector('#errorMsg').value;
-                // console.log(errorMsg);
-                console.log(response.data);
-
-                if (response.data.match(/invalid email/ig)) {
-                    alert('Invalid email');
+                if (response.data.match(/Invalid/g)) {
+                    let beginIndex = response.data.indexOf('Invalid');
+                    let endIndex = response.data.indexOf('<', beginIndex);
+                    let errorMsg = response.data.substring(beginIndex, endIndex);
+                    document.querySelector('#errorMsg').innerHTML = errorMsg;
                 }
-
-                // response.text().then(function (text) {
-                //     response.data.match(/invalid email/g);
-                // });
-                //
-                // if (errorMsg !== undefined) {
-                //     alert(errorMsg);
-                // } else {
-                //     alert('Success!')
-                //     location.replace('/restaurant/app/login');
-                // }
             }, function (response) {
                 alertErrors(response);
             });

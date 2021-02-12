@@ -16,7 +16,7 @@ public class DishesMapper implements ObjectMappers<Dishes> {
         return Dishes.builder()
                 .id(rs.getLong("id"))
                 .nameEn(rs.getString("name_en"))
-//                .nameUa(rs.getString("name_ua"))
+                .nameUa(rs.getString("name_ua"))
                 .price(rs.getBigDecimal("price"))
                 .category(Categories.builder()
                         .id(rs.getLong("category_Id"))

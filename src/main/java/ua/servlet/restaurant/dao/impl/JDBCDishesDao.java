@@ -6,6 +6,7 @@ import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.DishesDao;
 import ua.servlet.restaurant.dao.mapper.DishesMapper;
 import ua.servlet.restaurant.dao.entity.Dishes;
+import ua.servlet.restaurant.dto.DishesDTO;
 import ua.servlet.restaurant.utils.Prop;
 
 import java.sql.*;

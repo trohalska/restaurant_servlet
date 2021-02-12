@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 public class ParseJsonBody {
 
     public static String getBody(HttpServletRequest request) throws IOException {
-        String body = null;
+        String body;
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader bufferedReader = null;
 
@@ -18,12 +18,10 @@ public class ParseJsonBody {
             if (inputStream != null) {
                 bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 char[] charBuffer = new char[128];
-                int bytesRead = -1;
+                int bytesRead;
                 while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
                     stringBuilder.append(charBuffer, 0, bytesRead);
                 }
-            } else {
-                stringBuilder.append("");
             }
         } catch (IOException ex) {
             throw ex;

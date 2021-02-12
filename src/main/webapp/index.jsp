@@ -47,13 +47,15 @@
         </c:choose>
 
         <a class="abutton" href="${pageContext.request.contextPath}">
-            <fmt:message key="main.menu"/></a>
+            <fmt:message key="main.main"/></a>
 
-        <a class="abutton" href="${pageContext.request.contextPath}/customer/basket">
-            <fmt:message key="main.basket"/></a>
+        <c:if test="${sessionScope.role!='ROLE_GUEST'}">
+            <a class="abutton" href="${pageContext.request.contextPath}/customer/basket">
+                <fmt:message key="main.basket"/></a>
 
-        <a class="abutton" href="${pageContext.request.contextPath}/customer/orders">
-            <fmt:message key="main.orders"/></a>
+            <a class="abutton" href="${pageContext.request.contextPath}/customer/orders">
+                <fmt:message key="main.orders"/></a>
+        </c:if>
 
         <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
             <a class="abutton" href="${pageContext.request.contextPath}/manager/orders">
@@ -81,14 +83,8 @@
         <a><h2><fmt:message key="main.header"/></h2></a>
     </header>
 
-<%--    <br>--%>
-<%--    <a class="button" href="${pageContext.request.contextPath}/app/exception">Exception</a>--%>
     <br>
-    <br>
-    <a class="button" href="${pageContext.request.contextPath}/app/manager/getAll">Watch all users</a>
-    <br>
-    <br>
-    <a class="button" href="${pageContext.request.contextPath}/app/menu">MENU</a>
+    <a style="display: block; text-align: center; width: 80px; margin: 0 auto" class="button" href="${pageContext.request.contextPath}/app/menu"><fmt:message key="main.menu"/></a>
 
 </div>
 </body>

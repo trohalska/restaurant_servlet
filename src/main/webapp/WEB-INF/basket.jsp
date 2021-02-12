@@ -33,30 +33,18 @@
 <div class="body-block shadow-large page_width">
     <section class="section1">
         <a id="authorizedLogin">${sessionScope.userName}</a>
-        <c:choose>
-            <c:when test="${sessionScope.role=='ROLE_GUEST'}">
-                <a class="abutton" href="${pageContext.request.contextPath}/app/login">
-                    <fmt:message key="sign.in"/></a>
-                <a class="abutton" href="${pageContext.request.contextPath}/app/registration">
-                    <fmt:message key="sign.up"/></a>
-            </c:when>
-            <c:otherwise>
-                <a class="abutton" href="${pageContext.request.contextPath}/app/logout">
-                    <fmt:message key="sign.out"/></a>
-            </c:otherwise>
-        </c:choose>
+
+        <a class="abutton" href="${pageContext.request.contextPath}/app/logout">
+            <fmt:message key="sign.out"/></a>
 
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
 
-        <c:if test="${sessionScope.role!='ROLE_GUEST'}">
+        <a class="abutton" href="${pageContext.request.contextPath}/customer/basket">
+            <fmt:message key="main.basket"/></a>
 
-            <a class="abutton" href="${pageContext.request.contextPath}/customer/basket">
-                <fmt:message key="main.basket"/></a>
-
-            <a class="abutton" href="${pageContext.request.contextPath}/customer/orders">
-                <fmt:message key="main.orders"/></a>
-        </c:if>
+        <a class="abutton" href="${pageContext.request.contextPath}/customer/orders">
+            <fmt:message key="main.orders"/></a>
 
         <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
             <a class="abutton" href="${pageContext.request.contextPath}/manager/orders">
@@ -81,7 +69,7 @@
     </section>
 
     <header class="section2">
-        <a><h2><fmt:message key="main.header"/></h2></a>
+        <a><h2><fmt:message key="main.basket"/></h2></a>
     </header>
 
     <section class="section4"

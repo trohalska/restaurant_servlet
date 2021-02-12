@@ -1,5 +1,7 @@
 package ua.servlet.restaurant.servlet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.command.*;
 import ua.servlet.restaurant.command.ExceptionController;
 
@@ -12,16 +14,20 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class Servlet extends HttpServlet {
+    Logger logger = LogManager.getLogger(Command.class);
     private final Map<String, Command> commands = new HashMap<>();
 
     public void init(ServletConfig servletConfig){
         servletConfig.getServletContext()
                 .setAttribute("loggedUsers", new HashSet<String>());
+        servletConfig.getServletContext()
+                .setAttribute("lang","en");
 
         commands.put("logout", new LogOutController());
         commands.put("login", new LoginController());
         commands.put("registration", new RegistrationController());
         commands.put("menu", new MainController());
+        commands.put("basket" , new BasketController());
 
         commands.put("exception" , new ExceptionController());
 
@@ -42,16 +48,16 @@ public class Servlet extends HttpServlet {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
-        System.out.println(path);
-        path = path.replaceAll(".*/app/((manager|customer)/)?" , "");  // ".*/app/((manager|customer)/)?"
-        System.out.println(path);
+        logger.info(path);
+        path = path.replaceAll(".*/app/((manager|customer)/)?" , "");
+        logger.info(path);
 
         Command command = commands.getOrDefault(path,
                 (r)->"/index.jsp");
         String page = command.execute(request);
 
-        System.out.println(command.getClass().getName());
-        System.out.println(request.getServletContext().getAttribute("loggedUsers"));
+        logger.info(command.getClass().getName());
+        logger.info(request.getServletContext().getAttribute("loggedUsers"));
 
         if (page.contains("redirect:")) {
             response.sendRedirect(page.replace("redirect:", "/restaurant"));
