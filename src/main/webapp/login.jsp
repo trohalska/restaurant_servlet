@@ -73,7 +73,8 @@
         <section class="section4">
             <main>
                 <div class="frame">
-                    <label style="color: red;">${requestScope.errorMsg}</label>
+                    <div id="errorMsg">${requestScope.errorMsg}</div>
+
                     <form class="form-signin" method="post" action="${pageContext.request.contextPath}/app/login">
                         <label for="username"><fmt:message key="sign.username"/></label>
                         <input name="username" id="username" class="form-styling" type="text" required autofocus/>

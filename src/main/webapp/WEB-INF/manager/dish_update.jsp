@@ -6,6 +6,7 @@
 
 <!DOCTYPE html>
 <html lang="${sessionScope.lang}">
+
 <head>
     <meta charset="utf-8">
     <meta name="author" content="Tetiana Rohalska">
@@ -19,22 +20,33 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/sign.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
-    <script src="${pageContext.request.contextPath}/js/signup_request.js"></script>
+
 </head>
 
 <body>
 <div class="backcolor"></div>
 <div class="body-block shadow-large page_width">
-
     <section class="section1">
-        <a class="abutton" href="${pageContext.request.contextPath}/app/login">
-            <fmt:message key="sign.in"/></a>
+        <a id="authorizedLogin">${sessionScope.userName}</a>
+
+        <a class="abutton" href="${pageContext.request.contextPath}/app/logout">
+            <fmt:message key="sign.out"/></a>
+
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
+
+        <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
+            <fmt:message key="main.basket"/></a>
+
+        <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
+            <fmt:message key="main.orders"/></a>
+
+        <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
+            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders">
+                <fmt:message key="main.manager"/></a>
+        </c:if>
 
         <select class="abutton" id="locales">
             <option value=""><fmt:message key="lang.change"/></option>
@@ -54,57 +66,36 @@
     </section>
 
     <header class="section2">
-        <a href="${pageContext.request.contextPath}">
-            <h2><fmt:message key="main.header"/></h2>
-        </a>
+        <a><h2><fmt:message key="main.basket"/></h2></a>
     </header>
 
-<%--    <form method="post" action="${pageContext.request.contextPath}/app/registration">--%>
-
-<%--        <input type="text" name="login"><br/>--%>
-<%--        <input type="password" name="password"><br/>--%>
-<%--        <input type="text" name="email"><br/><br/>--%>
-<%--        <input class="button" type="submit" value="Registration">--%>
-
-<%--    </form>--%>
-
-    <section class="section4" ng-app="get_form" ng-controller="GetController">
+    <section class="section4">
         <main>
             <div class="frame">
                 <div id="errorMsg">${requestScope.errorMsg}</div>
 
-                <form id="formSignUp" class="form-signup">
+                <form class="form-signin" method="put" action="${pageContext.request.contextPath}/app/manager/dish/update">
+                    <label for="name_en"><fmt:message key="dish.name_en"/></label>
+                    <input name="name_en" id="name_en" class="form-styling" type="text"
+                           value="${requestScope.dish.nameEn}" required autofocus/>
 
-                    <label for="login"><fmt:message key="sign.username"/></label>
-                    <input id="login" class="form-styling" type="text" required autofocus/>
+                    <label for="name_ua"><fmt:message key="dish.name_ua"/></label>
+                    <input name="name_ua" id="name_ua" class="form-styling" type="text"
+                           value="${requestScope.dish.nameUa}" required/>
 
-                    <label for="email"><fmt:message key="sign.email"/></label>
-                    <input id="email" class="form-styling" type="email" required/>
+                    <label for="price"><fmt:message key="menu.price"/></label>
+                    <input name="price" id="price" class="form-styling" type="number" required
+                           min="0.01" max="1000.00" step="0.01" value="${requestScope.dish.price}"/>
 
-                    <label for="password"><fmt:message key="sign.password"/></label>
-                    <div>
-                        <input id="password" class="form-styling" type="password" name="password" autocomplete="on" required/>
-                        <span toggle="#password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-                    </div>
-
-                    <div>
-                        <label for="confirmpassword"><fmt:message key="sign.confirmPassword"/></label>
-                        <input id="confirmpassword" class="form-styling" type="password" name="confirmpassword" required
-                               autocomplete="on" />
-                        <span toggle="#confirmpassword" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-                    </div>
-
-                    <input class="btn-signup" ng-click="signup('${pageContext.request.contextPath}/app/registration')" value="<fmt:message key="sign.up"/>"/>
+                    <input class="btn-signin" type="submit" value="<fmt:message key="button.update"/>">
                 </form>
             </div>
         </main>
+
     </section>
 
 </div>
-
 </body>
 
-<script src="${pageContext.request.contextPath}/js/general.js"></script>
 
 </html>
-

@@ -50,15 +50,15 @@
             <fmt:message key="main.main"/></a>
 
         <c:if test="${sessionScope.role!='ROLE_GUEST'}">
-            <a class="abutton" href="${pageContext.request.contextPath}/customer/basket">
+            <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
                 <fmt:message key="main.basket"/></a>
 
-            <a class="abutton" href="${pageContext.request.contextPath}/customer/orders">
+            <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
                 <fmt:message key="main.orders"/></a>
         </c:if>
 
         <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
-            <a class="abutton" href="${pageContext.request.contextPath}/manager/orders">
+            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders">
                 <fmt:message key="main.manager"/></a>
         </c:if>
 

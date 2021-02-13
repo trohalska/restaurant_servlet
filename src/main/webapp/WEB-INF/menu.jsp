@@ -51,15 +51,15 @@
 
         <c:if test="${sessionScope.role!='ROLE_GUEST'}">
 
-            <a class="abutton" href="${pageContext.request.contextPath}/customer/basket">
+            <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
                 <fmt:message key="main.basket"/></a>
 
-            <a class="abutton" href="${pageContext.request.contextPath}/customer/orders">
+            <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
                 <fmt:message key="main.orders"/></a>
         </c:if>
 
         <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
-            <a class="abutton" href="${pageContext.request.contextPath}/manager/orders">
+            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders">
                 <fmt:message key="main.manager"/></a>
         </c:if>
 
@@ -139,9 +139,11 @@
                         <th columns="1"><fmt:message key="menu.dish"/></th>
                         <th columns="2"><fmt:message key="menu.price"/></th>
                         <th columns="3"><fmt:message key="menu.category"/></th>
-
                         <c:if test="${sessionScope.role!='ROLE_GUEST'}">
                             <th columns="4"><fmt:message key="basket.action"/></th>
+                        </c:if>
+                        <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
+                            <th columns="5"><fmt:message key="basket.action"/></th>
                         </c:if>
 
                     </tr>
@@ -155,11 +157,25 @@
 
                             <c:if test="${sessionScope.role!='ROLE_GUEST'}">
                                 <td>
-    <%--                                <a id="<c:out value="${dish.id}"/>" class="button" onclick="addToBasket(this)">Buy</a>--%>
                                     <form method="post" action="${pageContext.request.contextPath}/app/customer/basket/add">
-                                        <label for="dish"></label>
-                                        <input name="id" id="dish" class="hidden" type="text"/>
+                                        <input name="id" class="hidden" type="number"
+                                               value="<c:out value="${dish.id}"/>"/>
                                         <input class="abutton" type="submit" value="<fmt:message key="button.add"/>">
+                                    </form>
+                                </td>
+                            </c:if>
+                            <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
+                                <td>
+                                    <form method="put" action="${pageContext.request.contextPath}/app/manager/menu/update">
+                                        <input name="id" class="hidden" type="number"
+                                               value="<c:out value="${dish.id}"/>"/>
+                                        <input class="abutton" type="submit" value="<fmt:message key="button.update"/>">
+                                    </form>
+
+                                    <form method="delete" action="${pageContext.request.contextPath}/app/manager/menu/delete">
+                                        <input name="id" class="hidden" type="number"
+                                               value="<c:out value="${dish.id}"/>"/>
+                                        <input class="abutton" type="submit" value="<fmt:message key="button.delete"/>">
                                     </form>
                                 </td>
                             </c:if>

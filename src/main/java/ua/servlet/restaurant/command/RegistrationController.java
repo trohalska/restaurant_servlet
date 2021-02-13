@@ -35,10 +35,11 @@ public class RegistrationController implements Command {
             logger.info(logins.toString());
 
             loginsService.create(logins);
+//            return "redirect:/login";
         } catch (DBException e) {
             String errorMsg = Prop.getDBProperty("select.login.byLogin.dbe.exist");
             request.setAttribute("errorMsg", errorMsg);
-            logger.warn(errorMsg);
+            logger.warn(e.getMessage());
         } catch (IOException e) {
             String errorMsg = "Cannot get json body";
             request.setAttribute("errorMsg", errorMsg);

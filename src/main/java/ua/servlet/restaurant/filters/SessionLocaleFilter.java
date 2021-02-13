@@ -7,6 +7,11 @@ import java.io.IOException;
 
 @WebFilter(filterName = "SessionLocaleFilter", urlPatterns = {"/*"})
 public class SessionLocaleFilter implements Filter {
+    @Override
+    public void init(FilterConfig arg0) throws ServletException {
+    }
+
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
@@ -18,10 +23,9 @@ public class SessionLocaleFilter implements Filter {
         }
         chain.doFilter(request, response);
     }
-    public void destroy() {}
-    public void init(FilterConfig arg0) throws ServletException {}
 
-    public static String getLocale(HttpServletRequest request) {
-        return (String)request.getServletContext().getAttribute("lang");
+    @Override
+    public void destroy() {
     }
+
 }

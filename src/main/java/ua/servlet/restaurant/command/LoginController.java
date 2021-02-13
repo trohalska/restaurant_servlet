@@ -34,33 +34,35 @@ public class LoginController implements Command {
             return "/login.jsp";
         }
 
-        return checkPassword(request, user, login, password);
+        return checkPassword(request, user, password);
 
     }
 
     private String checkPassword(HttpServletRequest request, Logins user,
-                                 String login, String password) throws ServletException {
+                                 String password) throws ServletException {
 
         if (BCrypt.checkpw(password, user.getPassword())) {
-            if (CommandUtility.checkUserIsLogged(request, login)) {
+            if (CommandUtility.checkUserIsLogged(request, user.getLogin())) {
                 return "/WEB-INF/error.jsp";
             }
-            logger.info(Prop.getDBProperty("select.login.byLogin.success") + login);
-            return redirectByRoles(request, login, user);
+            logger.info(Prop.getDBProperty(
+                    "select.login.byLogin.success") + user.getLogin());
+            return redirectByRoles(request, user);
         }
 
-        String errorMsg = Prop.getDBProperty("select.login.byLogin.dbe.pass") + login;
+        String errorMsg = Prop.getDBProperty(
+                "select.login.byLogin.dbe.pass") + user.getLogin();
         logger.warn(errorMsg);
         request.setAttribute("errorMsg", errorMsg);
         return "/login.jsp";
     }
 
-    private String redirectByRoles(HttpServletRequest request, String login, Logins user) throws ServletException {
+    private String redirectByRoles(HttpServletRequest request, Logins user) throws ServletException {
         if (user.getRole().equals(RoleType.ROLE_MANAGER)){
-            CommandUtility.setUserRole(request, RoleType.ROLE_MANAGER, login);
+            CommandUtility.setUserRole(request, RoleType.ROLE_MANAGER, user);
             return "redirect:/app/manager/";
         } else if(user.getRole().equals(RoleType.ROLE_CUSTOMER)) {
-            CommandUtility.setUserRole(request, RoleType.ROLE_CUSTOMER, login);
+            CommandUtility.setUserRole(request, RoleType.ROLE_CUSTOMER, user);
             return "redirect:/app/customer/";
         }
         throw new ServletException(Prop.getDBProperty("error.unknown.role"));

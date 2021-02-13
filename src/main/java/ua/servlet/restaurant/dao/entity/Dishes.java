@@ -86,9 +86,7 @@ public class Dishes {
     }
 
     public class Builder {
-        private Builder() {
-            // private constructor
-        }
+        private Builder() {}
         public Dishes.Builder id(Long id) {
             Dishes.this.id = id;
             return this;

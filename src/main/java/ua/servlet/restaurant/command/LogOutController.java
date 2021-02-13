@@ -1,5 +1,6 @@
 package ua.servlet.restaurant.command;
 
+import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.entity.RoleType;
 
 import javax.servlet.ServletContext;
@@ -11,7 +12,7 @@ public class LogOutController implements Command {
         ServletContext context = request.getSession().getServletContext();
         logger.info("Success logout user:" + context.getAttribute("userName"));
         CommandUtility.deleteUserFromContext(context);
-        CommandUtility.setUserRole(request, RoleType.ROLE_GUEST, "guest");
+        CommandUtility.setUserRole(request, RoleType.ROLE_GUEST, Logins.builder().login("guest").build());
         return "redirect:/index.jsp";
     }
 }

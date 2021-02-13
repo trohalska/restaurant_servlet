@@ -26,22 +26,37 @@ public class Servlet extends HttpServlet {
         commands.put("logout", new LogOutController());
         commands.put("login", new LoginController());
         commands.put("registration", new RegistrationController());
+
         commands.put("menu", new MainController());
+//        commands.put("menu/create", new MainController());
+        commands.put("menu/update", new MenuUpdateController());
+        commands.put("menu/delete", new MenuDeleteController());
+
+//        commands.put("dish/create", new MainController());
+        commands.put("dish/update", new DishUpdateController());
+
+
         commands.put("basket" , new BasketController());
+        commands.put("basket/add" , new BasketAddController());
+        commands.put("basket/delete" , new BasketDeleteController());
+        commands.put("basket/delete_all" , new BasketDeleteAllController());
 
         commands.put("exception" , new ExceptionController());
 
 //        commands.put("getAll", new GetAllLogins());
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        processRequest(request, response);
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        processRequest(req, resp);
     }
-
-    public void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        processRequest(request, response);
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        processRequest(req, resp);
+    }
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        processRequest(req, resp);
+    }
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        processRequest(req, resp);
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -60,7 +75,7 @@ public class Servlet extends HttpServlet {
         logger.info(request.getServletContext().getAttribute("loggedUsers"));
 
         if (page.contains("redirect:")) {
-            response.sendRedirect(page.replace("redirect:", "/restaurant"));
+            response.sendRedirect(page.replace("redirect:", "restaurant"));
         } else {
             request.getRequestDispatcher(page).forward(request, response);
         }

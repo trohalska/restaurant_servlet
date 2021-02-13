@@ -2,13 +2,12 @@ package ua.servlet.restaurant.filters;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.servlet.restaurant.command.Command;
 import ua.servlet.restaurant.command.CommandUtility;
+import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.entity.RoleType;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
@@ -36,7 +35,7 @@ public class AuthFilter implements Filter {
         ServletContext context = servletRequest.getServletContext();
 
         if (session.getAttribute("role") == null) {
-            CommandUtility.setUserRole(request, RoleType.ROLE_GUEST, "guest");
+            CommandUtility.setUserRole(request, RoleType.ROLE_GUEST, Logins.builder().login("guest").build());
         }
 
         logger.info(session);

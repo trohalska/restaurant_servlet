@@ -1,5 +1,6 @@
 package ua.servlet.restaurant.command;
 
+import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.entity.RoleType;
 
 import javax.servlet.ServletContext;
@@ -13,19 +14,21 @@ import java.util.HashSet;
  */
 public class CommandUtility {
     public static void setUserRole(HttpServletRequest request,
-                            RoleType role, String name) {
+                            RoleType role, Logins user) {
         HttpSession session = request.getSession();
         ServletContext context = request.getServletContext();
-        context.setAttribute("userName", name);
-        session.setAttribute("userName", name);
+        context.setAttribute("principal", user);
+        session.setAttribute("userName", user.getLogin());
         session.setAttribute("role", role);
     }
 
     public static void deleteUserFromContext(ServletContext context) {
-        String userName = (String) context.getAttribute("userName");
+        Logins principal = (Logins) context.getAttribute("principal");
         HashSet<String> loggedUsers = (HashSet<String>) context.getAttribute("loggedUsers");
 
-        loggedUsers.remove(userName);
+        if (principal != null) {
+            loggedUsers.remove(principal.getLogin());
+        }
         context.setAttribute("loggedUsers", loggedUsers);
     }
 
@@ -41,6 +44,24 @@ public class CommandUtility {
         context.setAttribute("loggedUsers", loggedUsers);
 
         return false;
+    }
+
+    /**
+     * Gets principal for converting tables to dao
+     * @param request for context
+     * @return String "en" or "ua"
+     */
+    public static Logins getPrincipal(HttpServletRequest request) {
+        return (Logins)request.getServletContext().getAttribute("principal");
+    }
+
+    /**
+     * Gets language for converting tables to dao
+     * @param request for context
+     * @return String "en" or "ua"
+     */
+    public static String getLocale(HttpServletRequest request) {
+        return (String)request.getServletContext().getAttribute("lang");
     }
 
 

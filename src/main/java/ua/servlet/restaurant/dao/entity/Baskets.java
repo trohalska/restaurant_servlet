@@ -2,14 +2,14 @@ package ua.servlet.restaurant.dao.entity;
 
 public class Baskets {
     private Long id;
-    private Long dishId;
-    private Long loginId;
+    private Dishes dish;
+    private Logins login;
 
     public Baskets() {}
-    public Baskets(Long id, Long dishId, Long loginId) {
+    public Baskets(Long id, Dishes dish, Logins login) {
         this.id = id;
-        this.dishId = dishId;
-        this.loginId = loginId;
+        this.dish = dish;
+        this.login = login;
     }
 
     public Long getId() {
@@ -19,26 +19,26 @@ public class Baskets {
         this.id = id;
     }
 
-    public Long getDishId() {
-        return dishId;
+    public Dishes getDish() {
+        return dish;
     }
-    public void setDishId(Long dishId) {
-        this.dishId = dishId;
+    public void setDish(Dishes dish) {
+        this.dish = dish;
     }
 
-    public Long getLoginId() {
-        return loginId;
+    public Logins getLogin() {
+        return login;
     }
-    public void setLoginId(Long loginId) {
-        this.loginId = loginId;
+    public void setLogin(Logins login) {
+        this.login = login;
     }
 
     @Override
     public String toString() {
         return "Baskets{" +
                 "id=" + id +
-                ", dishId=" + dishId +
-                ", loginId=" + loginId +
+                ", dish=" + dish +
+                ", login=" + login +
                 '}';
     }
 
@@ -52,12 +52,12 @@ public class Baskets {
             Baskets.this.id = id;
             return this;
         }
-        public Baskets.Builder dishId(Long id) {
-            Baskets.this.id = id;
+        public Baskets.Builder dish(Dishes dish) {
+            Baskets.this.dish = dish;
             return this;
         }
-        public Baskets.Builder loginId(Long id) {
-            Baskets.this.id = id;
+        public Baskets.Builder login(Logins login) {
+            Baskets.this.login = login;
             return this;
         }
 

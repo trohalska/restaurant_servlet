@@ -4,16 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.BasketsDao;
 import ua.servlet.restaurant.dao.DBException;
-import ua.servlet.restaurant.dao.DishesDao;
 import ua.servlet.restaurant.dao.entity.Baskets;
-import ua.servlet.restaurant.dao.entity.Dishes;
-import ua.servlet.restaurant.dao.mapper.DishesMapper;
+import ua.servlet.restaurant.dao.mapper.BasketsMapper;
 import ua.servlet.restaurant.utils.Prop;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 public class JDBCBasketsDao implements BasketsDao {
@@ -25,32 +20,62 @@ public class JDBCBasketsDao implements BasketsDao {
 
     @Override
     public Optional<Baskets> create(Baskets entity) throws DBException {
-        return Optional.empty();
+        ResultSet rs;
+
+        final String query = Prop.getDBProperty("create.basket");
+        try (PreparedStatement pstmt =
+                     connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            int k = 1;
+            pstmt.setLong(k++, entity.getDish().getId());
+            pstmt.setLong(k, entity.getLogin().getId());
+
+            if (pstmt.executeUpdate() > 0) {
+                rs = pstmt.getGeneratedKeys();
+                if (rs.next()) {
+                    entity.setId(rs.getLong(1));
+                }
+                rs.close();
+            }
+            return Optional.of(entity);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+            String errorMsg = Prop.getDBProperty("create.baskets.dbe");
+            log.error(errorMsg);
+            throw new DBException(errorMsg);
+        }
     }
 
     @Override
-    public Baskets findById(int id) {
+    public Optional<Baskets> findById(int id) {
         return null;
     }
 
     @Override
     public List<Baskets> findAll() throws DBException {
-        Map<Long, Dishes> users = new HashMap<>();
+        return null;
+    }
 
-        final String query = Prop.getDBProperty("select.all.dishes");
+    public Optional<List<Baskets>> findAllByLoginId(Long id) throws DBException {
+        List<Baskets> baskets = new ArrayList<>();
+
+        final String query = Prop.getDBProperty("select.all.baskets");
+//        final String query = "SELECT * FROM baskets b " +
+//                "LEFT JOIN dishes d on b.dish_id = d.id " +
+//                "LEFT JOIN categories c on c.id = d.category_id";
         try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery(query);
 
-            DishesMapper dishesMapper = new DishesMapper();
+            BasketsMapper basketsMapper = new BasketsMapper();
             while (rs.next()) {
-                Dishes dish = dishesMapper.extractFromResultSet(rs);
-                dish = dishesMapper.makeUnique(users, dish);
+                baskets.add(basketsMapper.extractFromResultSet(rs));
             }
-            return new ArrayList<>(users.values());
+            rs.close();
+            return baskets.isEmpty() ? Optional.empty() : Optional.of(baskets);
         } catch (SQLException e) {
             e.printStackTrace();
 
-            String errorMsg = Prop.getDBProperty("select.all.dishes.dbe");
+            String errorMsg = Prop.getDBProperty("select.all.baskets.dbe");
             log.error(errorMsg);
             throw new DBException(errorMsg);
         }
@@ -63,7 +88,38 @@ public class JDBCBasketsDao implements BasketsDao {
 
     @Override
     public void delete(int id) {
+        final String query = Prop.getDBProperty("delete.basket");
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setLong(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
 
+            String errorMsg = Prop.getDBProperty("delete.baskets.dbe") + id;
+            log.error(errorMsg);
+        }
+    }
+
+    public void deleteAllByLoginId(int id) {
+        final String query = Prop.getDBProperty("delete.all.basket");
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setLong(1, id);
+
+            connection.setAutoCommit(false);
+            pstmt.executeUpdate();
+            connection.commit();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+            String errorMsg = Prop.getDBProperty("delete.all.basket.dbe") + id;
+            log.error(errorMsg);
+            try {
+                log.warn(Prop.getDBProperty("transaction.rollback"));
+                connection.rollback();
+            } catch (SQLException e) {
+                log.error(Prop.getDBProperty("transaction.rollback.fail"));
+            }
+        }
     }
 
     @Override

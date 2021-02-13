@@ -25,13 +25,32 @@ public class JDBCDishesDao implements DishesDao {
     }
 
     @Override
-    public Dishes findById(int id) {
-        return null;
+    public Optional<Dishes> findById(int id) throws DBException {
+        Optional<Dishes> result = Optional.empty();
+
+        final String query = Prop.getDBProperty("select.dishes");
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setLong(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            DishesMapper dishesMapper = new DishesMapper();
+            if (rs.next()) {
+                result = Optional.of(dishesMapper.extractFromResultSet(rs));
+            }
+            rs.close();
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            String errorMsg = Prop.getDBProperty("select.dishes.dbe");
+            log.error(errorMsg);
+            throw new DBException(errorMsg);
+        }
     }
 
     @Override
     public List<Dishes> findAll() throws DBException {
-        Map<Long, Dishes> users = new HashMap<>();
+        Map<Long, Dishes> dishes = new HashMap<>();
 
         final String query = Prop.getDBProperty("select.all.dishes");
         try (Statement st = connection.createStatement()) {
@@ -40,9 +59,10 @@ public class JDBCDishesDao implements DishesDao {
             DishesMapper dishesMapper = new DishesMapper();
             while (rs.next()) {
                 Dishes dish = dishesMapper.extractFromResultSet(rs);
-                dish = dishesMapper.makeUnique(users, dish);
+                dishesMapper.makeUnique(dishes, dish);
             }
-            return new ArrayList<>(users.values());
+            rs.close();
+            return new ArrayList<>(dishes.values());
         } catch (SQLException e) {
             e.printStackTrace();
 
@@ -54,12 +74,37 @@ public class JDBCDishesDao implements DishesDao {
 
     @Override
     public void update(Dishes entity) {
+//        final String query = Prop.getDBProperty("update.dishes");
+        final String query = "UPDATE dishes SET name_en=?, name_ua=?, price=? WHERE name_en=?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 
+            int k = 1;
+            pstmt.setString(k++, entity.getNameEn());
+            pstmt.setString(k++, entity.getNameUa());
+            pstmt.setBigDecimal(k++, entity.getPrice());
+            pstmt.setString(k, entity.getNameEn());
+
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+
+            String errorMsg = Prop.getDBProperty("delete.update.dbe") + entity.getId();
+            log.error(errorMsg);
+        }
     }
 
     @Override
     public void delete(int id) {
+        final String query = Prop.getDBProperty("delete.dishes");
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setLong(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
 
+            String errorMsg = Prop.getDBProperty("delete.dishes.dbe") + id;
+            log.error(errorMsg);
+        }
     }
 
     @Override
