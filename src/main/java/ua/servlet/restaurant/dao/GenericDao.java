@@ -1,6 +1,5 @@
 package ua.servlet.restaurant.dao;
 
-import javax.servlet.ServletException;
 import java.util.List;
 import java.util.Optional;
 

@@ -49,9 +49,7 @@ public class Categories {
     }
 
     public class Builder {
-        private Builder() {
-            // private constructor
-        }
+        private Builder() { }
         public Categories.Builder id(Long id) {
             Categories.this.id = id;
             return this;

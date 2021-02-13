@@ -39,9 +39,7 @@ public class CategoriesDTO {
     }
 
     public class Builder {
-        private Builder() {
-            // private constructor
-        }
+        private Builder() { }
         public CategoriesDTO.Builder id(Long id) {
             CategoriesDTO.this.id = id;
             return this;
