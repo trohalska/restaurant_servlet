@@ -59,7 +59,7 @@
         </c:if>
 
         <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
-            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders">
+            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders_manager">
                 <fmt:message key="main.manager"/></a>
         </c:if>
 

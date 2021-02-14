@@ -13,6 +13,8 @@ public class MainController implements Command {
         this.dishesService = new DishesService();
     }
 
+    // TODO sorting and pagination
+
     @Override
     public String execute(HttpServletRequest request) {
         String locale = CommandUtility.getLocale(request);

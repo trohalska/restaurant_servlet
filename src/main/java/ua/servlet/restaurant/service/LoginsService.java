@@ -5,9 +5,7 @@ import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.DaoFactory;
 import ua.servlet.restaurant.dao.LoginsDao;
 import ua.servlet.restaurant.dao.entity.Logins;
-import ua.servlet.restaurant.utils.Prop;
-
-import java.util.List;
+import ua.servlet.restaurant.utils.Prop;;
 
 public class LoginsService {
     DaoFactory daoFactory = DaoFactory.getInstance();
@@ -31,21 +29,5 @@ public class LoginsService {
             );
         }
     }
-
-    public List<Logins> getAll() throws DBException {
-        try (LoginsDao dao = daoFactory.createLoginsDao()) {
-            return dao.findAll();
-        }
-    }
-
-
-//    public Optional<Teacher> login(String name){
-//        Optional<Teacher> result; //= Optional.empty();
-//        try(TeacherDao teacherDao = daoFactory.createTeacherDao()){
-//            result = teacherDao.findByName(name);
-//        }
-//        return result;
-//    }
-
 
 }

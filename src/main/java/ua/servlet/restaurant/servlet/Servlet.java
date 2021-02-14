@@ -27,19 +27,24 @@ public class Servlet extends HttpServlet {
         commands.put("login", new LoginController());
         commands.put("registration", new RegistrationController());
 
-        commands.put("menu", new MainController());
+        commands.put("menu", new MainController());                             // get
 //        commands.put("menu/create", new MainController());
-        commands.put("menu/update", new MenuUpdateController());
-        commands.put("menu/delete", new MenuDeleteController());
+        commands.put("menu/update", new MenuUpdateController());                // put
+        commands.put("menu/delete", new MenuDeleteController());                // delete
 
 //        commands.put("dish/create", new MainController());
-        commands.put("dish/update", new DishUpdateController());
+        commands.put("dish/update", new DishUpdateController());                // put
 
+        commands.put("basket", new BasketController());                         // get
+        commands.put("basket/add", new BasketAddController());                  // post
+        commands.put("basket/delete", new BasketDeleteController());            // delete
+        commands.put("basket/delete_all", new BasketDeleteAllController());     // delete
 
-        commands.put("basket" , new BasketController());
-        commands.put("basket/add" , new BasketAddController());
-        commands.put("basket/delete" , new BasketDeleteController());
-        commands.put("basket/delete_all" , new BasketDeleteAllController());
+        commands.put("orders", new OrdersController());                         // get
+        commands.put("orders/create", new OrdersCreateController());            // post
+        commands.put("orders/payment", new OrdersPaymentController());          // get
+        commands.put("orders/payment/pay", new OrdersPaymentPayController());   // put
+//        commands.put("orders/confirm", new OrdersCreateController());
 
         commands.put("exception" , new ExceptionController());
 
@@ -75,7 +80,7 @@ public class Servlet extends HttpServlet {
         logger.info(request.getServletContext().getAttribute("loggedUsers"));
 
         if (page.contains("redirect:")) {
-            response.sendRedirect(page.replace("redirect:", "restaurant"));
+            response.sendRedirect(page.replace("redirect:", "app"));
         } else {
             request.getRequestDispatcher(page).forward(request, response);
         }

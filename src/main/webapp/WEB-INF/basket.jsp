@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
 
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+    <script src="${pageContext.request.contextPath}/js/general.js"></script>
 
 </head>
 
@@ -43,7 +44,7 @@
             <fmt:message key="main.orders"/></a>
 
         <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
-            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders">
+            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders_manager">
                 <fmt:message key="main.manager"/></a>
         </c:if>
 
@@ -73,11 +74,6 @@
         <div id="errorMsg">${requestScope.errorMsg}</div>
 
         <c:if test="${requestScope.errorMsg==null || requestScope.errorMsg==''}">
-            <div class="page_head">
-                <div>
-                    <h2><fmt:message key="main.menu"/></h2>
-                </div>
-            </div>
 
             <div id="baskets_block">
                 <div>
@@ -119,8 +115,12 @@
 
             <div class="page_head">
                 <div style="margin: 20px 0;">
-                    <a class="button" href="${pageContext.request.contextPath}/app/customer/orders/create">
-                        <fmt:message key="basket.create"/></a>
+<%--                    <a class="button" href="${pageContext.request.contextPath}/app/customer/orders/create">--%>
+<%--                        <fmt:message key="basket.create"/></a>--%>
+                    <form method="post" action="${pageContext.request.contextPath}/app/customer/orders/create">
+                        <input class="button" type="submit" value="<fmt:message key="basket.create"/>">
+                    </form>
+
                 </div>
                 <div>
                     <form method="delete" action="${pageContext.request.contextPath}/app/customer/basket/delete_all">

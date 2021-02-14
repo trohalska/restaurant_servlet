@@ -6,6 +6,7 @@ import ua.servlet.restaurant.utils.Prop;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 
 public class BasketAddController implements Command {
@@ -27,5 +28,16 @@ public class BasketAddController implements Command {
         }
         return "redirect:/app/menu";
     }
+
+//    public ResponseEntity<Baskets> add (@Valid @RequestBody ItemDTO itemDTO) {
+//        log.info(Constants.ADD_NEW_DISH + itemDTO.toString());
+//        try {
+//            return ResponseEntity.ok(
+//                    basketsService.saveNewItem(itemDTO));
+//        } catch (Exception e) {
+//            log.warn(e.getMessage());
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+//        }
+//    }
 
 }

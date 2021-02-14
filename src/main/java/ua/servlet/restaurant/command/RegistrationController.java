@@ -35,7 +35,7 @@ public class RegistrationController implements Command {
             logger.info(logins.toString());
 
             loginsService.create(logins);
-//            return "redirect:/login";
+            return "redirect:/login";
         } catch (DBException e) {
             String errorMsg = Prop.getDBProperty("select.login.byLogin.dbe.exist");
             request.setAttribute("errorMsg", errorMsg);

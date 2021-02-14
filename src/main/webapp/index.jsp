@@ -24,7 +24,6 @@
 <%--    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>--%>
 
 <%--    <script src="${pageContext.request.contextPath}/js/general.js"></script>--%>
-<%--    <script src="${pageContext.request.contextPath}/js/main_request.js"></script>--%>
 
 </head>
 
@@ -58,7 +57,7 @@
         </c:if>
 
         <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
-            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders">
+            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders_manager">
                 <fmt:message key="main.manager"/></a>
         </c:if>
 
