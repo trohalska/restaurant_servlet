@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix = "parse" uri="custom.tld" %>
 <fmt:setLocale value="${sessionScope.lang}" />
 <fmt:setBundle basename="messages" />
 
@@ -35,15 +36,15 @@
             <fmt:message key="sign.out"/></a>
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
-<%--        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">--%>
-<%--            <fmt:message key="main.menu"/></a>--%>
+        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">
+            <fmt:message key="main.menu"/></a>
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
             <fmt:message key="main.basket"/></a>
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
             <fmt:message key="main.orders"/></a>
 
         <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
-            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders_manager">
+            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders">
                 <fmt:message key="main.manager"/></a>
         </c:if>
 
@@ -65,71 +66,57 @@
     </section>
 
     <header class="section2">
-        <a><h2><fmt:message key="main.basket"/></h2></a>
+        <a><h2><fmt:message key="orders.manager"/></h2></a>
     </header>
 
     <section class="section4">
 
         <div id="errorMsg">${requestScope.errorMsg}</div>
 
-        <c:if test="${requestScope.errorMsg==null || requestScope.errorMsg==''}">
+        <div class="page_head">
+            <div>
+                <h2><fmt:message key="main.orders"/></h2>
+            </div>
+        </div>
 
-            <div id="baskets_block">
+        <c:if test="${requestScope.errorMsg==null || requestScope.errorMsg==''}">
+            <div id="dishes_block">
                 <div>
                     <table id="table">
                         <tr>
                             <th columns="0" onclick="tableSort(this, 'table')">№</th>
-                            <th columns="1" onclick="tableSort(this, 'table')"><fmt:message key="menu.dish"/></th>
-                            <th columns="2" onclick="tableSort(this, 'table')"><fmt:message key="menu.price"/></th>
-                            <th columns="3" onclick="tableSort(this, 'table')"><fmt:message key="menu.category"/></th>
-                            <th columns="4"><fmt:message key="basket.action"/></th>
-
+                            <th columns="1" onclick="tableSort(this, 'table')"><fmt:message key="orders.time"/></th>
+                            <th columns="2" onclick="tableSort(this, 'table')"><fmt:message key="orders.status"/></th>
+                            <th columns="3" onclick="tableSort(this, 'table')"><fmt:message key="orders.totalPrice"/></th>
+                            <th columns="4" onclick="tableSort(this, 'table')"><fmt:message key="orders.username"/></th>
+                            <th columns="5"><fmt:message key="basket.action"/></th>
                         </tr>
-                        <tbody id="baskets_table">
-                        <c:forEach var="dish" items="${requestScope.dishes}">
+                        <tbody id="dishes_table">
+                        <c:forEach var="order" items="${requestScope.orders}">
                             <tr class="rows">
-                                <td><c:out value="${dish.id}"/></td>
-                                <td><c:out value="${dish.name}"/></td>
-                                <td><c:out value="${dish.price}"/></td>
-                                <td><c:out value="${dish.categories.category}"/></td>
+                                <td><c:out value="${order.id}"/></td>
                                 <td>
-                                    <form method="delete" action="${pageContext.request.contextPath}/app/customer/basket/delete">
-                                        <input name="id" class="hidden" type="text"
-                                               value="${dish.id}"/>
-                                        <input class="abutton" type="submit" value="<fmt:message key="button.delete"/>">
-                                    </form>
+                                    <parse:parseLocalDateTime value="${order.time}"/>
+<%--                                    <c:out value='${order.time}'/>--%>
+                                </td>
+                                <td><c:out value="${order.status}"/></td>
+                                <td><c:out value="${order.totalPrice}"/></td>
+                                <td><c:out value="${order.login.login}"/></td>
+                                <td>
+                                    <c:if test="${order.status.name()!='DONE' && order.status.name()!='NEW'}">
+                                        <form method="put" action="${pageContext.request.contextPath}/app/customer/orders/confirm">
+                                            <input name="id" class="hidden" type="text" value="${order.id}"/>
+                                            <input name="status" class="hidden" type="text" value="${order.status}"/>
+                                            <input class="abutton" type="submit" value="<fmt:message key="orders.confirm"/>">
+                                        </form>
+                                    </c:if>
                                 </td>
                         </tr>
                         </c:forEach>
                     </table>
                 </div>
             </div>
-
-            <div class="page_head">
-                <p style="align-items: end;">
-                    <span><fmt:message key="orders.totalPrice"/> = </span>
-                    <span style="font-weight: 700">${requestScope.totalPrice}</span>
-                </p>
-            </div>
-
-            <div class="page_head">
-                <div style="margin: 20px 0;">
-<%--                    <a class="button" href="${pageContext.request.contextPath}/app/customer/orders/create">--%>
-<%--                        <fmt:message key="basket.create"/></a>--%>
-                    <form method="post" action="${pageContext.request.contextPath}/app/customer/orders/create">
-                        <input class="button" type="submit" value="<fmt:message key="basket.create"/>">
-                    </form>
-
-                </div>
-                <div>
-                    <form method="delete" action="${pageContext.request.contextPath}/app/customer/basket/delete_all">
-                        <input class="button" type="submit" value="<fmt:message key="basket.deleteAll"/>">
-                    </form>
-                </div>
-            </div>
         </c:if>
-
-
     </section>
 
 </div>

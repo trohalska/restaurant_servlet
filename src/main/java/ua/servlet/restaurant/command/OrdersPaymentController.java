@@ -17,11 +17,13 @@ public class OrdersPaymentController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
-        Long id = Long.parseLong(request.getParameter("id"));
-
+        String id = request.getParameter("id");
+        if (!Validator.valid_ID(request, id)) {
+            return "/WEB-INF/payment.jsp";
+        }
         logger.info(Prop.getDBProperty("select.orders.log") + id);
         try {
-            Orders order = ordersService.findById(id);
+            Orders order = ordersService.findById(Long.parseLong(id));
             request.setAttribute("order", order);
         } catch (DBException e) {
             logger.info(e.getMessage());

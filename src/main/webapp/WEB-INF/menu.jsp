@@ -48,12 +48,13 @@
 
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
+<%--        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">--%>
+<%--            <fmt:message key="main.menu"/></a>--%>
 
         <c:if test="${sessionScope.role!='ROLE_GUEST'}">
 
             <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
                 <fmt:message key="main.basket"/></a>
-
             <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
                 <fmt:message key="main.orders"/></a>
         </c:if>
@@ -110,27 +111,6 @@
 <%--            </div>--%>
         </div>
 
-<%--        <div id="dishes_block">--%>
-<%--            <div>--%>
-<%--                <table id="table" ng-model="dishes">--%>
-<%--                    <tr>--%>
-<%--                        <th columns="0" onclick="sorting('id')">№</th>--%>
-<%--                        <th columns="1" onclick="sorting('name', this)" th:text="#{menu.dish}"></th>--%>
-<%--                        <th columns="2" onclick="sorting('price')" th:text="#{menu.price}"></th>--%>
-<%--                        <th columns="3" onclick="sorting('categories')" th:text="#{menu.category}"></th>--%>
-<%--                    </tr>--%>
-<%--                    <tbody id="dishes_table">--%>
-<%--                    <tr ng-repeat="i in dishes" class="rows" checked=false>--%>
-<%--                        <td>{{i.id}}</td>--%>
-<%--                        <td>{{i.name}}</td>--%>
-<%--                        <td>{{i.price}}</td>--%>
-<%--                        <td>{{i.category}}</td>--%>
-<%--                    </tr>--%>
-<%--                    </tbody>--%>
-<%--                </table>--%>
-<%--            </div>--%>
-<%--        </div>--%>
-
         <div id="dishes_block">
             <div>
                 <table id="table">
@@ -142,9 +122,9 @@
                         <c:if test="${sessionScope.role!='ROLE_GUEST'}">
                             <th columns="4"><fmt:message key="basket.action"/></th>
                         </c:if>
-                        <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
-                            <th columns="5"><fmt:message key="basket.action"/></th>
-                        </c:if>
+<%--                        <c:if test="${sessionScope.role=='ROLE_MANAGER'}">--%>
+<%--                            <th columns="5"><fmt:message key="basket.action"/></th>--%>
+<%--                        </c:if>--%>
 
                     </tr>
                     <tbody id="dishes_table">
@@ -164,21 +144,21 @@
                                     </form>
                                 </td>
                             </c:if>
-                            <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
-                                <td>
-                                    <form method="put" action="${pageContext.request.contextPath}/app/manager/menu/update">
-                                        <input name="id" class="hidden" type="number"
-                                               value="<c:out value="${dish.id}"/>"/>
-                                        <input class="abutton" type="submit" value="<fmt:message key="button.update"/>">
-                                    </form>
+<%--                            <c:if test="${sessionScope.role=='ROLE_MANAGER'}">--%>
+<%--                                <td>--%>
+<%--                                    <form method="put" action="${pageContext.request.contextPath}/app/manager/menu/update">--%>
+<%--                                        <input name="id" class="hidden" type="number"--%>
+<%--                                               value="<c:out value="${dish.id}"/>"/>--%>
+<%--                                        <input class="abutton" type="submit" value="<fmt:message key="button.update"/>">--%>
+<%--                                    </form>--%>
 
-                                    <form method="delete" action="${pageContext.request.contextPath}/app/manager/menu/delete">
-                                        <input name="id" class="hidden" type="number"
-                                               value="<c:out value="${dish.id}"/>"/>
-                                        <input class="abutton" type="submit" value="<fmt:message key="button.delete"/>">
-                                    </form>
-                                </td>
-                            </c:if>
+<%--                                    <form method="delete" action="${pageContext.request.contextPath}/app/manager/menu/delete">--%>
+<%--                                        <input name="id" class="hidden" type="number"--%>
+<%--                                               value="<c:out value="${dish.id}"/>"/>--%>
+<%--                                        <input class="abutton" type="submit" value="<fmt:message key="button.delete"/>">--%>
+<%--                                    </form>--%>
+<%--                                </td>--%>
+<%--                            </c:if>--%>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -186,29 +166,23 @@
             </div>
         </div>
 
+        <div class="pages">
+            <div><fmt:message key="page.current"/> ${requestScope.pageNo}</div>
 
+            <div class="pagination">
+                <c:forEach var="i" begin="1" end="${requestScope.totalPages}" step="1">
+                    <a class="abutton" href="${pageContext.request.contextPath}/app/menu?page=${i}">
+                        ${i}
+                    </a>
+                </c:forEach>
 
-<%--        <div class="pages" ng-model="pageable">--%>
-<%--            <div th:text="#{page.current} + ' {{pageable.page}}'"></div>--%>
-
-<%--            <div class="pagination">--%>
 <%--                <a ng-repeat="x in [].constructor(pageable.totalPages) track by $index"--%>
 <%--                   class="abutton"--%>
-<%--                   href="/?page={{$index+1}}&sort={{pageable.sortField}}&direct={{pageable.sortDirection}}&category={{pageable.categoryId}}">{{ $index+1 }}</a>--%>
-<%--            </div>--%>
+<%--                   href="/page={{$index+1}}&sort={{pageable.sortField}}&direct={{pageable.sortDirection}}&category={{pageable.categoryId}}">{{ $index+1 }}</a>--%>
+            </div>
 
-<%--            <div th:text="#{page.total} + ' {{pageable.totalPages}}'"></div>--%>
-<%--        </div>--%>
-
-<%--        <div class="page_head" sec:authorize="isAuthenticated()">--%>
-<%--            <div style="margin: 20px 0;">--%>
-<%--                <label for="addDish" th:text="#{main.addDishId}"></label>--%>
-<%--                <input id="addDish" ng-model="dishId"/>--%>
-<%--            </div>--%>
-<%--            <div>--%>
-<%--                <a class="button" ng-click="postdata(dishId)" th:text="#{button.add}"></a>--%>
-<%--            </div>--%>
-<%--        </div>--%>
+            <div><fmt:message key="page.total"/> ${requestScope.totalPages}</div>
+        </div>
 
     </section>
 

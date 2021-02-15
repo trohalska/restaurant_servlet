@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.command.CommandUtility;
 import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.entity.RoleType;
+import ua.servlet.restaurant.utils.Prop;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -48,25 +49,19 @@ public class AuthFilter implements Filter {
 
         if (path.contains("customer")) {
             if (role.equals(RoleType.ROLE_GUEST)) {
-
-                servletResponse.getWriter().append("AccessDenied! You need to authorize!");
-                return;
+                throw new ServletException(Prop.getDBProperty("error.access.denied"));
             }
         } else if (path.contains("manager")) {
             if (role.equals(RoleType.ROLE_GUEST)
                     || role.equals(RoleType.ROLE_CUSTOMER)) {
-
-                servletResponse.getWriter().append("AccessDenied! Forbidden page!");
-                return;
+                throw new ServletException(Prop.getDBProperty("error.forbidden.page"));
             }
         }
         if ((path.contains("login")
                 || (path.contains("registration")))
             && (role.equals(RoleType.ROLE_CUSTOMER)
                 || role.equals(RoleType.ROLE_MANAGER))) {
-
-            servletResponse.getWriter().append("AccessDenied! You need to logout first!");
-            return;
+            throw new ServletException(Prop.getDBProperty("error.for.logged.user"));
         }
 
         filterChain.doFilter(servletRequest,servletResponse);

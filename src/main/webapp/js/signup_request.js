@@ -49,7 +49,9 @@ angular.module("get_form", [])
                     let endIndex = response.data.indexOf('<', beginIndex);
                     let errorMsg = response.data.substring(beginIndex, endIndex);
                     document.querySelector('#errorMsg').innerHTML = errorMsg;
+                    return;
                 }
+                location.replace('/restaurant/app/login');
             }, function (response) {
                 alertErrors(response);
             });

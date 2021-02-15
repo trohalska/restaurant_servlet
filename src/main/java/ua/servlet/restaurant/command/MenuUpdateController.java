@@ -8,7 +8,6 @@ import ua.servlet.restaurant.utils.Prop;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.math.BigDecimal;
 
 public class MenuUpdateController implements Command  {
     private final DishesService dishesService;
@@ -18,20 +17,17 @@ public class MenuUpdateController implements Command  {
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
-        Long id = Long.parseLong(request.getParameter("id"));
-
-        if (id <= 0 ) {
-            request.setAttribute("errorMsg", Prop.getDBProperty("invalid.fields"));
-            return "/WEB-INF/menu.jsp";
+        String id = request.getParameter("id");
+        if (!Validator.valid_ID(request, id)) {
+            return "/WEB-INF/manager/dish_update.jsp";
         }
-
         logger.info(Prop.getDBProperty("select.dishes.log") + id);
         try {
-            Dishes dish = dishesService.findById(id);
+            Dishes dish = dishesService.findById(Long.parseLong(id));
             request.setAttribute("dish", dish);
         } catch (DBException e) {
             logger.warn(e.getMessage());
-            return "redirect:/app/main";
+            request.setAttribute("errorMsg", e.getMessage());
         }
         return "/WEB-INF/manager/dish_update.jsp";
     }

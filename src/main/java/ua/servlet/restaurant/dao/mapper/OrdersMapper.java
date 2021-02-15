@@ -15,7 +15,9 @@ public class OrdersMapper implements ObjectMappers<Orders> {
                 .status(Status.valueOf(rs.getString("status")))
                 .time(rs.getTimestamp("time").toLocalDateTime())
                 .totalPrice(rs.getBigDecimal("total_price"))
-//                .login()
+                .login(Logins.builder()
+                        .login(rs.getString("login"))
+                        .build())
                 .build();
     }
 

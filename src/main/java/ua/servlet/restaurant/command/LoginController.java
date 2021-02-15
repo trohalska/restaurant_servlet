@@ -22,9 +22,12 @@ public class LoginController implements Command {
         String password = request.getParameter("password");
         logger.info(login + " " + password);
 
-        if ( login == null || login.equals("") || password == null || password.equals("") ){
+        if (login == null || login.equals("") || password == null || password.equals("")) {
             return "/login.jsp";
         }
+//        if (!Validator.valid_EmptyFields(request, login, password)) {
+//            return "/login.jsp";
+//        }
         Logins user;
         try {
             user = loginsService.findByLogin(login);
@@ -33,7 +36,7 @@ public class LoginController implements Command {
             request.setAttribute("errorMsg", e.getMessage());
             return "/login.jsp";
         }
-
+        logger.info(user);
         return checkPassword(request, user, password);
 
     }
@@ -43,7 +46,10 @@ public class LoginController implements Command {
 
         if (BCrypt.checkpw(password, user.getPassword())) {
             if (CommandUtility.checkUserIsLogged(request, user.getLogin())) {
-                return "/WEB-INF/error.jsp";
+                String errorMsg = Prop.getDBProperty("invalid.user");
+                logger.warn(errorMsg);
+                request.setAttribute("errorMsg", errorMsg);
+                return "/login.jsp";
             }
             logger.info(Prop.getDBProperty(
                     "select.login.byLogin.success") + user.getLogin());

@@ -1,6 +1,8 @@
 package ua.servlet.restaurant.command;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.service.LoginsService;
@@ -9,10 +11,9 @@ import ua.servlet.restaurant.utils.Prop;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RegistrationController implements Command {
+    Logger logger = LogManager.getLogger(Command.class);
     private final LoginsService loginsService;
     public RegistrationController() {
         this.loginsService = new LoginsService();
@@ -27,7 +28,8 @@ public class RegistrationController implements Command {
                 return "/registration.jsp";
             }
             Logins logins = new ObjectMapper().readValue(json, Logins.class);
-            if (!validateInput(logins, request)) {
+
+            if (!Validator.valid_Registration(logins, request)) {
                 return "/registration.jsp";
             }
 
@@ -35,45 +37,16 @@ public class RegistrationController implements Command {
             logger.info(logins.toString());
 
             loginsService.create(logins);
-            return "redirect:/login";
         } catch (DBException e) {
-            String errorMsg = Prop.getDBProperty("select.login.byLogin.dbe.exist");
+            String errorMsg = Prop.getDBProperty("invalid.username");
             request.setAttribute("errorMsg", errorMsg);
-            logger.warn(e.getMessage());
+            logger.warn(errorMsg);
         } catch (IOException e) {
             String errorMsg = "Cannot get json body";
             request.setAttribute("errorMsg", errorMsg);
             logger.error(errorMsg);
         }
         return "/registration.jsp";
-    }
-
-    private boolean validateInput(Logins user, HttpServletRequest request) {
-        final String EMAIL_REGEX = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$";
-        final String PASS_REGEX = "^[a-z0-9._%+-]{2,6}$";
-        Matcher m;
-
-        if (user.getLogin().equals("") || user.getEmail().equals("")) {
-            return setErrorAndLog(request, "invalid.fields");
-        }
-
-        m = Pattern.compile(EMAIL_REGEX).matcher(user.getEmail());
-        if (!m.find()) {
-            return setErrorAndLog(request, "invalid.email");
-        }
-
-        m = Pattern.compile(PASS_REGEX).matcher(user.getPassword());
-        if (!m.find()) {
-            return setErrorAndLog(request, "invalid.password");
-        }
-        return true;
-    }
-
-    private boolean setErrorAndLog(HttpServletRequest request, String error) {
-        String errorMsg = Prop.getDBProperty(error);
-        request.setAttribute("errorMsg", errorMsg);
-        logger.warn(errorMsg);
-        return false;
     }
 
 }

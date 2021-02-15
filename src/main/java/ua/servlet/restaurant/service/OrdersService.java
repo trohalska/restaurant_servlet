@@ -27,7 +27,8 @@ public class OrdersService {
         }
     }
 
-    public List<Orders> getAll(HttpServletRequest request) throws DBException {
+    // for user
+    public List<Orders> getAllByLoginId(HttpServletRequest request) throws DBException {
 //        String locale = CommandUtility.getLocale(request);
         Logins user = CommandUtility.getPrincipal(request);
         List<Orders> list;
@@ -37,6 +38,19 @@ public class OrdersService {
                     () -> new DBException(Prop.getDBProperty("select.all.orders.empty")));
         }
 
+        return list;
+    }
+
+    // for manager
+    public List<Orders> getAll() throws DBException {
+        List<Orders> list;
+
+        try (OrdersDao dao = daoFactory.createOrdersDao()) {
+            list = dao.findAll();
+        }
+        if (list.isEmpty()) {
+            throw new DBException(Prop.getDBProperty("select.all.orders.empty"));
+        }
         return list;
     }
 

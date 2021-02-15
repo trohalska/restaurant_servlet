@@ -25,15 +25,13 @@ public class JDBCOrdersDao implements OrdersDao {
 
         final String query = Prop.getDBProperty("create.order");
 //        final String query = "INSERT INTO orders (status, time, total_price, login_id) VALUES (?, current_timestamp, " +
-//                "(SELECT SUM(d.price) FROM baskets b JOIN dishes d on b.dish_id = d.id WHERE b.login_id=?), ?); " +
-//                "DELETE FROM baskets WHERE login_id=?";
+//                "(SELECT SUM(d.price) FROM baskets b JOIN dishes d on b.dish_id = d.id WHERE b.login_id=?), ?)";
         try (PreparedStatement pstmt =
                      connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             int k = 1;
             pstmt.setString(k++, entity.getStatus().name());
             pstmt.setLong(k++, entity.getLogin().getId());
             pstmt.setLong(k++, entity.getLogin().getId());
-            pstmt.setLong(k, entity.getLogin().getId());
 
             if (pstmt.executeUpdate() > 0) {
                 rs = pstmt.getGeneratedKeys();
@@ -84,7 +82,24 @@ public class JDBCOrdersDao implements OrdersDao {
 
     @Override
     public List<Orders> findAll() throws DBException {
-        return null;
+        final String query = Prop.getDBProperty("select.all.orders.manager");
+        try (Statement st = connection.createStatement()) {
+            ResultSet rs = st.executeQuery(query);
+
+            OrdersMapper ordersMapper = new OrdersMapper();
+            List<Orders> result = new ArrayList<>();
+            while (rs.next()) {
+                result.add(ordersMapper.extractFromResultSet(rs));
+            }
+            rs.close();
+            return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            String errorMsg = Prop.getDBProperty("select.all.orders.manager.dbe");
+            log.error(errorMsg);
+            throw new DBException(errorMsg);
+        }
     }
 
     public Optional<List<Orders>> findAllByLoginId(Long id) throws DBException {
@@ -92,6 +107,7 @@ public class JDBCOrdersDao implements OrdersDao {
         List<Orders> list;
 
         final String query = Prop.getDBProperty("select.all.orders");
+//        String query = "SELECT * FROM orders o LEFT JOIN login l ON o.login_id = l.id WHERE o.login_id=? ORDER BY o.id";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -113,16 +129,16 @@ public class JDBCOrdersDao implements OrdersDao {
         }
     }
 
-    // only fot payment
+    // fot payment and manager update
     @Override
     public void update(Orders entity) {
         final String query = Prop.getDBProperty("update.orders");
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
 
             int k = 1;
-            pstmt.setString(k++, entity.getStatus().name());
+            pstmt.setString(k++, entity.getStatus().next().name());
             pstmt.setLong(k++, entity.getId());
-            pstmt.setString(k, Status.NEW.name());
+            pstmt.setString(k, entity.getStatus().name());
 
             pstmt.executeUpdate();
         } catch (SQLException ex) {

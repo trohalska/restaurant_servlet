@@ -72,6 +72,64 @@ public class JDBCDishesDao implements DishesDao {
         }
     }
 
+    public List<Dishes> findAllPageable(int pageNo, String sort,
+                                        String direct, int categoryId) throws DBException {
+        Map<Long, Dishes> dishes = new HashMap<>();
+        int rowsOnPage = Integer.parseInt(Prop.getProperty("pageable.page"));
+        int beginNo = (pageNo - 1) * rowsOnPage + 1;
+        int endNo = beginNo + rowsOnPage - 1;
+
+//        final String query = (category.equals("none"))
+//                ? Prop.getDBProperty("select.all.dishes.pageable")
+//                : Prop.getDBProperty("select.all.dishes.pageable.filter");
+
+//        final String preQuery = (categoryId == 0)
+//
+//                ? "SELECT * FROM dishes d LEFT JOIN categories c " +
+//                "ON d.category_id = c.id ORDER BY ? %s " +
+//                "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
+//
+//                : "SELECT * FROM dishes d LEFT JOIN categories c " +
+//                "ON d.category_id = c.id WHERE c.id=? ORDER BY ? %s " +
+//                "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+//
+//        String query = String.format(preQuery, direct.toUpperCase(Locale.ROOT));
+
+        String query = "SELECT * FROM " +
+                "(SELECT row_number() OVER (ORDER BY d.id) AS row,* FROM dishes d LEFT JOIN categories c " +
+                "ON d.category_id = c.id ORDER BY ? ASC) AS temp " +
+                "WHERE temp.row BETWEEN ? AND ?";
+
+        System.out.println(query);
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            int k = 1;
+            if (categoryId != 0) {
+                pstmt.setInt(k++, categoryId);
+            }
+//            pstmt.setString(k++, "d." + sort);
+            pstmt.setString(k++, "d." + sort);
+            pstmt.setInt(k++, beginNo);
+            pstmt.setInt(k, endNo);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            DishesMapper dishesMapper = new DishesMapper();
+            while (rs.next()) {
+                Dishes dish = dishesMapper.extractFromResultSet(rs);
+                dishesMapper.makeUnique(dishes, dish);
+            }
+            rs.close();
+            return new ArrayList<>(dishes.values());
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+            String errorMsg = Prop.getDBProperty("select.all.dishes.dbe");
+            log.error(errorMsg);
+            throw new DBException(errorMsg);
+        }
+    }
+
     @Override
     public void update(Dishes entity) {
 //        final String query = Prop.getDBProperty("update.dishes");

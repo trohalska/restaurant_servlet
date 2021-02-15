@@ -3,7 +3,6 @@ package ua.servlet.restaurant.servlet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.command.*;
-import ua.servlet.restaurant.command.ExceptionController;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -44,9 +43,9 @@ public class Servlet extends HttpServlet {
         commands.put("orders/create", new OrdersCreateController());            // post
         commands.put("orders/payment", new OrdersPaymentController());          // get
         commands.put("orders/payment/pay", new OrdersPaymentPayController());   // put
-//        commands.put("orders/confirm", new OrdersCreateController());
+        commands.put("orders/confirm", new OrdersConfirmController());          // put
 
-        commands.put("exception" , new ExceptionController());
+        commands.put("orders_manager", new OrdersManagerController());          // get
 
 //        commands.put("getAll", new GetAllLogins());
     }

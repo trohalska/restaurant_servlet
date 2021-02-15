@@ -15,11 +15,13 @@ public class BasketDeleteController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
-        Long id = Long.parseLong(request.getParameter("id"));
-
+        String id = request.getParameter("id");
+        if (!Validator.valid_ID(request, id)) {
+            return "/WEB_INF/basket.jsp";
+        }
         logger.info(Prop.getDBProperty("delete.basket.log") + id);
-        basketService.delete(id);
-        return "redirect:/app/customer/basket";
+        basketService.delete(Long.parseLong(id));
+        return "redirect:/customer/basket";
     }
 
 }

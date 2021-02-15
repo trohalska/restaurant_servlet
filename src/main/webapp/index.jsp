@@ -47,11 +47,12 @@
 
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
+<%--        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">--%>
+<%--            <fmt:message key="main.menu"/></a>--%>
 
         <c:if test="${sessionScope.role!='ROLE_GUEST'}">
             <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
                 <fmt:message key="main.basket"/></a>
-
             <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
                 <fmt:message key="main.orders"/></a>
         </c:if>
@@ -83,7 +84,9 @@
     </header>
 
     <br>
-    <a style="display: block; text-align: center; width: 80px; margin: 0 auto" class="button" href="${pageContext.request.contextPath}/app/menu"><fmt:message key="main.menu"/></a>
+
+    <a style="display: block; text-align: center; width: 80px; margin: 0 auto" class="button" href="${pageContext.request.contextPath}/app/menu?page=1&sort=id&direct=desc&category=0">
+        <fmt:message key="main.menu"/></a>
 
 </div>
 </body>

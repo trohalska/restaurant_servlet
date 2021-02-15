@@ -21,26 +21,15 @@ public class DishUpdateController implements Command  {
         String nameUa = request.getParameter("name_ua");
         String priceS = request.getParameter("price");
 
-        if ( nameEn == null || nameEn.equals("")
-                || nameUa == null || nameUa.equals("")
-                || priceS == null || priceS.equals("")) {
-            request.setAttribute("errorMsg", Prop.getDBProperty("invalid.fields"));
+        if (!Validator.valid_DishUpdate(request, nameEn, nameUa, priceS)) {
             return "/WEB-INF/manager/dish_update.jsp";
         }
-
-        BigDecimal price = new BigDecimal(priceS);
-
-        if ( price.compareTo(BigDecimal.ZERO) <= 0) {
-            request.setAttribute("errorMsg", Prop.getDBProperty("invalid.price"));
-            return "/WEB-INF/manager/dish_update.jsp";
-        }
-
         logger.info(Prop.getDBProperty("update.dishes.log") + nameEn);
         dishesService.update(Dishes.builder()
                 .nameEn(nameEn)
                 .nameUa(nameUa)
-                .price(price)
+                .price(new BigDecimal(priceS))
                 .build());
-        return "/WEB-INF/manager/dish_update.jsp";
+        return "/WEB-INF/dish_update.jsp";
     }
 }

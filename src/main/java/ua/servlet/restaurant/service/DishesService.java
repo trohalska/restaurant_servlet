@@ -22,9 +22,10 @@ public class DishesService {
         }
     }
 
-    public List<DishesDTO> getAll(String locale) throws DBException {
+    public List<DishesDTO> getAll(String locale, int pageNo, String sort,
+                                  String direct, int categoryId) throws DBException {
         try (DishesDao dao = daoFactory.createDishesDao()) {
-            return DishesDTOConverter.convertList(dao.findAll(), locale);
+            return DishesDTOConverter.convertList(dao.findAllPageable(pageNo, sort, direct, categoryId), locale);
         }
     }
 

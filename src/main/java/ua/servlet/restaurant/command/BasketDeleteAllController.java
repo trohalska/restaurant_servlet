@@ -19,7 +19,7 @@ public class BasketDeleteAllController implements Command {
 
         logger.info(Prop.getDBProperty("delete.all.basket.log") + id);
         basketService.deleteAll(id);
-        return "redirect:/app/customer/basket";
+        return "redirect:/customer/basket";
     }
 
 }

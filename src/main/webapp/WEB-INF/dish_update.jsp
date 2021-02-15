@@ -33,13 +33,12 @@
 
         <a class="abutton" href="${pageContext.request.contextPath}/app/logout">
             <fmt:message key="sign.out"/></a>
-
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
-
+<%--        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">--%>
+<%--            <fmt:message key="main.menu"/></a>--%>
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
             <fmt:message key="main.basket"/></a>
-
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
             <fmt:message key="main.orders"/></a>
 

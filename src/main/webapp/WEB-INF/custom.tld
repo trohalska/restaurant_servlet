@@ -1,0 +1,17 @@
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>Example TLD</short-name>
+
+    <tag>
+        <name>parseLocalDateTime</name>
+        <tag-class>ua.servlet.restaurant.utils.ParseLocalDateTimeTag</tag-class>
+        <body-content>scriptless</body-content>
+
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+</taglib>

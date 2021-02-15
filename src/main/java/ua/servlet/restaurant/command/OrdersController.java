@@ -22,7 +22,7 @@ public class OrdersController implements Command {
     public String execute(HttpServletRequest request) throws IOException, ServletException {
         logger.info(Prop.getDBProperty("select.all.orders.log"));
         try {
-            List<Orders> orders = ordersService.getAll(request);
+            List<Orders> orders = ordersService.getAllByLoginId(request);
             request.setAttribute("orders", orders);
         } catch (DBException e) {
             logger.warn(e.getMessage());

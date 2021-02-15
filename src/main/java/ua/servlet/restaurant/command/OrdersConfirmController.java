@@ -10,29 +10,33 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-public class OrdersPaymentPayController implements Command {
+public class OrdersConfirmController implements Command {
     private final OrdersService ordersService;
-    public OrdersPaymentPayController() {
+    public OrdersConfirmController() {
         this.ordersService = new OrdersService();
     }
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
-        String id = request.getParameter("id");
-        if (!Validator.valid_ID(request, id)) {
-            return "/WEB-INF/payment.jsp";
+        String idStr = request.getParameter("id");
+        String statusStr = request.getParameter("status");
+
+        if (!Validator.valid_OrdersConfirm(request, idStr, statusStr)) {
+            return "/WEB-INF/manager/orders_manager.jsp";
         }
-        logger.info(Prop.getDBProperty("update.orders.log") + id);
+
+        logger.info(Prop.getDBProperty("update.orders.log") + idStr);
         try {
             ordersService.update(Orders.builder()
-                    .id(Long.parseLong(id))
-                    .status(Status.NEW)
+                    .id(Long.parseLong(idStr))
+                    .status(Status.valueOf(statusStr))
                     .build());
         } catch (DBException e) {
             logger.info(e.getMessage());
             request.setAttribute("errorMsg", e.getMessage());
-            return "/WEB-INF/payment.jsp";
+            return "/WEB-INF/manager/orders_manager.jsp";
         }
-        return "redirect:/customer/orders";
+        return "redirect:/manager/orders_manager";
     }
+
 }

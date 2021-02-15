@@ -6,7 +6,6 @@ import ua.servlet.restaurant.utils.Prop;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.io.IOException;
 
 public class BasketAddController implements Command {
@@ -17,16 +16,19 @@ public class BasketAddController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
-        Long id = Long.parseLong(request.getParameter("id"));
-
+        String id = request.getParameter("id");
+        if (!Validator.valid_ID(request, id)) {
+            return "/WEB_INF/basket.jsp";
+        }
         logger.info(Prop.getDBProperty("create.basket.log") + id);
         try {
-            basketService.create(request, id);
+            basketService.create(request, Long.parseLong(id));
         } catch (DBException e) {
             logger.info(e.getMessage());
             request.setAttribute("errorMsg", e.getMessage());
+            return "/WEB_INF/basket.jsp";
         }
-        return "redirect:/app/menu";
+        return "redirect:/menu";
     }
 
 //    public ResponseEntity<Baskets> add (@Valid @RequestBody ItemDTO itemDTO) {

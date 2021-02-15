@@ -62,7 +62,8 @@ public class JDBCBasketsDao implements BasketsDao {
         final String query = Prop.getDBProperty("select.all.baskets");
 //        final String query = "SELECT * FROM baskets b " +
 //                "LEFT JOIN dishes d on b.dish_id = d.id " +
-//                "LEFT JOIN categories c on c.id = d.category_id WHERE login_id=?";
+//                "LEFT JOIN categories c on c.id = d.category_id WHERE login_id=? " +
+//                "ORDER BY b.id";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();

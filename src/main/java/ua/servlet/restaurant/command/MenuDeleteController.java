@@ -15,10 +15,12 @@ public class MenuDeleteController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
-        Long id = Long.parseLong(request.getParameter("id"));
-
+        String id = request.getParameter("id");
+        if (!Validator.valid_ID(request, id)) {
+            return "/WEB_INF/menu.jsp";
+        }
         logger.info(Prop.getDBProperty("delete.dishes.log") + id);
-        dishesService.delete(id);
+        dishesService.delete(Long.parseLong(id));
         return "redirect:/app/menu";
     }
 }
