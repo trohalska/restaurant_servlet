@@ -36,8 +36,8 @@
             <fmt:message key="sign.out"/></a>
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
-        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">
-            <fmt:message key="main.menu"/></a>
+<%--        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">--%>
+<%--            <fmt:message key="main.menu"/></a>--%>
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
             <fmt:message key="main.basket"/></a>
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
@@ -95,10 +95,7 @@
                         <c:forEach var="order" items="${requestScope.orders}">
                             <tr class="rows">
                                 <td><c:out value="${order.id}"/></td>
-                                <td>
-                                    <parse:parseLocalDateTime value="${order.time}"/>
-<%--                                    <c:out value='${order.time}'/>--%>
-                                </td>
+                                <td><parse:parseLocalDateTime value="${order.time}"/></td>
                                 <td><c:out value="${order.status}"/></td>
                                 <td><c:out value="${order.totalPrice}"/></td>
                                 <td><c:out value="${order.login.login}"/></td>

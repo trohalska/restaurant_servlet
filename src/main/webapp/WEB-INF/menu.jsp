@@ -74,7 +74,7 @@
                 $("#locales").change(function () {
                     let selectedOption = $('#locales').val();
                     if (selectedOption !== ''){
-                        window.location.replace('?locale=' + selectedOption);
+                        window.location.replace('&locale=' + selectedOption);
                     }
                 });
             });
@@ -85,104 +85,117 @@
         <a><h2><fmt:message key="main.header"/></h2></a>
     </header>
 
-    <section class="section4"
-             ng-app="get_form" ng-controller="GetController" data-ng-init="getItems()">
-        <div class="page_head">
-            <div>
-                <h2><fmt:message key="main.menu"/></h2>
+    <section class="section4">
+        <div id="errorMsg">${requestScope.errorMsg}</div>
+
+        <c:if test="${requestScope.errorMsg==null || requestScope.errorMsg==''}">
+
+            <div class="page_head">
+                <div>
+                    <h2><fmt:message key="main.menu"/></h2>
+                </div>
+
+    <%--            <div ng-model="categories">--%>
+    <%--                <label for="categories_filter"></label>--%>
+    <%--                <select id="categories_filter" class="form-styling">--%>
+    <%--                    <option th:text="#{menu.filter.name}"></option>--%>
+    <%--                    <option value="0" th:text="#{menu.filter.all}"></option>--%>
+    <%--                    <option ng-repeat="c in categories" value="{{c.id}}">{{c.category}}</option>--%>
+    <%--                </select>--%>
+    <%--                <script type="text/javascript">--%>
+    <%--                    $(document).ready(function() {--%>
+    <%--                        $("#categories_filter").change(function () {--%>
+    <%--                            category = $('#categories_filter').val();--%>
+    <%--                            page = 1;--%>
+    <%--                            replace();--%>
+    <%--                        });--%>
+    <%--                    });--%>
+    <%--                </script>--%>
+    <%--            </div>--%>
             </div>
 
-<%--            <div ng-model="categories">--%>
-<%--                <label for="categories_filter"></label>--%>
-<%--                <select id="categories_filter" class="form-styling">--%>
-<%--                    <option th:text="#{menu.filter.name}"></option>--%>
-<%--                    <option value="0" th:text="#{menu.filter.all}"></option>--%>
-<%--                    <option ng-repeat="c in categories" value="{{c.id}}">{{c.category}}</option>--%>
-<%--                </select>--%>
-<%--                <script type="text/javascript">--%>
-<%--                    $(document).ready(function() {--%>
-<%--                        $("#categories_filter").change(function () {--%>
-<%--                            category = $('#categories_filter').val();--%>
-<%--                            page = 1;--%>
-<%--                            replace();--%>
-<%--                        });--%>
-<%--                    });--%>
-<%--                </script>--%>
-<%--            </div>--%>
-        </div>
-
-        <div id="dishes_block">
-            <div>
-                <table id="table">
-                    <tr>
-                        <th columns="0">№</th>
-                        <th columns="1"><fmt:message key="menu.dish"/></th>
-                        <th columns="2"><fmt:message key="menu.price"/></th>
-                        <th columns="3"><fmt:message key="menu.category"/></th>
-                        <c:if test="${sessionScope.role!='ROLE_GUEST'}">
-                            <th columns="4"><fmt:message key="basket.action"/></th>
-                        </c:if>
-<%--                        <c:if test="${sessionScope.role=='ROLE_MANAGER'}">--%>
-<%--                            <th columns="5"><fmt:message key="basket.action"/></th>--%>
-<%--                        </c:if>--%>
-
-                    </tr>
-                    <tbody id="dishes_table">
-                    <c:forEach var="dish" items="${requestScope.dishes}">
-                        <tr class="rows">
-                            <td><c:out value="${dish.id}"/></td>
-                            <td><c:out value="${dish.name}"/></td>
-                            <td><c:out value="${dish.price}"/></td>
-                            <td><c:out value="${dish.categories.category}"/></td>
-
+            <div id="dishes_block">
+                <div>
+                    <table id="table">
+                        <tr>
+                            <th columns="0">
+                                <a href="${pageContext.request.contextPath}/app/menu?page=${requestScope.pageNo}&sort=id&direct=${requestScope.directTable}&category=${requestScope.category}">
+                                    №</a></th>
+                            <th columns="1">
+                                <a href="${pageContext.request.contextPath}/app/menu?page=${requestScope.pageNo}&sort=${requestScope.name}&direct=${requestScope.directTable}&category=${requestScope.category}">
+                                    <fmt:message key="menu.dish"/></a></th>
+                            <th columns="2">
+                                <a href="${pageContext.request.contextPath}/app/menu?page=${requestScope.pageNo}&sort=price&direct=${requestScope.directTable}&category=${requestScope.category}">
+                                    <fmt:message key="menu.price"/></a></th>
+                            <th columns="3">
+                                <a href="${pageContext.request.contextPath}/app/menu?page=${requestScope.pageNo}&sort=category_id&direct=${requestScope.directTable}&category=${requestScope.category}">
+                                    <fmt:message key="menu.category"/></a></th>
                             <c:if test="${sessionScope.role!='ROLE_GUEST'}">
-                                <td>
-                                    <form method="post" action="${pageContext.request.contextPath}/app/customer/basket/add">
-                                        <input name="id" class="hidden" type="number"
-                                               value="<c:out value="${dish.id}"/>"/>
-                                        <input class="abutton" type="submit" value="<fmt:message key="button.add"/>">
-                                    </form>
-                                </td>
+                                <th columns="4"><fmt:message key="basket.action"/></th>
                             </c:if>
-<%--                            <c:if test="${sessionScope.role=='ROLE_MANAGER'}">--%>
-<%--                                <td>--%>
-<%--                                    <form method="put" action="${pageContext.request.contextPath}/app/manager/menu/update">--%>
-<%--                                        <input name="id" class="hidden" type="number"--%>
-<%--                                               value="<c:out value="${dish.id}"/>"/>--%>
-<%--                                        <input class="abutton" type="submit" value="<fmt:message key="button.update"/>">--%>
-<%--                                    </form>--%>
-
-<%--                                    <form method="delete" action="${pageContext.request.contextPath}/app/manager/menu/delete">--%>
-<%--                                        <input name="id" class="hidden" type="number"--%>
-<%--                                               value="<c:out value="${dish.id}"/>"/>--%>
-<%--                                        <input class="abutton" type="submit" value="<fmt:message key="button.delete"/>">--%>
-<%--                                    </form>--%>
-<%--                                </td>--%>
-<%--                            </c:if>--%>
+                            <%--                        <c:if test="${sessionScope.role=='ROLE_MANAGER'}">--%>
+                            <%--                            <th columns="5"><fmt:message key="basket.action"/></th>--%>
+                            <%--                        </c:if>--%>
                         </tr>
+                        <tbody id="dishes_table">
+                        <c:forEach var="dish" items="${requestScope.dishes}">
+                            <tr class="rows">
+                                <td><c:out value="${dish.id}"/></td>
+                                <td><c:out value="${dish.name}"/></td>
+                                <td><c:out value="${dish.price}"/></td>
+                                <td><c:out value="${dish.categories.category}"/></td>
+
+                                <c:if test="${sessionScope.role!='ROLE_GUEST'}">
+                                    <td>
+                                        <form method="post" action="${pageContext.request.contextPath}/app/customer/basket/add">
+                                            <input name="id" class="hidden" type="number"
+                                                   value="<c:out value="${dish.id}"/>"/>
+                                            <input class="abutton" type="submit" value="<fmt:message key="button.add"/>">
+                                        </form>
+                                    </td>
+                                </c:if>
+    <%--                            <c:if test="${sessionScope.role=='ROLE_MANAGER'}">--%>
+    <%--                                <td>--%>
+    <%--                                    <form method="put" action="${pageContext.request.contextPath}/app/manager/menu/update">--%>
+    <%--                                        <input name="id" class="hidden" type="number"--%>
+    <%--                                               value="<c:out value="${dish.id}"/>"/>--%>
+    <%--                                        <input class="abutton" type="submit" value="<fmt:message key="button.update"/>">--%>
+    <%--                                    </form>--%>
+
+    <%--                                    <form method="delete" action="${pageContext.request.contextPath}/app/manager/menu/delete">--%>
+    <%--                                        <input name="id" class="hidden" type="number"--%>
+    <%--                                               value="<c:out value="${dish.id}"/>"/>--%>
+    <%--                                        <input class="abutton" type="submit" value="<fmt:message key="button.delete"/>">--%>
+    <%--                                    </form>--%>
+    <%--                                </td>--%>
+    <%--                            </c:if>--%>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="pages">
+                <div><fmt:message key="page.current"/> ${requestScope.pageNo}</div>
+
+                <div class="pagination">
+                    <c:forEach var="i" begin="1" end="${requestScope.totalPages}" step="1">
+                        <a class="abutton"
+                           href="${pageContext.request.contextPath}/app/menu?page=${i}&sort=${requestScope.sort}&direct=${requestScope.direct}&category=${requestScope.category}">
+                            ${i}
+                        </a>
                     </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
-        <div class="pages">
-            <div><fmt:message key="page.current"/> ${requestScope.pageNo}</div>
+    <%--                <a ng-repeat="x in [].constructor(pageable.totalPages) track by $index"--%>
+    <%--                   class="abutton"--%>
+    <%--                   href="/page={{$index+1}}&sort={{pageable.sortField}}&direct={{pageable.sortDirection}}&category={{pageable.categoryId}}">{{ $index+1 }}</a>--%>
+                </div>
 
-            <div class="pagination">
-                <c:forEach var="i" begin="1" end="${requestScope.totalPages}" step="1">
-                    <a class="abutton" href="${pageContext.request.contextPath}/app/menu?page=${i}">
-                        ${i}
-                    </a>
-                </c:forEach>
-
-<%--                <a ng-repeat="x in [].constructor(pageable.totalPages) track by $index"--%>
-<%--                   class="abutton"--%>
-<%--                   href="/page={{$index+1}}&sort={{pageable.sortField}}&direct={{pageable.sortDirection}}&category={{pageable.categoryId}}">{{ $index+1 }}</a>--%>
+                <div><fmt:message key="page.total"/> ${requestScope.totalPages}</div>
             </div>
 
-            <div><fmt:message key="page.total"/> ${requestScope.totalPages}</div>
-        </div>
+        </c:if>
 
     </section>
 

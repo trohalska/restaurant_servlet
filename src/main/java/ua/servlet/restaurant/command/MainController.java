@@ -2,6 +2,7 @@ package ua.servlet.restaurant.command;
 
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dto.DishesDTO;
+import ua.servlet.restaurant.dto.Page;
 import ua.servlet.restaurant.service.DishesService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,42 +13,42 @@ public class MainController implements Command {
     public MainController() {
         this.dishesService = new DishesService();
     }
+
     // TODO sorting
 
     @Override
     public String execute(HttpServletRequest request) {
         String locale = CommandUtility.getLocale(request);
 
-        // todo input validation
+        // check id ask blabla or sort blabla
 
         String page = request.getParameter("page");
         String sort = request.getParameter("sort");
         String direct = request.getParameter("direct");
         String category = request.getParameter("category");
 
-        int pageNo = 1;
-        int categoryId = 0;
-        if (!Validator.valid_EmptyFields(request, page, sort, direct, category)) {
-            sort = "id";
-            direct = "asc";
-        } else {
-            pageNo = Integer.parseInt(page);
-            categoryId = Integer.parseInt(category);
-        }
+        int pageNo = (!Validator.valid_EmptyFields(request, page))          ? 1     : Integer.parseInt(page);
+        int categoryId = (!Validator.valid_EmptyFields(request, category))  ? 0     : Integer.parseInt(category);
+        sort = (!Validator.valid_EmptyFields(request, sort))                ? "id"  : sort;
+        direct = (!Validator.valid_EmptyFields(request, direct))            ? "ASC" : direct;
 
-        pageNo = Integer.parseInt(page);
-
-        List<DishesDTO> list;
+        Page pageable;
         try {
-            list = dishesService.getAll(locale, pageNo, sort, direct, categoryId);
+//            list = dishesService.getAll(locale);
+            pageable = dishesService.getAllPageable(locale, pageNo, sort, direct, categoryId);
         } catch (DBException e) {
             logger.info(e.getMessage());
             request.setAttribute("errorMsg", e.getMessage());
             return "/WEB-INF/menu.jsp";
         }
-        request.setAttribute("dishes", list);
+        request.setAttribute("dishes", pageable.getDishes());
         request.setAttribute("pageNo", pageNo);
-        request.setAttribute("totalPages", 3);
+        request.setAttribute("totalPages", pageable.getTotalPages());
+        request.setAttribute("sort", sort);
+        request.setAttribute("direct", direct);
+        request.setAttribute("directTable", (direct.equals("ASC")) ? "DESC" : "ASC");
+        request.setAttribute("name", (locale.equals("en")) ? "name_en" : "name_ua");
+        request.setAttribute("category", categoryId);
         return "/WEB-INF/menu.jsp";
     }
 }

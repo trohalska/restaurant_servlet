@@ -5,6 +5,7 @@ import ua.servlet.restaurant.dao.DaoFactory;
 import ua.servlet.restaurant.dao.DishesDao;
 import ua.servlet.restaurant.dao.entity.Dishes;
 import ua.servlet.restaurant.dto.DishesDTO;
+import ua.servlet.restaurant.dto.Page;
 import ua.servlet.restaurant.dto.converter.DishesDTOConverter;
 import ua.servlet.restaurant.utils.Prop;
 
@@ -22,10 +23,16 @@ public class DishesService {
         }
     }
 
-    public List<DishesDTO> getAll(String locale, int pageNo, String sort,
-                                  String direct, int categoryId) throws DBException {
+    public Page getAllPageable(String locale, int pageNo, String sort,
+                               String direct, int categoryId) throws DBException {
         try (DishesDao dao = daoFactory.createDishesDao()) {
-            return DishesDTOConverter.convertList(dao.findAllPageable(pageNo, sort, direct, categoryId), locale);
+//            return DishesDTOConverter.convertList(dao.findAllPageable(pageNo, sort, direct, categoryId), locale);
+            return dao.findAllPageable(pageNo, sort, direct, categoryId, locale);
+        }
+    }
+    public List<DishesDTO> getAll(String locale) throws DBException {
+        try (DishesDao dao = daoFactory.createDishesDao()) {
+            return DishesDTOConverter.convertList(dao.findAll(), locale);
         }
     }
 

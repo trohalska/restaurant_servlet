@@ -31,6 +31,7 @@ public class Validator {
                 return false;
             }
         }
+        // todo findAny, isempty isblank
         return true;
     }
 

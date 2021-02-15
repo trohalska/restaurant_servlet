@@ -47,7 +47,6 @@ public class Servlet extends HttpServlet {
 
         commands.put("orders_manager", new OrdersManagerController());          // get
 
-//        commands.put("getAll", new GetAllLogins());
     }
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {

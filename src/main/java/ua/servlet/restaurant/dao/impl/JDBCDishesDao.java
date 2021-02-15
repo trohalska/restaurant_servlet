@@ -7,7 +7,10 @@ import ua.servlet.restaurant.dao.DishesDao;
 import ua.servlet.restaurant.dao.mapper.DishesMapper;
 import ua.servlet.restaurant.dao.entity.Dishes;
 import ua.servlet.restaurant.dto.DishesDTO;
+import ua.servlet.restaurant.dto.Page;
+import ua.servlet.restaurant.dto.converter.DishesDTOConverter;
 import ua.servlet.restaurant.utils.Prop;
+import ua.servlet.restaurant.utils.Utils;
 
 import java.sql.*;
 import java.util.*;
@@ -72,9 +75,8 @@ public class JDBCDishesDao implements DishesDao {
         }
     }
 
-    public List<Dishes> findAllPageable(int pageNo, String sort,
-                                        String direct, int categoryId) throws DBException {
-        Map<Long, Dishes> dishes = new HashMap<>();
+    public Page findAllPageable(int pageNo, String sort,
+                                String direct, int categoryId, String locale) throws DBException {
         int rowsOnPage = Integer.parseInt(Prop.getProperty("pageable.page"));
         int beginNo = (pageNo - 1) * rowsOnPage + 1;
         int endNo = beginNo + rowsOnPage - 1;
@@ -83,44 +85,57 @@ public class JDBCDishesDao implements DishesDao {
 //                ? Prop.getDBProperty("select.all.dishes.pageable")
 //                : Prop.getDBProperty("select.all.dishes.pageable.filter");
 
-//        final String preQuery = (categoryId == 0)
-//
-//                ? "SELECT * FROM dishes d LEFT JOIN categories c " +
-//                "ON d.category_id = c.id ORDER BY ? %s " +
-//                "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY"
-//
-//                : "SELECT * FROM dishes d LEFT JOIN categories c " +
-//                "ON d.category_id = c.id WHERE c.id=? ORDER BY ? %s " +
-//                "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-//
-//        String query = String.format(preQuery, direct.toUpperCase(Locale.ROOT));
+        final String preQuery = (categoryId == 0)
 
-        String query = "SELECT * FROM " +
-                "(SELECT row_number() OVER (ORDER BY d.id) AS row,* FROM dishes d LEFT JOIN categories c " +
-                "ON d.category_id = c.id ORDER BY ? ASC) AS temp " +
+                ? "SELECT (select count(*) from dishes),* FROM " +
+                "(SELECT row_number() OVER (ORDER BY %1$s %2$s) AS row,* FROM dishes d LEFT JOIN categories c " +
+                "ON d.category_id = c.id ORDER BY %1$s %2$s) AS temp " +
+                "WHERE temp.row BETWEEN ? AND ?"
+
+                : "SELECT (select count(*) from dishes WHERE category_id=?),* FROM " +
+                "(SELECT row_number() OVER (ORDER BY %1$s %2$s) AS row,* FROM dishes d LEFT JOIN categories c " +
+                "ON d.category_id = c.id WHERE c.id=? ORDER BY %1$s %2$s) AS temp " +
                 "WHERE temp.row BETWEEN ? AND ?";
+
+        String query = String.format(preQuery, "d." + sort, direct.toUpperCase(Locale.ROOT));
+        if (!sort.equals("id")) {
+            query += " ORDER BY " + sort + " " + direct.toUpperCase(Locale.ROOT);
+        }
 
         System.out.println(query);
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
             int k = 1;
             if (categoryId != 0) {
                 pstmt.setInt(k++, categoryId);
+                pstmt.setInt(k++, categoryId);
             }
-//            pstmt.setString(k++, "d." + sort);
-            pstmt.setString(k++, "d." + sort);
             pstmt.setInt(k++, beginNo);
             pstmt.setInt(k, endNo);
 
             ResultSet rs = pstmt.executeQuery();
 
+            Long totalRows = null;
+            List<Dishes> dishes = new ArrayList<>();
             DishesMapper dishesMapper = new DishesMapper();
             while (rs.next()) {
-                Dishes dish = dishesMapper.extractFromResultSet(rs);
-                dishesMapper.makeUnique(dishes, dish);
+                dishes.add(dishesMapper.extractFromResultSet(rs));
+                if (totalRows == null) {
+                    totalRows = rs.getLong("count");
+                }
             }
             rs.close();
-            return new ArrayList<>(dishes.values());
+
+            if (totalRows != null) {
+                totalRows = (totalRows % rowsOnPage == 0)
+                        ? totalRows/rowsOnPage
+                        : totalRows/rowsOnPage + 1;
+            }
+            return Page.builder()
+                    .dishes(DishesDTOConverter.convertList(dishes, locale))
+                    .totalPages(totalRows)
+                    .build();
+
         } catch (SQLException e) {
             e.printStackTrace();
 
