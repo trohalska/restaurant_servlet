@@ -3,16 +3,20 @@ package ua.servlet.restaurant.command;
 import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.entity.RoleType;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class LogOutController implements Command {
     @Override
     public String execute(HttpServletRequest request) {
-        ServletContext context = request.getSession().getServletContext();
-        logger.info("Success logout user:" + context.getAttribute("userName"));
-        CommandUtility.deleteUserFromContext(context);
-        CommandUtility.setUserRole(request, RoleType.ROLE_GUEST, Logins.builder().login("guest").build());
+        HttpSession session = request.getSession();
+        logger.info("Success logout user:" +
+                ((Logins)session.getAttribute("principal")).getLogin());
+
+        CommandUtility.deleteUserFromSession(session);
+
+        CommandUtility.setUserRole(request,
+                Logins.builder().login("guest").role(RoleType.ROLE_GUEST).build());
         return "redirect:/index.jsp";
     }
 }

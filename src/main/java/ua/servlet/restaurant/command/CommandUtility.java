@@ -1,7 +1,6 @@
 package ua.servlet.restaurant.command;
 
 import ua.servlet.restaurant.dao.entity.Logins;
-import ua.servlet.restaurant.dao.entity.RoleType;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -13,23 +12,17 @@ import java.util.HashSet;
  * session has current user role
  */
 public class CommandUtility {
-    public static void setUserRole(HttpServletRequest request,
-                            RoleType role, Logins user) {
-        HttpSession session = request.getSession();
-        ServletContext context = request.getServletContext();
-        context.setAttribute("principal", user);
-        session.setAttribute("userName", user.getLogin());
-        session.setAttribute("role", role);
+    public static void setUserRole(HttpServletRequest request, Logins user) {
+        request.getSession().setAttribute("principal", user);
     }
 
-    public static void deleteUserFromContext(ServletContext context) {
-        Logins principal = (Logins) context.getAttribute("principal");
-        HashSet<String> loggedUsers = (HashSet<String>) context.getAttribute("loggedUsers");
-
+    public static void deleteUserFromSession(HttpSession session) {
+        Logins principal = (Logins)session.getAttribute("principal");
+        HashSet<String> loggedUsers = (HashSet<String>) session.getServletContext().getAttribute("loggedUsers");
         if (principal != null) {
             loggedUsers.remove(principal.getLogin());
         }
-        context.setAttribute("loggedUsers", loggedUsers);
+        session.getServletContext().setAttribute("loggedUsers", loggedUsers);
     }
 
 
@@ -52,7 +45,7 @@ public class CommandUtility {
      * @return String "en" or "ua"
      */
     public static Logins getPrincipal(HttpServletRequest request) {
-        return (Logins)request.getServletContext().getAttribute("principal");
+        return (Logins)request.getSession().getAttribute("principal");
     }
 
     /**
@@ -61,7 +54,7 @@ public class CommandUtility {
      * @return String "en" or "ua"
      */
     public static String getLocale(HttpServletRequest request) {
-        return (String)request.getServletContext().getAttribute("lang");
+        return (String)request.getSession().getAttribute("lang");
     }
 
 

@@ -33,19 +33,18 @@ public class AuthFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpSession session = request.getSession();
-        ServletContext context = servletRequest.getServletContext();
 
-        if (session.getAttribute("role") == null) {
-            CommandUtility.setUserRole(request, RoleType.ROLE_GUEST, Logins.builder().login("guest").build());
+        if (session.getAttribute("principal") == null) {
+            CommandUtility.setUserRole(request,
+                    Logins.builder().login("guest").role(RoleType.ROLE_GUEST).build());
         }
 
         logger.info(session);
-        logger.info(session.getAttribute("role"));
-        logger.info(context.getAttribute("loggedUsers"));
+        logger.info(session.getAttribute("principal"));
+        logger.info(servletRequest.getServletContext().getAttribute("loggedUsers"));
 
         String path = request.getRequestURI();
-
-        Object role = session.getAttribute("role");
+        RoleType role = ((Logins)session.getAttribute("principal")).getRole();
 
         if (path.contains("customer")) {
             if (role.equals(RoleType.ROLE_GUEST)) {

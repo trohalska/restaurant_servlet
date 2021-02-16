@@ -64,11 +64,10 @@ public class LoginController implements Command {
     }
 
     private String redirectByRoles(HttpServletRequest request, Logins user) throws ServletException {
+        CommandUtility.setUserRole(request, user);
         if (user.getRole().equals(RoleType.ROLE_MANAGER)){
-            CommandUtility.setUserRole(request, RoleType.ROLE_MANAGER, user);
             return "redirect:/app/manager/";
         } else if(user.getRole().equals(RoleType.ROLE_CUSTOMER)) {
-            CommandUtility.setUserRole(request, RoleType.ROLE_CUSTOMER, user);
             return "redirect:/app/customer/";
         }
         throw new ServletException(Prop.getDBProperty("error.unknown.role"));

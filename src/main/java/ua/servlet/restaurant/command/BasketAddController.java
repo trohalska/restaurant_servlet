@@ -28,7 +28,7 @@ public class BasketAddController implements Command {
             request.setAttribute("errorMsg", e.getMessage());
             return "/WEB_INF/basket.jsp";
         }
-        return "redirect:/menu";
+        return "redirect:/customer/basket"; // "redirect:/"
     }
 
 //    public ResponseEntity<Baskets> add (@Valid @RequestBody ItemDTO itemDTO) {

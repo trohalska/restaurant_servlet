@@ -24,7 +24,7 @@
 <div class="backcolor"></div>
 <div class="body-block shadow-large page_width">
     <section class="section1">
-        <a id="authorizedLogin">${sessionScope.userName}</a>
+        <a id="authorizedLogin">${sessionScope.principal.login}</a>
 
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>

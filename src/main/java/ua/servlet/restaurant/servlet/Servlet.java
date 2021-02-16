@@ -19,8 +19,6 @@ public class Servlet extends HttpServlet {
     public void init(ServletConfig servletConfig){
         servletConfig.getServletContext()
                 .setAttribute("loggedUsers", new HashSet<String>());
-        servletConfig.getServletContext()
-                .setAttribute("lang","en");
 
         commands.put("logout", new LogOutController());
         commands.put("login", new LoginController());

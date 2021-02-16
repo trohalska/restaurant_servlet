@@ -32,9 +32,9 @@
 <div class="backcolor"></div>
 <div class="body-block shadow-large page_width">
     <section class="section1">
-        <a id="authorizedLogin">${sessionScope.userName}</a>
+        <a id="authorizedLogin">${sessionScope.principal.login}</a>
         <c:choose>
-            <c:when test="${sessionScope.role=='ROLE_GUEST'}">
+            <c:when test="${sessionScope.principal.role=='ROLE_GUEST'}">
                 <a class="abutton" href="${pageContext.request.contextPath}/app/login">
                     <fmt:message key="sign.in"/></a>
                 <a class="abutton" href="${pageContext.request.contextPath}/app/registration">
@@ -51,7 +51,7 @@
 <%--        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">--%>
 <%--            <fmt:message key="main.menu"/></a>--%>
 
-        <c:if test="${sessionScope.role!='ROLE_GUEST'}">
+        <c:if test="${sessionScope.principal.role!='ROLE_GUEST'}">
 
             <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
                 <fmt:message key="main.basket"/></a>
@@ -59,7 +59,7 @@
                 <fmt:message key="main.orders"/></a>
         </c:if>
 
-        <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
+        <c:if test="${sessionScope.principal.role=='ROLE_MANAGER'}">
             <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders_manager">
                 <fmt:message key="main.manager"/></a>
         </c:if>
@@ -74,7 +74,11 @@
                 $("#locales").change(function () {
                     let selectedOption = $('#locales').val();
                     if (selectedOption !== ''){
-                        window.location.replace('&locale=' + selectedOption);
+                        window.location.replace(
+                            "${pageContext.request.contextPath}/app/menu" +
+                            "?page=${requestScope.pageNo}&sort=${requestScope.sort}" +
+                            "&direct=${requestScope.direct}&category=${requestScope.category}" +
+                            '&locale=' + selectedOption);
                     }
                 });
             });
@@ -130,10 +134,10 @@
                             <th columns="3">
                                 <a href="${pageContext.request.contextPath}/app/menu?page=${requestScope.pageNo}&sort=category_id&direct=${requestScope.directTable}&category=${requestScope.category}">
                                     <fmt:message key="menu.category"/></a></th>
-                            <c:if test="${sessionScope.role!='ROLE_GUEST'}">
+                            <c:if test="${sessionScope.principal.role!='ROLE_GUEST'}">
                                 <th columns="4"><fmt:message key="basket.action"/></th>
                             </c:if>
-                            <%--                        <c:if test="${sessionScope.role=='ROLE_MANAGER'}">--%>
+                            <%--                        <c:if test="${sessionScope.principal.role=='ROLE_MANAGER'}">--%>
                             <%--                            <th columns="5"><fmt:message key="basket.action"/></th>--%>
                             <%--                        </c:if>--%>
                         </tr>
@@ -145,7 +149,7 @@
                                 <td><c:out value="${dish.price}"/></td>
                                 <td><c:out value="${dish.categories.category}"/></td>
 
-                                <c:if test="${sessionScope.role!='ROLE_GUEST'}">
+                                <c:if test="${sessionScope.principal.role!='ROLE_GUEST'}">
                                     <td>
                                         <form method="post" action="${pageContext.request.contextPath}/app/customer/basket/add">
                                             <input name="id" class="hidden" type="number"
@@ -154,7 +158,7 @@
                                         </form>
                                     </td>
                                 </c:if>
-    <%--                            <c:if test="${sessionScope.role=='ROLE_MANAGER'}">--%>
+    <%--                            <c:if test="${sessionScope.principal.role=='ROLE_MANAGER'}">--%>
     <%--                                <td>--%>
     <%--                                    <form method="put" action="${pageContext.request.contextPath}/app/manager/menu/update">--%>
     <%--                                        <input name="id" class="hidden" type="number"--%>

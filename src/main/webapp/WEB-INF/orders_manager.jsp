@@ -30,7 +30,7 @@
 <div class="backcolor"></div>
 <div class="body-block shadow-large page_width">
     <section class="section1">
-        <a id="authorizedLogin">${sessionScope.userName}</a>
+        <a id="authorizedLogin">${sessionScope.principal.login}</a>
 
         <a class="abutton" href="${pageContext.request.contextPath}/app/logout">
             <fmt:message key="sign.out"/></a>
@@ -43,7 +43,7 @@
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
             <fmt:message key="main.orders"/></a>
 
-        <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
+        <c:if test="${sessionScope.principal.role=='ROLE_MANAGER'}">
             <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders">
                 <fmt:message key="main.manager"/></a>
         </c:if>

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix = "parse" uri="custom.tld" %>
 <fmt:setLocale value="${sessionScope.lang}" />
 <fmt:setBundle basename="messages" />
 
@@ -29,20 +30,18 @@
 <div class="backcolor"></div>
 <div class="body-block shadow-large page_width">
     <section class="section1">
-        <a id="authorizedLogin">${sessionScope.userName}</a>
+        <a id="authorizedLogin">${sessionScope.principal.login}</a>
 
         <a class="abutton" href="${pageContext.request.contextPath}/app/logout">
             <fmt:message key="sign.out"/></a>
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
-<%--        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">--%>
-<%--            <fmt:message key="main.menu"/></a>--%>
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
             <fmt:message key="main.basket"/></a>
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
             <fmt:message key="main.orders"/></a>
 
-        <c:if test="${sessionScope.role=='ROLE_MANAGER'}">
+        <c:if test="${sessionScope.principal.role=='ROLE_MANAGER'}">
             <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders_manager">
                 <fmt:message key="main.manager"/></a>
         </c:if>
@@ -88,7 +87,7 @@
                         <c:forEach var="order" items="${requestScope.orders}">
                             <tr class="rows">
                                 <td><c:out value="${order.id}"/></td>
-                                <td><c:out value="${order.time}"/></td>
+                                <td><parse:parseLocalDateTime value="${order.time}"/></td>
                                 <td><c:out value="${order.status}"/></td>
                                 <td><c:out value="${order.totalPrice}"/></td>
                                 <td>
