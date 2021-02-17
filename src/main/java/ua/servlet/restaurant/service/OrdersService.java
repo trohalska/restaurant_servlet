@@ -1,20 +1,10 @@
 package ua.servlet.restaurant.service;
 
-import ua.servlet.restaurant.command.CommandUtility;
 import ua.servlet.restaurant.dao.*;
 import ua.servlet.restaurant.dao.entity.*;
-import ua.servlet.restaurant.dto.BasketDTO;
-import ua.servlet.restaurant.dto.DishesDTO;
-import ua.servlet.restaurant.dto.converter.BasketDTOConverter;
-import ua.servlet.restaurant.dto.converter.DishesDTOConverter;
 import ua.servlet.restaurant.utils.Prop;
 
-import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
 import java.util.List;
-
-// TODO get for manager
-// TODO confirm
 
 public class OrdersService {
     DaoFactory daoFactory = DaoFactory.getInstance();
@@ -28,13 +18,11 @@ public class OrdersService {
     }
 
     // for user
-    public List<Orders> getAllByLoginId(HttpServletRequest request) throws DBException {
-//        String locale = CommandUtility.getLocale(request);
-        Logins user = CommandUtility.getPrincipal(request);
+    public List<Orders> getAllByLoginId(Long id) throws DBException {
         List<Orders> list;
 
         try (OrdersDao dao = daoFactory.createOrdersDao()) {
-            list = dao.findAllByLoginId(user.getId()).orElseThrow(
+            list = dao.findAllByLoginId(id).orElseThrow(
                     () -> new DBException(Prop.getDBProperty("select.all.orders.empty")));
         }
 
@@ -54,7 +42,7 @@ public class OrdersService {
         return list;
     }
 
-    public void create(HttpServletRequest request, Logins user) throws DBException {
+    public void create(Logins user) throws DBException {
         try (OrdersDao dao = daoFactory.createOrdersDao()) {
             dao.create(Orders.builder()
                     .status(Status.NEW)

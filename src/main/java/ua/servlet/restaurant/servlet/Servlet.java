@@ -68,12 +68,11 @@ public class Servlet extends HttpServlet {
         path = path.replaceAll(".*/app/((manager|customer)/)?" , "");
         logger.info(path);
 
-        Command command = commands.getOrDefault(path,
-                (r)->"/index.jsp");
+        Command command = commands.getOrDefault(path, (r)->"/index.jsp");
         String page = command.execute(request);
 
         logger.info(command.getClass().getName());
-        logger.info(request.getServletContext().getAttribute("loggedUsers"));
+        logger.info(request.getSession().getServletContext().getAttribute("loggedUsers"));
 
         if (page.contains("redirect:")) {
             response.sendRedirect(page.replace("redirect:", "app"));

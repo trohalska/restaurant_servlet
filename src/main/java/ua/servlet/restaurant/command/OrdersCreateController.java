@@ -2,7 +2,6 @@ package ua.servlet.restaurant.command;
 
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.entity.Logins;
-import ua.servlet.restaurant.service.BasketService;
 import ua.servlet.restaurant.service.OrdersService;
 import ua.servlet.restaurant.utils.Prop;
 
@@ -22,7 +21,7 @@ public class OrdersCreateController implements Command {
 
         logger.info(Prop.getDBProperty("create.order.log") + user.getLogin());
         try {
-            ordersService.create(request, user);
+            ordersService.create(user);
         } catch (DBException e) {
             logger.info(e.getMessage());
             request.setAttribute("errorMsg", e.getMessage());

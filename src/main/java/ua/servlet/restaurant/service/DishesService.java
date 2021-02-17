@@ -26,7 +26,6 @@ public class DishesService {
     public Page getAllPageable(String locale, int pageNo, String sort,
                                String direct, int categoryId) throws DBException {
         try (DishesDao dao = daoFactory.createDishesDao()) {
-//            return DishesDTOConverter.convertList(dao.findAllPageable(pageNo, sort, direct, categoryId), locale);
             return dao.findAllPageable(pageNo, sort, direct, categoryId, locale);
         }
     }

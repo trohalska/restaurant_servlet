@@ -1,6 +1,7 @@
 package ua.servlet.restaurant.command;
 
 import ua.servlet.restaurant.dao.DBException;
+import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.entity.Orders;
 import ua.servlet.restaurant.dto.BasketDTO;
 import ua.servlet.restaurant.service.BasketService;
@@ -20,9 +21,12 @@ public class OrdersController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
+        Logins user = CommandUtility.getPrincipal(request);
+
         logger.info(Prop.getDBProperty("select.all.orders.log"));
         try {
-            List<Orders> orders = ordersService.getAllByLoginId(request);
+            List<Orders> orders =
+                    ordersService.getAllByLoginId(user.getId());
             request.setAttribute("orders", orders);
         } catch (DBException e) {
             logger.warn(e.getMessage());

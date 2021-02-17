@@ -5,7 +5,7 @@ import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.DaoFactory;
 import ua.servlet.restaurant.dao.LoginsDao;
 import ua.servlet.restaurant.dao.entity.Logins;
-import ua.servlet.restaurant.utils.Prop;;
+import ua.servlet.restaurant.utils.Prop;
 
 public class LoginsService {
     DaoFactory daoFactory = DaoFactory.getInstance();

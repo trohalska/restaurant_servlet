@@ -1,6 +1,7 @@
 package ua.servlet.restaurant.command;
 
 import ua.servlet.restaurant.dao.DBException;
+import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dto.BasketDTO;
 import ua.servlet.restaurant.service.BasketService;
 import ua.servlet.restaurant.utils.Prop;
@@ -17,9 +18,12 @@ public class BasketController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
-        logger.info(Prop.getDBProperty("select.all.baskets.log"));
+        String locale = CommandUtility.getLocale(request);
+        Logins user = CommandUtility.getPrincipal(request);
+
+        logger.info(Prop.getDBProperty("select.all.baskets.log") + user.getLogin());
         try {
-            BasketDTO basket = basketService.getAll(request);
+            BasketDTO basket = basketService.getAll(user, locale);
             request.setAttribute("dishes", basket.getDishes());
             request.setAttribute("totalPrice", basket.getTotalPrice());
         } catch (DBException e) {

@@ -38,9 +38,7 @@ public class JDBCBasketsDao implements BasketsDao {
             }
             return Optional.of(entity);
         } catch (SQLException ex) {
-            ex.printStackTrace();
-
-            String errorMsg = Prop.getDBProperty("create.baskets.dbe");
+            String errorMsg = Prop.getDBProperty("create.basket.dbe") + entity.getDish().getId();
             log.error(errorMsg);
             throw new DBException(errorMsg);
         }
@@ -75,8 +73,6 @@ public class JDBCBasketsDao implements BasketsDao {
             rs.close();
             return baskets.isEmpty() ? Optional.empty() : Optional.of(baskets);
         } catch (SQLException e) {
-            e.printStackTrace();
-
             String errorMsg = Prop.getDBProperty("select.all.baskets.dbe");
             log.error(errorMsg);
             throw new DBException(errorMsg);
@@ -95,8 +91,6 @@ public class JDBCBasketsDao implements BasketsDao {
             pstmt.setLong(1, id);
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            ex.printStackTrace();
-
             String errorMsg = Prop.getDBProperty("delete.baskets.dbe") + id;
             log.error(errorMsg);
         }
@@ -111,7 +105,7 @@ public class JDBCBasketsDao implements BasketsDao {
             pstmt.executeUpdate();
             connection.commit();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+//            ex.printStackTrace();
 
             String errorMsg = Prop.getDBProperty("delete.all.basket.dbe") + id;
             log.error(errorMsg);
