@@ -44,24 +44,28 @@ public class JDBCBasketsDao implements BasketsDao {
         }
     }
 
+    @Deprecated
     @Override
     public Optional<Baskets> findById(int id) {
-        return null;
+        return Optional.empty();
     }
 
+    @Deprecated
     @Override
-    public List<Baskets> findAll() throws DBException {
+    public List<Baskets> findAll() {
         return null;
     }
 
+    /**
+     * Get all basket's items by user id
+     * @param id user id
+     * @return list of basket's items
+     * @throws DBException if cannot find
+     */
     public Optional<List<Baskets>> findAllByLoginId(Long id) throws DBException {
         List<Baskets> baskets = new ArrayList<>();
 
         final String query = Prop.getDBProperty("select.all.baskets");
-//        final String query = "SELECT * FROM baskets b " +
-//                "LEFT JOIN dishes d on b.dish_id = d.id " +
-//                "LEFT JOIN categories c on c.id = d.category_id WHERE login_id=? " +
-//                "ORDER BY b.id";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -79,11 +83,14 @@ public class JDBCBasketsDao implements BasketsDao {
         }
     }
 
+    @Deprecated
     @Override
-    public void update(Baskets entity) {
+    public void update(Baskets entity) { }
 
-    }
-
+    /**
+     * Delete item from basket
+     * @param id id deleted item
+     */
     @Override
     public void delete(int id) {
         final String query = Prop.getDBProperty("delete.basket");
@@ -96,6 +103,11 @@ public class JDBCBasketsDao implements BasketsDao {
         }
     }
 
+    /**
+     * TRANSACTION
+     * Delete all items from basket by user id
+     * @param id user id
+     */
     public void deleteAllByLoginId(int id) {
         final String query = Prop.getDBProperty("delete.all.basket");
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
@@ -105,8 +117,6 @@ public class JDBCBasketsDao implements BasketsDao {
             pstmt.executeUpdate();
             connection.commit();
         } catch (SQLException ex) {
-//            ex.printStackTrace();
-
             String errorMsg = Prop.getDBProperty("delete.all.basket.dbe") + id;
             log.error(errorMsg);
             try {

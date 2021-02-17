@@ -13,9 +13,6 @@ public class Prop {
     private static final String PROPERTIES  = PATH + "application.properties";
     private static final String DB          = PATH + "db.properties";
 
-    private static final String PATH_TEST   = "src/test/resources/";
-    private static final String APP_TEST    = PATH_TEST + "test.properties";
-
     private static String getter(String propName, String source) {
         try (FileInputStream fis = new FileInputStream(source)) {
             Properties p = new Properties();

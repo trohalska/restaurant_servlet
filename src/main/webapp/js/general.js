@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * output error responce
+ * output error response
  */
 let alertErrors = (response) => {
     console.log(response);
@@ -28,35 +28,6 @@ $(".toggle-password").click(function() {
         input.attr("type", "password");
     }
 });
-
-/**
- * allow to select row from table
- */
-
-let setSelectedElement = (elem, check, color) => {
-    elem.setAttribute("checked", check);
-    elem.setAttribute("style", "background: " + color + ";");
-}
-/**
- * ----------------------------
- */
-let getSelector = () => {
-    document.querySelectorAll('.rows')
-        .forEach(item => item.addEventListener('click', function() {
-
-            if (this.getAttribute("checked") === "true") {
-                setSelectedElement(this, "false", "none");
-                return;
-            }
-
-            let previous = document.querySelector('.rows[checked="true"]');
-            if (previous !== null) {
-                setSelectedElement(previous, "false", "none");
-            }
-            setSelectedElement(this, "true", "rgba(84, 100, 164, .3)");
-
-        }));
-}
 
 /**
  * JS sort table fields
@@ -92,9 +63,7 @@ let tableSort = (item, table) => {
         }
     }
 }
-/**
- * ----------------------------
- */
+
 let tableSortComparator = (row1, row2) => {
     let num1 = Number.parseFloat(row1);
     let num2 = Number.parseFloat(row2);
@@ -104,9 +73,7 @@ let tableSortComparator = (row1, row2) => {
     }
     return row1 > row2;
 }
-/**
- * ----------------------------
- */
+
 function isFloatOrInteger(n) {
     return n === +n;
 }

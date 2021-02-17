@@ -14,8 +14,7 @@ import java.util.List;
 public class DishesService {
     DaoFactory daoFactory = DaoFactory.getInstance();
 
-    // TODO create
-
+    // todo create, update
     public Dishes findById(Long id) throws DBException {
         try (DishesDao dao = daoFactory.createDishesDao()) {
             return dao.findById(id.intValue()).orElseThrow(
@@ -23,18 +22,31 @@ public class DishesService {
         }
     }
 
+    /**
+     * Get page
+     * @param locale for localization
+     * @param pageNo current page
+     * @param sort sort field
+     * @param direct sort direction (ASC or DESC)
+     * @param categoryId filter category
+     * @return Page
+     * @throws DBException if DB throw exception
+     */
     public Page getAllPageable(String locale, int pageNo, String sort,
                                String direct, int categoryId) throws DBException {
         try (DishesDao dao = daoFactory.createDishesDao()) {
             return dao.findAllPageable(pageNo, sort, direct, categoryId, locale);
         }
     }
+
+    @Deprecated
     public List<DishesDTO> getAll(String locale) throws DBException {
         try (DishesDao dao = daoFactory.createDishesDao()) {
             return DishesDTOConverter.convertList(dao.findAll(), locale);
         }
     }
 
+    // todo create, update
     public void update(Dishes dish) {
         try (DishesDao dao = daoFactory.createDishesDao()) {
             dao.update(dish);

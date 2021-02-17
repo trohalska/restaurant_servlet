@@ -20,8 +20,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
 
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-
 </head>
 
 <body>
@@ -29,10 +27,8 @@
 <div class="body-block shadow-large page_width">
     <section class="section1">
         <a id="authorizedLogin">${sessionScope.principal.login}</a>
-
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
-
     </section>
 
     <header class="section2">
@@ -52,13 +48,14 @@
                     <span id="totalPrice">${requestScope.order.totalPrice}</span>
                     <span><fmt:message key="payment.str3"/></span>
                 </p>
-                <td>
-                    <form method="put" action="${pageContext.request.contextPath}/app/customer/orders/payment/pay">
-                        <input name="id" class="hidden" type="text"
-                               value="${requestScope.order.id}"/>
+                <div>
+                    <form method="POST" action="${pageContext.request.contextPath}/app/customer/orders/payment/pay">
+                        <label>
+                            <input name="id" class="hidden" type="text" value="${requestScope.order.id}"/>
+                        </label>
                         <input class="abutton" type="submit" value="<fmt:message key="payment.button"/>">
                     </form>
-                </td>
+                </div>
             </div>
         </c:if>
     </section>

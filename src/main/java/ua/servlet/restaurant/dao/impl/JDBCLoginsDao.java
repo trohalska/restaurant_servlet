@@ -20,6 +20,12 @@ public class JDBCLoginsDao implements LoginsDao {
         this.connection = connection;
     }
 
+    /**
+     * For registration new user (customer)
+     * @param entity new user
+     * @return login
+     * @throws DBException if cannot create
+     */
     @Override
     public Optional<Logins> create(Logins entity) throws DBException {
         ResultSet rs;
@@ -27,7 +33,6 @@ public class JDBCLoginsDao implements LoginsDao {
         final String query = Prop.getDBProperty("create.user");
         try (PreparedStatement pstmt =
                      connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-
             int k = 1;
             pstmt.setString(k++, entity.getLogin());
             pstmt.setString(k++, entity.getEmail());
@@ -44,19 +49,44 @@ public class JDBCLoginsDao implements LoginsDao {
             }
             return Optional.of(entity);
         } catch (SQLException ex) {
-            ex.printStackTrace();
-
             String errorMsg = Prop.getDBProperty("create.user.dbe") + entity.getLogin();
             log.error(errorMsg);
             throw new DBException(errorMsg);
         }
     }
 
-    @Override
-    public Optional<Logins> findById(int id) {
-        return null;
+    /**
+     * For login page
+     * @param login login
+     * @return login if found
+     * @throws DBException if cannot find
+     */
+    public Optional<Logins> findByLogin(String login) throws DBException {
+        Optional<Logins> result = Optional.empty();
+
+        try (PreparedStatement pstmt =
+                     connection.prepareStatement(Prop.getDBProperty("select.login.byLogin"))) {
+            pstmt.setString(1, login);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                result = Optional.of(new LoginsMapper().extractFromResultSet(rs));
+            }
+            rs.close();
+            return result;
+        } catch (SQLException ex) {
+            String errorMsg = Prop.getDBProperty("select.login.byLogin.dbe") + login;
+            log.error(errorMsg);
+            throw new DBException(errorMsg);
+        }
     }
 
+    @Deprecated
+    @Override
+    public Optional<Logins> findById(int id) {
+        return Optional.empty();
+    }
+
+    @Deprecated
     @Override
     public List<Logins> findAll() throws DBException {
         Map<Long, Logins> users = new HashMap<>();
@@ -81,15 +111,15 @@ public class JDBCLoginsDao implements LoginsDao {
         }
     }
 
+    @Deprecated
     @Override
     public void update(Logins entity) {
 
     }
 
+    @Deprecated
     @Override
-    public void delete(int id) {
-
-    }
+    public void delete(int id) { }
 
     @Override
     public void close()  {
@@ -99,27 +129,6 @@ public class JDBCLoginsDao implements LoginsDao {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        }
-    }
-
-    public Optional<Logins> findByLogin(String login) throws DBException {
-        Optional<Logins> result = Optional.empty();
-
-        try (PreparedStatement pstmt =
-                     connection.prepareStatement(Prop.getDBProperty("select.login.byLogin"))) {
-            pstmt.setString(1, login);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                result = Optional.of(new LoginsMapper().extractFromResultSet(rs));
-            }
-            rs.close();
-            return result;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-
-            String errorMsg = Prop.getDBProperty("select.login.byLogin.dbe") + login;
-            log.error(errorMsg);
-            throw new DBException(errorMsg);
         }
     }
 

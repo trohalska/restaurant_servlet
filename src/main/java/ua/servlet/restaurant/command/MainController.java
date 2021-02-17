@@ -1,12 +1,10 @@
 package ua.servlet.restaurant.command;
 
 import ua.servlet.restaurant.dao.DBException;
-import ua.servlet.restaurant.dto.DishesDTO;
 import ua.servlet.restaurant.dto.Page;
 import ua.servlet.restaurant.service.DishesService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 public class MainController implements Command {
     private final DishesService dishesService;
@@ -23,10 +21,10 @@ public class MainController implements Command {
         String direct = request.getParameter("direct");
         String category = request.getParameter("category");
 
-        int pageNo = (!Validator.valid_EmptyFields(request, page))          ? 1     : Integer.parseInt(page);
-        int categoryId = (!Validator.valid_EmptyFields(request, category))  ? 0     : Integer.parseInt(category);
-        sort = (!Validator.valid_EmptyFields(request, sort))                ? "id"  : sort;
-        direct = (!Validator.valid_EmptyFields(request, direct))            ? "ASC" : direct;
+        int pageNo = (Validator.valid_EmptyFields(request, page))          ? 1     : Integer.parseInt(page);
+        int categoryId = (Validator.valid_EmptyFields(request, category))  ? 0     : Integer.parseInt(category);
+        sort = (Validator.valid_EmptyFields(request, sort))                ? "id"  : sort;
+        direct = (Validator.valid_EmptyFields(request, direct))            ? "ASC" : direct;
 
         Page pageable;
         try {

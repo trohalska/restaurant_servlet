@@ -19,7 +19,7 @@ public class OrdersPaymentPayController implements Command {
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
         String id = request.getParameter("id");
-        if (!Validator.valid_ID(request, id)) {
+        if (Validator.valid_ID(request, id)) {
             return "/WEB-INF/payment.jsp";
         }
         logger.info(Prop.getDBProperty("update.orders.log") + id);

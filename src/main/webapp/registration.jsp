@@ -6,6 +6,7 @@
 
 <!DOCTYPE html>
 <html lang="${sessionScope.lang}">
+
 <head>
     <meta charset="utf-8">
     <meta name="author" content="Tetiana Rohalska">
@@ -36,6 +37,7 @@
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
 
+        <label for="locales"></label>
         <select class="abutton" id="locales">
             <option value=""><fmt:message key="lang.change"/></option>
             <option value="en"><fmt:message key="lang.en"/></option>
@@ -59,22 +61,13 @@
         </a>
     </header>
 
-<%--    <form method="post" action="${pageContext.request.contextPath}/app/registration">--%>
-
-<%--        <input type="text" name="login"><br/>--%>
-<%--        <input type="password" name="password"><br/>--%>
-<%--        <input type="text" name="email"><br/><br/>--%>
-<%--        <input class="button" type="submit" value="Registration">--%>
-
-<%--    </form>--%>
-
     <section class="section4" ng-app="get_form" ng-controller="GetController">
         <main>
             <div class="frame">
+
                 <div id="errorMsg">${requestScope.errorMsg}</div>
 
                 <form id="formSignUp" class="form-signup">
-
                     <label for="login"><fmt:message key="sign.username"/></label>
                     <input id="login" class="form-styling" type="text" required autofocus/>
 
@@ -94,7 +87,9 @@
                         <span toggle="#confirmpassword" class="fa fa-fw fa-eye field-icon toggle-password"></span>
                     </div>
 
-                    <input class="btn-signup" ng-click="signup('${pageContext.request.contextPath}/app/registration')" value="<fmt:message key="sign.up"/>"/>
+                    <label>
+                        <input class="btn-signup" ng-click="signup('${pageContext.request.contextPath}/app/registration')" value="<fmt:message key="sign.up"/>"/>
+                    </label>
                 </form>
             </div>
         </main>

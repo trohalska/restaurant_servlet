@@ -17,13 +17,9 @@
     <title>restaurant</title>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
-
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
     <script src="${pageContext.request.contextPath}/js/general.js"></script>
-
 </head>
 
 <body>
@@ -46,6 +42,7 @@
                 <fmt:message key="main.manager"/></a>
         </c:if>
 
+        <label for="locales"></label>
         <select class="abutton" id="locales">
             <option value=""><fmt:message key="lang.change"/></option>
             <option value="en"><fmt:message key="lang.en"/></option>
@@ -92,14 +89,15 @@
                                 <td><c:out value="${order.totalPrice}"/></td>
                                 <td>
                                     <c:if test="${order.status=='NEW'}">
-                                        <form method="get" action="${pageContext.request.contextPath}/app/customer/orders/payment">
-                                            <input name="id" class="hidden" type="text"
-                                                   value="${order.id}"/>
+                                        <form method="GET"
+                                              action="${pageContext.request.contextPath}/app/customer/orders/payment">
+                                            <label>
+                                                <input name="id" class="hidden" type="text" value="${order.id}"/>
+                                            </label>
                                             <input class="abutton" type="submit" value="<fmt:message key="orders.pay"/>">
                                         </form>
                                     </c:if>
                                 </td>
-
                         </tr>
                         </c:forEach>
                     </table>

@@ -16,13 +16,9 @@
     <title>restaurant</title>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
-
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
     <script src="${pageContext.request.contextPath}/js/general.js"></script>
-
 </head>
 
 <body>
@@ -35,8 +31,6 @@
             <fmt:message key="sign.out"/></a>
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
-<%--        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">--%>
-<%--            <fmt:message key="main.menu"/></a>--%>
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
             <fmt:message key="main.basket"/></a>
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
@@ -47,6 +41,7 @@
                 <fmt:message key="main.manager"/></a>
         </c:if>
 
+        <label for="locales"></label>
         <select class="abutton" id="locales">
             <option value=""><fmt:message key="lang.change"/></option>
             <option value="en"><fmt:message key="lang.en"/></option>
@@ -93,7 +88,7 @@
                                 <td><c:out value="${dish.price}"/></td>
                                 <td><c:out value="${dish.categories.category}"/></td>
                                 <td>
-                                    <form method="delete" action="${pageContext.request.contextPath}/app/customer/basket/delete">
+                                    <form method="POST" action="${pageContext.request.contextPath}/app/customer/basket/delete">
                                         <input name="id" class="hidden" type="text"
                                                value="${dish.id}"/>
                                         <input class="abutton" type="submit" value="<fmt:message key="button.delete"/>">
@@ -114,15 +109,12 @@
 
             <div class="page_head">
                 <div style="margin: 20px 0;">
-<%--                    <a class="button" href="${pageContext.request.contextPath}/app/customer/orders/create">--%>
-<%--                        <fmt:message key="basket.create"/></a>--%>
-                    <form method="post" action="${pageContext.request.contextPath}/app/customer/orders/create">
+                    <form method="POST" action="${pageContext.request.contextPath}/app/customer/orders/create">
                         <input class="button" type="submit" value="<fmt:message key="basket.create"/>">
                     </form>
-
                 </div>
                 <div>
-                    <form method="delete" action="${pageContext.request.contextPath}/app/customer/basket/delete_all">
+                    <form method="POST" action="${pageContext.request.contextPath}/app/customer/basket/delete_all">
                         <input class="button" type="submit" value="<fmt:message key="basket.deleteAll"/>">
                     </form>
                 </div>

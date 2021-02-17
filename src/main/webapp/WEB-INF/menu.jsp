@@ -15,13 +15,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>restaurant</title>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
-
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-
 </head>
 
 <body>
@@ -46,7 +43,6 @@
             <fmt:message key="main.main"/></a>
 
         <c:if test="${sessionScope.principal.role!='ROLE_GUEST'}">
-
             <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
                 <fmt:message key="main.basket"/></a>
             <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
@@ -58,6 +54,7 @@
                 <fmt:message key="main.manager"/></a>
         </c:if>
 
+        <label for="locales"></label>
         <select class="abutton" id="locales">
             <option value=""><fmt:message key="lang.change"/></option>
             <option value="en"><fmt:message key="lang.en"/></option>
@@ -84,15 +81,14 @@
     </header>
 
     <section class="section4">
+
         <div id="errorMsg">${requestScope.errorMsg}</div>
 
         <c:if test="${requestScope.errorMsg==null || requestScope.errorMsg==''}">
-
             <div class="page_head">
                 <div>
                     <h2><fmt:message key="main.menu"/></h2>
                 </div>
-
                 <div>
                     <label for="categories_filter"></label>
                     <select id="categories_filter" class="form-styling">
@@ -111,7 +107,6 @@
                         });
                     </script>
                 </div>
-
             </div>
 
             <div id="dishes_block">
@@ -144,9 +139,12 @@
 
                                 <c:if test="${sessionScope.principal.role!='ROLE_GUEST'}">
                                     <td>
-                                        <form method="post" action="${pageContext.request.contextPath}/app/customer/basket/add">
-                                            <input name="id" class="hidden" type="number"
-                                                   value="<c:out value="${dish.id}"/>"/>
+                                        <form method="POST"
+                                              action="${pageContext.request.contextPath}/app/customer/basket/add">
+                                            <label>
+                                                <input name="id" class="hidden" type="number"
+                                                       value="<c:out value="${dish.id}"/>"/>
+                                            </label>
                                             <input class="abutton" type="submit" value="<fmt:message key="button.add"/>">
                                         </form>
                                     </td>
@@ -168,18 +166,13 @@
                             ${i}
                         </a>
                     </c:forEach>
-
                 </div>
 
                 <div><fmt:message key="page.total"/> ${requestScope.totalPages}</div>
             </div>
 
         </c:if>
-
     </section>
-
 </div>
 </body>
-
-
 </html>

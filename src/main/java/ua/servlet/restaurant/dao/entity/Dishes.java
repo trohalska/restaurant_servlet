@@ -1,11 +1,8 @@
 package ua.servlet.restaurant.dao.entity;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@JsonPropertyOrder(alphabetic = true)
 public class Dishes {
     private Long id;
     private String nameEn;

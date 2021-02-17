@@ -18,7 +18,7 @@ public class BasketAddController implements Command {
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
         String id = request.getParameter("id");
-        if (!Validator.valid_ID(request, id)) {
+        if (Validator.valid_ID(request, id)) {
             return "/WEB-INF/basket.jsp";
         }
         Logins user = CommandUtility.getPrincipal(request);

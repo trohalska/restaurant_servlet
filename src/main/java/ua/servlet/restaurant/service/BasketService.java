@@ -18,6 +18,13 @@ import java.util.List;
 public class BasketService {
     DaoFactory daoFactory = DaoFactory.getInstance();
 
+    /**
+     * Get all basket's items by user id
+     * @param user user id
+     * @param locale for dto
+     * @return BasketDTO (dishes and total price)
+     * @throws DBException if DB throw exception or there are no orders
+     */
     public BasketDTO getAll(Logins user, String locale) throws DBException {
         List<Baskets> list;
 
@@ -34,6 +41,12 @@ public class BasketService {
                 .build();
     }
 
+    /**
+     * Add dish to basket
+     * @param user user id
+     * @param id dish id
+     * @throws DBException if DB throw exception
+     */
     public void create(Logins user, Long id) throws DBException {
         try (BasketsDao dao = daoFactory.createBasketsDao()) {
             dao.create(Baskets.builder()
@@ -45,12 +58,20 @@ public class BasketService {
         }
     }
 
+    /**
+     * Delete item from basket.
+     * @param id item id
+     */
     public void delete(Long id) {
         try (BasketsDao dao = daoFactory.createBasketsDao()) {
             dao.delete(id.intValue());
         }
     }
 
+    /**
+     * Delete all items from basket.
+     * @param id item id
+     */
     public void deleteAll(Long id) {
         try (BasketsDao dao = daoFactory.createBasketsDao()) {
             dao.deleteAllByLoginId(id.intValue());

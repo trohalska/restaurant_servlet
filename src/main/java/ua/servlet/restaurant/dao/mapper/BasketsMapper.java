@@ -25,7 +25,6 @@ public class BasketsMapper implements ObjectMappers<Baskets> {
                                 .categoryUa(rs.getString("category_ua"))
                                 .build())
                         .build())
-//                .login()
                 .build();
     }
 

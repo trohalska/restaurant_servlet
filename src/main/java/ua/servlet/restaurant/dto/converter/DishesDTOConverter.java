@@ -23,6 +23,11 @@ public class DishesDTOConverter {
         return dishes.stream().map(d -> convert(d, lang)).collect(Collectors.toList());
     }
 
+    /**
+     * Count total price for basket page
+     * @param dishes dishes in the basket
+     * @return BigDecimal total price
+     */
     public static BigDecimal getTotalPrice(List<DishesDTO> dishes) {
         return dishes.stream()
                 .map(DishesDTO::getPrice)

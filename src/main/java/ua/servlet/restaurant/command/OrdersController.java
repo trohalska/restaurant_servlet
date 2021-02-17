@@ -3,8 +3,6 @@ package ua.servlet.restaurant.command;
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.entity.Orders;
-import ua.servlet.restaurant.dto.BasketDTO;
-import ua.servlet.restaurant.service.BasketService;
 import ua.servlet.restaurant.service.OrdersService;
 import ua.servlet.restaurant.utils.Prop;
 

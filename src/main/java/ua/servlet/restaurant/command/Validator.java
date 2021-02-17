@@ -14,27 +14,42 @@ public class Validator {
     private static final Logger logger = LogManager.getLogger(Validator.class);
     private final static String EMAIL_REGEX = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$";
     private final static String PASS_REGEX = "^[a-z0-9._%+-]{2,6}$";
-    private final static String ID_REGEX = "^[1-9]\\d*$";
-    private final static String PRICE_REGEX = "^\\d+(,\\d{1,2})?$";
 
+    /**
+     * Set errors into request and log it for all validation
+     * @param request request
+     * @param error error string
+     * @return true
+     */
     static boolean setErrorAndLog(HttpServletRequest request, String error) {
         String errorMsg = Prop.getDBProperty(error);
         request.setAttribute("errorMsg", errorMsg);
         logger.warn(errorMsg);
-        return false;
+        return true;
     }
 
+    /**
+     * Validation for null or empty fields
+     * @param request request
+     * @param args String varargs
+     * @return true if invalid, false if valid
+     */
     static boolean valid_EmptyFields(HttpServletRequest request, String... args) {
         for (String s : args) {
             if (s == null || s.equals("")) {
                 setErrorAndLog(request, "invalid.fields");
-                return false;
+                return true;
             }
         }
-        // todo findAny, isempty isblank
-        return true;
+        return false;
     }
 
+    /**
+     *
+     * @param user
+     * @param request
+     * @return
+     */
     static boolean valid_Registration(Logins user, HttpServletRequest request) {
         Matcher m;
 
@@ -52,24 +67,10 @@ public class Validator {
         return true;
     }
 
-    static boolean valid_DishUpdate(HttpServletRequest request, String... args) {
-        if (!valid_EmptyFields(request, args)) {
-            return false;
-        }
-        // todo check name-ua, name_en
-        Matcher m;
-        m = Pattern.compile(PRICE_REGEX).matcher(args[2]);
-        if (!m.find() || args[2].equals("0")) {
-            return setErrorAndLog(request, "invalid.price");
-        }
-        return true;
-    }
-
     static boolean valid_OrdersConfirm(HttpServletRequest request, String... args) {
-        if (!valid_EmptyFields(request, args)) {
+        if (valid_EmptyFields(request, args)) {
             return false;
         }
-
         Status status;
         long id;
         try {
@@ -79,7 +80,6 @@ public class Validator {
             setErrorAndLog(request, "invalid.fields");
             return false;
         }
-
         if (status.equals(Status.DONE)
                 || status.equals(Status.NEW)
                 || id <= 0) {
@@ -90,8 +90,8 @@ public class Validator {
     }
 
     static boolean valid_ID(HttpServletRequest request, String args) {
-        if (!valid_EmptyFields(request, args)) {
-            return false;
+        if (valid_EmptyFields(request, args)) {
+            return true;
         }
 
         long id;
@@ -99,13 +99,13 @@ public class Validator {
             id = Long.parseLong(args);
         } catch (Exception e) {
             setErrorAndLog(request, "invalid.id");
-            return false;
+            return true;
         }
         if (id <= 0) {
             setErrorAndLog(request, "invalid.positive.id");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
 }

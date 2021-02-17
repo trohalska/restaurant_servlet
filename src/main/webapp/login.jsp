@@ -23,21 +23,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 </head>
 <body>
-
-<%--<h1>Вход в систему</h1><br/>--%>
-<%--<form method="get" action="${pageContext.request.contextPath}/app/login">--%>
-
-<%--    <input type="text" name="name"><br/>--%>
-<%--    <input type="password" name="pass"><br/><br/>--%>
-<%--    <input class="button" type="submit" value="Войти">--%>
-
-<%--</form>--%>
-<%--<br/>--%>
-<%--<a href="${pageContext.request.contextPath}/app/logout">На головну</a>--%>
-
     <div class="backcolor"></div>
     <div class="body-block shadow-large page_width">
 
@@ -73,9 +60,10 @@
         <section class="section4">
             <main>
                 <div class="frame">
+
                     <div id="errorMsg">${requestScope.errorMsg}</div>
 
-                    <form class="form-signin" method="post" action="${pageContext.request.contextPath}/app/login">
+                    <form class="form-signin" method="POST" action="${pageContext.request.contextPath}/app/login">
                         <label for="username"><fmt:message key="sign.username"/></label>
                         <input name="username" id="username" class="form-styling" type="text" required autofocus/>
                         <label for="password"><fmt:message key="sign.password"/></label>
@@ -93,15 +81,5 @@
 </body>
 
 <script src="${pageContext.request.contextPath}/js/general.js"></script>
-
-<%--<script>--%>
-<%--    let init = () => {--%>
-<%--        let urlParams = new URLSearchParams(window.location.search);--%>
-<%--        if (urlParams.get('error') !== null) {--%>
-<%--            alert('incorrect login or password!');--%>
-<%--        }--%>
-<%--    }--%>
-<%--    window.onload = init;--%>
-<%--</script>--%>
 
 </html>

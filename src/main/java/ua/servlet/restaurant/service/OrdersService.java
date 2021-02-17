@@ -9,7 +9,12 @@ import java.util.List;
 public class OrdersService {
     DaoFactory daoFactory = DaoFactory.getInstance();
 
-    // for payment
+    /**
+     * Find order by id for payment page
+     * @param id order id
+     * @return Orders
+     * @throws DBException if DB throw exception
+     */
     public Orders findById(Long id) throws DBException {
         try (OrdersDao dao = daoFactory.createOrdersDao()) {
             return dao.findById(id.intValue()).orElseThrow(
@@ -17,22 +22,28 @@ public class OrdersService {
         }
     }
 
-    // for user
+    /**
+     * Find all user orders for user order's page
+     * @param id order id
+     * @return orders list
+     * @throws DBException if DB throw exception
+     */
     public List<Orders> getAllByLoginId(Long id) throws DBException {
         List<Orders> list;
-
         try (OrdersDao dao = daoFactory.createOrdersDao()) {
             list = dao.findAllByLoginId(id).orElseThrow(
                     () -> new DBException(Prop.getDBProperty("select.all.orders.empty")));
         }
-
         return list;
     }
 
-    // for manager
+    /**
+     * Find all orders for manager page
+     * @return orders list
+     * @throws DBException if DB throw exception or there are no orders
+     */
     public List<Orders> getAll() throws DBException {
         List<Orders> list;
-
         try (OrdersDao dao = daoFactory.createOrdersDao()) {
             list = dao.findAll();
         }
@@ -42,6 +53,11 @@ public class OrdersService {
         return list;
     }
 
+    /**
+     * Create new order
+     * @param user user - owner of order
+     * @throws DBException if DB throw exception
+     */
     public void create(Logins user) throws DBException {
         try (OrdersDao dao = daoFactory.createOrdersDao()) {
             dao.create(Orders.builder()
@@ -53,16 +69,15 @@ public class OrdersService {
         }
     }
 
+    /**
+     * Update for payment and change status by manager
+     * @param order Orders (for order id and status)
+     * @throws DBException  if DB throw exception
+     */
     public void update(Orders order) throws DBException {
         try (OrdersDao dao = daoFactory.createOrdersDao()) {
             dao.update(order);
         }
     }
-
-//    public void delete(Long id) {
-//        try (BasketsDao dao = daoFactory.createBasketsDao()) {
-//            dao.delete(id.intValue());
-//        }
-//    }
 
 }

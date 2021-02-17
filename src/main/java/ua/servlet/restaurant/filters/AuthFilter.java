@@ -23,7 +23,7 @@ public class AuthFilter implements Filter {
     Logger logger = LogManager.getLogger(AuthFilter.class);
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
     }
 
     @Override

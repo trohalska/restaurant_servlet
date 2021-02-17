@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.service.LoginsService;
-import ua.servlet.restaurant.utils.ParseJsonBody;
+import ua.servlet.restaurant.utils.JsonBody;
 import ua.servlet.restaurant.utils.Prop;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,20 +19,26 @@ public class RegistrationController implements Command {
         this.loginsService = new LoginsService();
     }
 
+    /**
+     * Get json string as input data, parse it into Logins class and write to DB
+     * Set errorMsg:
+     * - if catch DBException
+     * - if cannot get json or it is invalid
+     * @param request request
+     * @return registration page
+     */
     @Override
     public String execute(HttpServletRequest request) {
         try {
-            String json = ParseJsonBody.getBody(request);
+            String json = JsonBody.getBody(request);
             logger.info(json);
             if (json.equals("")) {
                 return "/registration.jsp";
             }
             Logins logins = new ObjectMapper().readValue(json, Logins.class);
-
             if (!Validator.valid_Registration(logins, request)) {
                 return "/registration.jsp";
             }
-
             logger.info(Prop.getDBProperty("create.user.log") + logins.getLogin());
             logger.info(logins.toString());
 
@@ -42,8 +48,8 @@ public class RegistrationController implements Command {
             request.setAttribute("errorMsg", errorMsg);
             logger.warn(errorMsg);
         } catch (IOException e) {
-            String errorMsg = "Cannot get json body";
-            request.setAttribute("errorMsg", errorMsg);
+            String errorMsg = Prop.getDBProperty("error.json");
+            request.setAttribute("errorMsg", Prop.getDBProperty("error.try.again"));
             logger.error(errorMsg);
         }
         return "/registration.jsp";

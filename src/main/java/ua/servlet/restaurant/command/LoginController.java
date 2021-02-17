@@ -25,9 +25,6 @@ public class LoginController implements Command {
         if (login == null || login.equals("") || password == null || password.equals("")) {
             return "/login.jsp";
         }
-//        if (!Validator.valid_EmptyFields(request, login, password)) {
-//            return "/login.jsp";
-//        }
         Logins user;
         try {
             user = loginsService.findByLogin(login);

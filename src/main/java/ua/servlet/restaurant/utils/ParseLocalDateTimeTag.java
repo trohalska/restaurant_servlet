@@ -5,6 +5,9 @@ import javax.servlet.jsp.*;
 import java.io.*;
 import java.time.LocalDateTime;
 
+/**
+ * Custom tag for parsing LocalDateTime
+ */
 public class ParseLocalDateTimeTag extends SimpleTagSupport {
     private LocalDateTime value;
 
@@ -12,7 +15,7 @@ public class ParseLocalDateTimeTag extends SimpleTagSupport {
         this.value = value;
     }
 
-    public void doTag() throws JspException, IOException {
+    public void doTag() throws IOException {
         if (value != null) {
             JspWriter out = getJspContext().getOut();
             out.println(parse(value));

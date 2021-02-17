@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.OrdersDao;
 import ua.servlet.restaurant.dao.entity.Orders;
-import ua.servlet.restaurant.dao.entity.Status;
 import ua.servlet.restaurant.dao.mapper.OrdersMapper;
 import ua.servlet.restaurant.utils.Prop;
 
@@ -19,21 +18,36 @@ public class JDBCOrdersDao implements OrdersDao {
         this.connection = connection;
     }
 
+    /**
+     * TRANSACTION
+     * Create order - get all from basket by user id, get sum prices, delete all from basket
+     * @param entity Orders
+     * @return created order
+     * @throws DBException if cannot create order
+     */
     @Override
     public Optional<Orders> create(Orders entity) throws DBException {
         ResultSet rs;
 
         final String query = Prop.getDBProperty("create.order");
-//        final String query = "INSERT INTO orders (status, time, total_price, login_id) VALUES (?, current_timestamp, " +
-//                "(SELECT SUM(d.price) FROM baskets b JOIN dishes d on b.dish_id = d.id WHERE b.login_id=?), ?)";
+        final String queryDelete = Prop.getDBProperty("delete.all.basket");
         try (PreparedStatement pstmt =
-                     connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                     connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+             PreparedStatement pstmtDelete = connection.prepareStatement(queryDelete)) {
+
             int k = 1;
             pstmt.setString(k++, entity.getStatus().name());
             pstmt.setLong(k++, entity.getLogin().getId());
-            pstmt.setLong(k++, entity.getLogin().getId());
+            pstmt.setLong(k, entity.getLogin().getId());
 
-            if (pstmt.executeUpdate() > 0) {
+            pstmtDelete.setLong(1, entity.getLogin().getId());
+
+            connection.setAutoCommit(false);
+            int resultCreate = pstmt.executeUpdate();
+            pstmtDelete.executeUpdate();
+            connection.commit();
+
+            if (resultCreate > 0) {
                 rs = pstmt.getGeneratedKeys();
 
                 if (rs.next()) {
@@ -44,18 +58,24 @@ public class JDBCOrdersDao implements OrdersDao {
                 rs.close();
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
-
             String errorMsg = Prop.getDBProperty("create.order.dbe");
             log.error(errorMsg);
-            throw new DBException(errorMsg);
+            try {
+                log.warn(Prop.getDBProperty("transaction.rollback"));
+                connection.rollback();
+            } catch (SQLException e) {
+                log.error(Prop.getDBProperty("transaction.rollback.fail"));
+            }
         }
-
-        deleteAllFromBasket(entity.getLogin().getId().intValue()); // transaction !!!
-
         return Optional.of(entity);
     }
 
+    /**
+     * Find order by id for payment page
+     * @param id order id
+     * @return order
+     * @throws DBException if id invalid
+     */
     @Override
     public Optional<Orders> findById(int id) throws DBException {
         Optional<Orders> result = Optional.empty();
@@ -72,14 +92,17 @@ public class JDBCOrdersDao implements OrdersDao {
             rs.close();
             return result;
         } catch (SQLException e) {
-            e.printStackTrace();
-
             String errorMsg = Prop.getDBProperty("select.orders.dbe");
             log.error(errorMsg);
             throw new DBException(errorMsg);
         }
     }
 
+    /**
+     * Select all orders for manager page
+     * @return list of orders
+     * @throws DBException if cannot find
+     */
     @Override
     public List<Orders> findAll() throws DBException {
         final String query = Prop.getDBProperty("select.all.orders.manager");
@@ -94,20 +117,23 @@ public class JDBCOrdersDao implements OrdersDao {
             rs.close();
             return result;
         } catch (SQLException e) {
-            e.printStackTrace();
-
             String errorMsg = Prop.getDBProperty("select.all.orders.manager.dbe");
             log.error(errorMsg);
             throw new DBException(errorMsg);
         }
     }
 
+    /**
+     * Select only users orders for user page by user id
+     * @param id user id
+     * @return optional list of orders
+     * @throws DBException if user id invalid
+     */
     public Optional<List<Orders>> findAllByLoginId(Long id) throws DBException {
         Map<Long, Orders> orders = new HashMap<>();
         List<Orders> list;
 
         final String query = Prop.getDBProperty("select.all.orders");
-//        String query = "SELECT * FROM orders o LEFT JOIN login l ON o.login_id = l.id WHERE o.login_id=? ORDER BY o.id";
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -121,15 +147,18 @@ public class JDBCOrdersDao implements OrdersDao {
             list = new ArrayList<>(orders.values());
             return list.isEmpty() ? Optional.empty() : Optional.of(list);
         } catch (SQLException e) {
-            e.printStackTrace();
-
             String errorMsg = Prop.getDBProperty("select.all.orders.dbe");
             log.error(errorMsg);
             throw new DBException(errorMsg);
         }
     }
 
-    // fot payment and manager update
+    //
+
+    /**
+     * Update for payment and change status by manager
+     * @param entity Orders (for order id and status)
+     */
     @Override
     public void update(Orders entity) {
         final String query = Prop.getDBProperty("update.orders");
@@ -142,42 +171,14 @@ public class JDBCOrdersDao implements OrdersDao {
 
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            ex.printStackTrace();
-
             String errorMsg = Prop.getDBProperty("update.orders.dbe") + entity.getId();
             log.error(errorMsg);
         }
     }
 
+    @Deprecated
     @Override
-    public void delete(int id) {
-    }
-
-    /**
-     * This id internal transaction for create order and clean basket after it
-     * @param id user id (whose basket is clean up)
-     */
-    public void deleteAllFromBasket(int id) {
-        final String query = Prop.getDBProperty("delete.all.basket");
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setLong(1, id);
-
-            connection.setAutoCommit(false);
-            pstmt.executeUpdate();
-            connection.commit();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-
-            String errorMsg = Prop.getDBProperty("delete.all.basket.dbe") + id;
-            log.error(errorMsg);
-            try {
-                log.warn(Prop.getDBProperty("transaction.rollback"));
-                connection.rollback();
-            } catch (SQLException e) {
-                log.error(Prop.getDBProperty("transaction.rollback.fail"));
-            }
-        }
-    }
+    public void delete(int id) { }
 
     @Override
     public void close()  {

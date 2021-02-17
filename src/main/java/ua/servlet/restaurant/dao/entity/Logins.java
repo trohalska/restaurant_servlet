@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-//@JsonPropertyOrder({"id", "login", "password", "email"})
 @JsonPropertyOrder(alphabetic = true)
 public class Logins {
     private Long id;

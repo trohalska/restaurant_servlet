@@ -17,13 +17,9 @@
     <title>restaurant</title>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
-
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
     <script src="${pageContext.request.contextPath}/js/general.js"></script>
-
 </head>
 
 <body>
@@ -36,8 +32,6 @@
             <fmt:message key="sign.out"/></a>
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
-<%--        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">--%>
-<%--            <fmt:message key="main.menu"/></a>--%>
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
             <fmt:message key="main.basket"/></a>
         <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
@@ -48,6 +42,7 @@
                 <fmt:message key="main.manager"/></a>
         </c:if>
 
+        <label for="locales"></label>
         <select class="abutton" id="locales">
             <option value=""><fmt:message key="lang.change"/></option>
             <option value="en"><fmt:message key="lang.en"/></option>
@@ -101,14 +96,18 @@
                                 <td><c:out value="${order.login.login}"/></td>
                                 <td>
                                     <c:if test="${order.status.name()!='DONE' && order.status.name()!='NEW'}">
-                                        <form method="put" action="${pageContext.request.contextPath}/app/customer/orders/confirm">
-                                            <input name="id" class="hidden" type="text" value="${order.id}"/>
-                                            <input name="status" class="hidden" type="text" value="${order.status}"/>
+                                        <form method="POST" action="${pageContext.request.contextPath}/app/customer/orders/confirm">
+                                            <label>
+                                                <input name="id" class="hidden" type="text" value="${order.id}"/>
+                                            </label>
+                                            <label>
+                                                <input name="status" class="hidden" type="text" value="${order.status}"/>
+                                            </label>
                                             <input class="abutton" type="submit" value="<fmt:message key="orders.confirm"/>">
                                         </form>
                                     </c:if>
                                 </td>
-                        </tr>
+                            </tr>
                         </c:forEach>
                     </table>
                 </div>

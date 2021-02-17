@@ -4,8 +4,7 @@
 <fmt:setLocale value="${sessionScope.lang}" />
 <fmt:setBundle basename="messages" />
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -16,7 +15,6 @@
     <title>restaurant</title>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
 </head>
@@ -25,25 +23,8 @@
 <div class="body-block shadow-large page_width">
     <section class="section1">
         <a id="authorizedLogin">${sessionScope.principal.login}</a>
-
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
-
-        <select class="abutton" id="locales">
-            <option value=""><fmt:message key="lang.change"/></option>
-            <option value="en"><fmt:message key="lang.en"/></option>
-            <option value="ua"><fmt:message key="lang.ua"/></option>
-        </select>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $("#locales").change(function () {
-                    let selectedOption = $('#locales').val();
-                    if (selectedOption !== ''){
-                        window.location.replace('?locale=' + selectedOption);
-                    }
-                });
-            });
-        </script>
     </section>
 
     <header class="section2">
@@ -53,22 +34,20 @@
     <section class="section4">
         <main>
             <div class="frame">
-                <h2 style="color: red;">
+                <h2 style="color: red; text-align: center">
                     ${pageContext.exception.toString().substring(pageContext.exception.toString().indexOf(':') + 2)}
                 </h2>
                 <br>
-                <table width = "100%" border = "1">
-                    <tr valign = "top">
-                        <td width = "40%"><b>Error:</b></td>
+                <table>
+                    <tr>
+                        <td><b>Error:</b></td>
                         <td>${pageContext.exception}</td>
                     </tr>
-
-                    <tr valign = "top">
+                    <tr>
                         <td><b>URI:</b></td>
                         <td>${pageContext.errorData.requestURI}</td>
                     </tr>
-
-                    <tr valign = "top">
+                    <tr>
                         <td><b>Status code:</b></td>
                         <td>${pageContext.errorData.statusCode}</td>
                     </tr>
@@ -82,11 +61,9 @@
                     <%--        </td>--%>
                     <%--    </tr>--%>
                 </table>
-
             </div>
         </main>
     </section>
-
 </div>
 </body>
 

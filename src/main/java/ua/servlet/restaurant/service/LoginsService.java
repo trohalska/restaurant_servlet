@@ -10,6 +10,12 @@ import ua.servlet.restaurant.utils.Prop;
 public class LoginsService {
     DaoFactory daoFactory = DaoFactory.getInstance();
 
+    /**
+     * For registration, hash password
+     * @param user Logins
+     * @return Logins
+     * @throws DBException if DB throw exception
+     */
     public Logins create(Logins user) throws DBException {
         user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12)));
 
@@ -21,6 +27,12 @@ public class LoginsService {
         }
     }
 
+    /**
+     * For login page
+     * @param login String username
+     * @return Logins
+     * @throws DBException if DB throw exception
+     */
     public Logins findByLogin(String login) throws DBException {
         try (LoginsDao dao = daoFactory.createLoginsDao()) {
             return dao.findByLogin(login).orElseThrow(
