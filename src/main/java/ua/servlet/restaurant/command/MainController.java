@@ -14,13 +14,9 @@ public class MainController implements Command {
         this.dishesService = new DishesService();
     }
 
-    // TODO sorting
-
     @Override
     public String execute(HttpServletRequest request) {
         String locale = CommandUtility.getLocale(request);
-
-        // check id ask blabla or sort blabla
 
         String page = request.getParameter("page");
         String sort = request.getParameter("sort");
@@ -34,7 +30,6 @@ public class MainController implements Command {
 
         Page pageable;
         try {
-//            list = dishesService.getAll(locale);
             pageable = dishesService.getAllPageable(locale, pageNo, sort, direct, categoryId);
         } catch (DBException e) {
             logger.info(e.getMessage());
@@ -42,6 +37,7 @@ public class MainController implements Command {
             return "/WEB-INF/menu.jsp";
         }
         request.setAttribute("dishes", pageable.getDishes());
+        request.setAttribute("categories", pageable.getCategories());
         request.setAttribute("pageNo", pageNo);
         request.setAttribute("totalPages", pageable.getTotalPages());
         request.setAttribute("sort", sort);

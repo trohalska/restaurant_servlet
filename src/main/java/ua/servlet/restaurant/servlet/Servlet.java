@@ -25,12 +25,6 @@ public class Servlet extends HttpServlet {
         commands.put("registration", new RegistrationController());
 
         commands.put("menu", new MainController());                             // get
-//        commands.put("menu/create", new MainController());
-        commands.put("menu/update", new MenuUpdateController());                // put
-        commands.put("menu/delete", new MenuDeleteController());                // delete
-
-//        commands.put("dish/create", new MainController());
-        commands.put("dish/update", new DishUpdateController());                // put
 
         commands.put("basket", new BasketController());                         // get
         commands.put("basket/add", new BasketAddController());                  // post

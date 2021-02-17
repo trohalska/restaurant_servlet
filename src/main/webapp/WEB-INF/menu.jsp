@@ -21,10 +21,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
 
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-<%--    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>--%>
-
-<%--    <script src="${pageContext.request.contextPath}/js/general.js"></script>--%>
-<%--    <script src="${pageContext.request.contextPath}/js/main_request.js"></script>--%>
 
 </head>
 
@@ -48,8 +44,6 @@
 
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
-<%--        <a class="abutton" href="${pageContext.request.contextPath}/app/menu">--%>
-<%--            <fmt:message key="main.menu"/></a>--%>
 
         <c:if test="${sessionScope.principal.role!='ROLE_GUEST'}">
 
@@ -99,23 +93,25 @@
                     <h2><fmt:message key="main.menu"/></h2>
                 </div>
 
-    <%--            <div ng-model="categories">--%>
-    <%--                <label for="categories_filter"></label>--%>
-    <%--                <select id="categories_filter" class="form-styling">--%>
-    <%--                    <option th:text="#{menu.filter.name}"></option>--%>
-    <%--                    <option value="0" th:text="#{menu.filter.all}"></option>--%>
-    <%--                    <option ng-repeat="c in categories" value="{{c.id}}">{{c.category}}</option>--%>
-    <%--                </select>--%>
-    <%--                <script type="text/javascript">--%>
-    <%--                    $(document).ready(function() {--%>
-    <%--                        $("#categories_filter").change(function () {--%>
-    <%--                            category = $('#categories_filter').val();--%>
-    <%--                            page = 1;--%>
-    <%--                            replace();--%>
-    <%--                        });--%>
-    <%--                    });--%>
-    <%--                </script>--%>
-    <%--            </div>--%>
+                <div>
+                    <label for="categories_filter"></label>
+                    <select id="categories_filter" class="form-styling">
+                        <option><fmt:message key="menu.filter.name"/></option>
+                        <option value="0"><fmt:message key="menu.filter.all"/></option>
+                        <c:forEach var="c" items="${requestScope.categories}">
+                            <option value="${c.id}">${c.category}</option>
+                        </c:forEach>
+                    </select>
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+                            $("#categories_filter").change(function () {
+                                location.replace("${pageContext.request.contextPath}/app/menu?page=1&sort=${requestScope.sort}&direct=${requestScope.direct}&category="
+                                    + $('#categories_filter').val());
+                            });
+                        });
+                    </script>
+                </div>
+
             </div>
 
             <div id="dishes_block">
@@ -137,9 +133,6 @@
                             <c:if test="${sessionScope.principal.role!='ROLE_GUEST'}">
                                 <th columns="4"><fmt:message key="basket.action"/></th>
                             </c:if>
-                            <%--                        <c:if test="${sessionScope.principal.role=='ROLE_MANAGER'}">--%>
-                            <%--                            <th columns="5"><fmt:message key="basket.action"/></th>--%>
-                            <%--                        </c:if>--%>
                         </tr>
                         <tbody id="dishes_table">
                         <c:forEach var="dish" items="${requestScope.dishes}">
@@ -158,21 +151,6 @@
                                         </form>
                                     </td>
                                 </c:if>
-    <%--                            <c:if test="${sessionScope.principal.role=='ROLE_MANAGER'}">--%>
-    <%--                                <td>--%>
-    <%--                                    <form method="put" action="${pageContext.request.contextPath}/app/manager/menu/update">--%>
-    <%--                                        <input name="id" class="hidden" type="number"--%>
-    <%--                                               value="<c:out value="${dish.id}"/>"/>--%>
-    <%--                                        <input class="abutton" type="submit" value="<fmt:message key="button.update"/>">--%>
-    <%--                                    </form>--%>
-
-    <%--                                    <form method="delete" action="${pageContext.request.contextPath}/app/manager/menu/delete">--%>
-    <%--                                        <input name="id" class="hidden" type="number"--%>
-    <%--                                               value="<c:out value="${dish.id}"/>"/>--%>
-    <%--                                        <input class="abutton" type="submit" value="<fmt:message key="button.delete"/>">--%>
-    <%--                                    </form>--%>
-    <%--                                </td>--%>
-    <%--                            </c:if>--%>
                             </tr>
                         </c:forEach>
                         </tbody>
@@ -191,9 +169,6 @@
                         </a>
                     </c:forEach>
 
-    <%--                <a ng-repeat="x in [].constructor(pageable.totalPages) track by $index"--%>
-    <%--                   class="abutton"--%>
-    <%--                   href="/page={{$index+1}}&sort={{pageable.sortField}}&direct={{pageable.sortDirection}}&category={{pageable.categoryId}}">{{ $index+1 }}</a>--%>
                 </div>
 
                 <div><fmt:message key="page.total"/> ${requestScope.totalPages}</div>

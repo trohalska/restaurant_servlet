@@ -4,10 +4,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.DishesDao;
+import ua.servlet.restaurant.dao.entity.Categories;
+import ua.servlet.restaurant.dao.mapper.CategoriesMapper;
 import ua.servlet.restaurant.dao.mapper.DishesMapper;
 import ua.servlet.restaurant.dao.entity.Dishes;
 import ua.servlet.restaurant.dto.DishesDTO;
 import ua.servlet.restaurant.dto.Page;
+import ua.servlet.restaurant.dto.converter.CategoriesDTOConverter;
 import ua.servlet.restaurant.dto.converter.DishesDTOConverter;
 import ua.servlet.restaurant.utils.Prop;
 import ua.servlet.restaurant.utils.Utils;
@@ -81,6 +84,10 @@ public class JDBCDishesDao implements DishesDao {
         int beginNo = (pageNo - 1) * rowsOnPage + 1;
         int endNo = beginNo + rowsOnPage - 1;
 
+        Long totalRows = null;
+        List<Dishes> dishes = new ArrayList<>();
+        Map<Long, Categories> categories = new HashMap<>();
+
 //        final String query = (category.equals("none"))
 //                ? Prop.getDBProperty("select.all.dishes.pageable")
 //                : Prop.getDBProperty("select.all.dishes.pageable.filter");
@@ -102,9 +109,12 @@ public class JDBCDishesDao implements DishesDao {
             query += " ORDER BY " + sort + " " + direct.toUpperCase(Locale.ROOT);
         }
 
-        System.out.println(query);
+        final String queryCategories = "SELECT * FROM categories";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
+        try (PreparedStatement pstmt
+                     = connection.prepareStatement(
+                             query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement st = connection.createStatement()) {
             int k = 1;
             if (categoryId != 0) {
                 pstmt.setInt(k++, categoryId);
@@ -114,9 +124,6 @@ public class JDBCDishesDao implements DishesDao {
             pstmt.setInt(k, endNo);
 
             ResultSet rs = pstmt.executeQuery();
-
-            Long totalRows = null;
-            List<Dishes> dishes = new ArrayList<>();
             DishesMapper dishesMapper = new DishesMapper();
             while (rs.next()) {
                 dishes.add(dishesMapper.extractFromResultSet(rs));
@@ -126,6 +133,14 @@ public class JDBCDishesDao implements DishesDao {
             }
             rs.close();
 
+            ResultSet rs2 = st.executeQuery(queryCategories);
+            CategoriesMapper categoriesMapper = new CategoriesMapper();
+            while (rs2.next()) {
+                Categories category = categoriesMapper.extractFromResultSet(rs2);
+                categoriesMapper.makeUnique(categories, category);
+            }
+            rs2.close();
+
             if (totalRows != null) {
                 totalRows = (totalRows % rowsOnPage == 0)
                         ? totalRows/rowsOnPage
@@ -133,6 +148,8 @@ public class JDBCDishesDao implements DishesDao {
             }
             return Page.builder()
                     .dishes(DishesDTOConverter.convertList(dishes, locale))
+                    .categories(CategoriesDTOConverter.convertList(
+                            new ArrayList<>(categories.values()), locale))
                     .totalPages(totalRows)
                     .build();
 
