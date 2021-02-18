@@ -20,24 +20,31 @@ public class Servlet extends HttpServlet {
         servletConfig.getServletContext()
                 .setAttribute("loggedUsers", new HashSet<String>());
 
-        commands.put("logout", new LogOutController());
         commands.put("login", new LoginController());
         commands.put("registration", new RegistrationController());
+        commands.put("logout", new LogOutController());
+        commands.put("menu", new MainController());                                     // get
 
-        commands.put("menu", new MainController());                             // get
+        commands.put("customer/basket", new BasketController());                        // get
+        commands.put("customer/basket/add", new BasketAddController());                 // post
+        commands.put("customer/basket/delete", new BasketDeleteController());           // delete
+        commands.put("customer/basket/delete_all", new BasketDeleteAllController());    // delete
 
-        commands.put("basket", new BasketController());                         // get
-        commands.put("basket/add", new BasketAddController());                  // post
-        commands.put("basket/delete", new BasketDeleteController());            // delete
-        commands.put("basket/delete_all", new BasketDeleteAllController());     // delete
+        commands.put("customer/orders", new OrdersController());                        // get
+        commands.put("customer/orders/create", new OrdersCreateController());           // post
+        commands.put("customer/orders/payment", new OrdersPaymentController());         // get
+        commands.put("customer/orders/payment/pay", new OrdersPaymentPayController());  // post
 
-        commands.put("orders", new OrdersController());                         // get
-        commands.put("orders/create", new OrdersCreateController());            // post
-        commands.put("orders/payment", new OrdersPaymentController());          // get
-        commands.put("orders/payment/pay", new OrdersPaymentPayController());   // put
-        commands.put("orders/confirm", new OrdersConfirmController());          // put
+        commands.put("manager/orders/confirm", new OrdersConfirmController());          // post
+        commands.put("manager/orders_manager", new OrdersManagerController());          // get
+        commands.put("manager/dishes_manager", new DishesManagerController());          // get
 
-        commands.put("orders_manager", new OrdersManagerController());          // get
+
+        commands.put("manager/dish/create", new DishCreateController());                // get
+        commands.put("manager/dish/create/do", new DishCreateDoController());           // post
+        commands.put("manager/dish/update", new DishUpdateController());                // get
+        commands.put("manager/dish/update/do", new DishUpdateDoController());           // post
+        commands.put("manager/dish/delete", new DishDeleteController());                // delete
 
     }
 
@@ -53,7 +60,7 @@ public class Servlet extends HttpServlet {
 
         String path = request.getRequestURI();
         logger.info(path);
-        path = path.replaceAll(".*/app/((manager|customer)/)?" , "");
+        path = path.replaceAll(".*/app/" , ""); // .*/app/((manager|customer)/)?
         logger.info(path);
 
         Command command = commands.getOrDefault(path, (r)->"/index.jsp");

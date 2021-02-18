@@ -12,7 +12,7 @@
 }
 
 .form-signin {
-    height: 300px;
+    height: 400px;
     font-weight: 300;
     /*  padding-left: 37px;
     padding-right: 37px;*/
@@ -92,19 +92,5 @@ label {
     cursor: pointer;
 }
 
-/*.forgot {*/
-/*    height: 100px;*/
-/*    width: 80%;*/
-/*    margin: 25px auto;*/
-/*    text-align: center;*/
-/*    font-weight: 400;*/
-/*    font-size: 13px;*/
-/*    text-decoration: none;*/
-/*}*/
-
-/*#emailRestorePass {*/
-/*    width: 62% !important;*/
-/*    display: inline;*/
-/*}*/
 
 

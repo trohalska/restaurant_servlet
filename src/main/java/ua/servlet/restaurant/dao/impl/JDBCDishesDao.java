@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.DishesDao;
 import ua.servlet.restaurant.dao.entity.Categories;
+import ua.servlet.restaurant.dao.entity.RoleType;
 import ua.servlet.restaurant.dao.mapper.CategoriesMapper;
 import ua.servlet.restaurant.dao.mapper.DishesMapper;
 import ua.servlet.restaurant.dao.entity.Dishes;
@@ -14,6 +15,7 @@ import ua.servlet.restaurant.dto.converter.DishesDTOConverter;
 import ua.servlet.restaurant.utils.Prop;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class JDBCDishesDao implements DishesDao {
@@ -23,13 +25,35 @@ public class JDBCDishesDao implements DishesDao {
         this.connection = connection;
     }
 
-    @Deprecated
     @Override
-    public Optional<Dishes> create(Dishes entity) {
-        return Optional.empty();
+    public Optional<Dishes> create(Dishes entity) throws DBException {
+        ResultSet rs;
+
+        final String query = Prop.getDBProperty("create.dishes");
+        try (PreparedStatement pstmt =
+                     connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            int k = 1;
+            pstmt.setString(k++, entity.getNameEn());
+            pstmt.setString(k++, entity.getNameUa());
+            pstmt.setBigDecimal(k++, entity.getPrice());
+            pstmt.setTimestamp(k++, Timestamp.valueOf(LocalDateTime.now()));
+            pstmt.setLong(k, entity.getCategories().getId());
+
+            if (pstmt.executeUpdate() > 0) {
+                rs = pstmt.getGeneratedKeys();
+                if (rs.next()) {
+                    entity.setId(rs.getLong(1));
+                }
+                rs.close();
+            }
+            return Optional.of(entity);
+        } catch (SQLException ex) {
+            String errorMsg = Prop.getDBProperty("create.dishes.dbe") + entity.getNameEn();
+            log.error(errorMsg);
+            throw new DBException(errorMsg);
+        }
     }
 
-    // todo for update
     /**
      * Find dish for update
      * @param id dish id
@@ -59,11 +83,10 @@ public class JDBCDishesDao implements DishesDao {
     }
 
     /**
-     * Find all dishes for menu page (old version)
+     * Find all dishes for dishes manager page
      * @return list of dishes
      * @throws DBException if cannot find
      */
-    @Deprecated
     @Override
     public Optional<List<Dishes>> findAll() throws DBException {
         Map<Long, Dishes> dishes = new HashMap<>();
@@ -210,8 +233,10 @@ public class JDBCDishesDao implements DishesDao {
         return totalRows;
     }
 
-    // todo for update delete dish
-    @Deprecated
+    /**
+     * Update dish (manager)
+     * @param entity Dishes
+     */
     @Override
     public void update(Dishes entity) {
         final String query = Prop.getDBProperty("update.dishes");
@@ -220,16 +245,20 @@ public class JDBCDishesDao implements DishesDao {
             pstmt.setString(k++, entity.getNameEn());
             pstmt.setString(k++, entity.getNameUa());
             pstmt.setBigDecimal(k++, entity.getPrice());
-            pstmt.setString(k, entity.getNameEn());
+            pstmt.setLong(k, entity.getId());
 
             pstmt.executeUpdate();
         } catch (SQLException ex) {
-            String errorMsg = Prop.getDBProperty("delete.update.dbe") + entity.getId();
+            String errorMsg = Prop.getDBProperty("update.dishes.dbe") + entity.getId();
             log.error(errorMsg);
         }
     }
 
-    @Deprecated
+    /**
+     * Delete dish (manager)
+     * @param login_id manager id
+     * @param id dish id
+     */
     @Override
     public void delete(Long login_id, Long id) {
         final String query = Prop.getDBProperty("delete.dishes");

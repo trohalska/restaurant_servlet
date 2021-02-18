@@ -22,9 +22,13 @@
 <div class="backcolor"></div>
 <div class="body-block shadow-large page_width">
     <section class="section1">
-        <a id="authorizedLogin">${sessionScope.principal.login}</a>
-        <a class="abutton" href="${pageContext.request.contextPath}">
-            <fmt:message key="main.main"/></a>
+        <div>
+            <a class="hbutton" href="${pageContext.request.contextPath}">
+                <fmt:message key="main.main"/></a>
+        </div>
+        <div>
+            <a id="authorizedLogin">${sessionScope.principal.login}</a>
+        </div>
     </section>
 
     <header class="section2">
@@ -37,20 +41,20 @@
                 <h2 style="color: red; text-align: center">
                     ${pageContext.exception.toString().substring(pageContext.exception.toString().indexOf(':') + 2)}
                 </h2>
-                <br>
-                <table>
-                    <tr>
-                        <td><b>Error:</b></td>
-                        <td>${pageContext.exception}</td>
-                    </tr>
-                    <tr>
-                        <td><b>URI:</b></td>
-                        <td>${pageContext.errorData.requestURI}</td>
-                    </tr>
-                    <tr>
-                        <td><b>Status code:</b></td>
-                        <td>${pageContext.errorData.statusCode}</td>
-                    </tr>
+<%--                <br>--%>
+<%--                <table>--%>
+<%--                    <tr>--%>
+<%--                        <td><b>Error:</b></td>--%>
+<%--                        <td>${pageContext.exception}</td>--%>
+<%--                    </tr>--%>
+<%--                    <tr>--%>
+<%--                        <td><b>URI:</b></td>--%>
+<%--                        <td>${pageContext.errorData.requestURI}</td>--%>
+<%--                    </tr>--%>
+<%--                    <tr>--%>
+<%--                        <td><b>Status code:</b></td>--%>
+<%--                        <td>${pageContext.errorData.statusCode}</td>--%>
+<%--                    </tr>--%>
 
                     <%--    <tr valign = "top">--%>
                     <%--        <td><b>Stack trace:</b></td>--%>
@@ -60,7 +64,7 @@
                     <%--            </c:forEach>--%>
                     <%--        </td>--%>
                     <%--    </tr>--%>
-                </table>
+<%--                </table>--%>
             </div>
         </main>
     </section>

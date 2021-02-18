@@ -20,27 +20,9 @@ a {
 :focus {outline: none;}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-	/* display: none; <- Crashes Chrome on hover */
 	-webkit-appearance: none;
-	margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+	margin: 0;
 }
-/*input:-internal-autofill-selected {*/
-/*	background-color: rgba(183, 201, 109,.3) !important;*/
-/*}*/
-/*input:-webkit-autofill,*/
-/*input:-webkit-autofill:hover,*/
-/*input:-webkit-autofill:focus,*/
-/*textarea:-webkit-autofill,*/
-/*textarea:-webkit-autofill:hover,*/
-/*textarea:-webkit-autofill:focus,*/
-/*select:-webkit-autofill,*/
-/*select:-webkit-autofill:hover,*/
-/*select:-webkit-autofill:focus {*/
-/*	border: none;*/
-/*	!*-webkit-text-fill-color: green;*!*/
-/*	-webkit-box-shadow: 0 0 0px 1000px rgba(183, 201, 109,.3) inset;*/
-/*	!*transition: background-color 5000s ease-in-out 0s;*!*/
-/*}*/
 body {
 	font-family: "Montserrat", sans-serif;
 	font-weight: 400;
@@ -61,9 +43,53 @@ body * {
 }
 .abutton:hover,
 .abutton:active,
-.abutton:focus {
+.abutton:focus,
+.hbutton:hover,
+.hbutton:active,
+.hbutton:focus{
 	background: rgba(84, 100, 164 ,.3);
 	color: red;
+	border-radius: 3px;
+	border: none;
+	outline: none;
+}
+
+.hbutton {
+	box-sizing: border-box;
+	font-size: 1.2em;
+	font-weight: 500;
+	display: inline-block;
+	text-align: center;
+	/*width: 100px;*/
+	background: none;
+	align-items: center;
+	color: #494d5f;
+	padding: 4px;
+	margin: 0 5px;
+	border: none;
+	outline: none;
+}
+.mbutton {
+	box-sizing: border-box;
+	/*font-size: 1.2em;*/
+	font-weight: 700;
+	color: #5464a4;
+	display: inline-block;
+	text-align: center;
+	width: 100px;
+	background: none;
+	align-items: center;
+	padding: 4px;
+	margin: 0 5px;
+	border: none;
+	outline: none;
+}
+
+.mbutton:hover,
+.mbutton:active,
+.mbutton:focus{
+	background: rgba(84, 100, 164 ,.3);
+	/*color: red;*/
 	border-radius: 3px;
 	border: none;
 	outline: none;
@@ -125,7 +151,7 @@ body * {
 .section1 {
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-end;
+	justify-content: space-between;
 	align-items: center;
 
 	background-color: #d8d8d8;
@@ -431,4 +457,5 @@ select {
 	margin-right: 15px;
 	color: #5464a4;
 	font-weight: 700;
+	font-size: 1.2em;
 }

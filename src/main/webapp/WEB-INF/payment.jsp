@@ -25,25 +25,31 @@
 <div class="backcolor"></div>
 <div class="body-block shadow-large page_width">
     <section class="section1">
-        <a id="authorizedLogin">${sessionScope.principal.login}</a>
-        <a class="abutton" href="${pageContext.request.contextPath}">
-            <fmt:message key="main.main"/></a>
-        <label for="locales"></label>
-        <select class="abutton" id="locales">
-            <option value=""><fmt:message key="lang.change"/></option>
-            <option value="en"><fmt:message key="lang.en"/></option>
-            <option value="ua"><fmt:message key="lang.ua"/></option>
-        </select>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $("#locales").change(function () {
-                    let selectedOption = $('#locales').val();
-                    if (selectedOption !== ''){
-                        window.location.replace('?id=${requestScope.order.id}&locale=' + selectedOption);
-                    }
+        <div style="display:flex; align-items: center">
+            <a class="hbutton" href="${pageContext.request.contextPath}">
+                <fmt:message key="main.main"/></a>
+        </div>
+        <div>
+            <a id="authorizedLogin">${sessionScope.principal.login}</a>
+            <a class="abutton" href="${pageContext.request.contextPath}/app/logout">
+                <fmt:message key="sign.out"/></a>
+            <label for="locales"></label>
+            <select class="abutton" id="locales">
+                <option value=""><fmt:message key="lang.change"/></option>
+                <option value="en"><fmt:message key="lang.en"/></option>
+                <option value="ua"><fmt:message key="lang.ua"/></option>
+            </select>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $("#locales").change(function () {
+                        let selectedOption = $('#locales').val();
+                        if (selectedOption !== ''){
+                            window.location.replace('?id=${requestScope.order.id}&locale=' + selectedOption);
+                        }
+                    });
                 });
-            });
-        </script>
+            </script>
+        </div>
     </section>
 
     <header class="section2">

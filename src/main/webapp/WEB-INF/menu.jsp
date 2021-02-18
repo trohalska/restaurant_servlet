@@ -26,55 +26,59 @@
 <div class="backcolor"></div>
 <div class="body-block shadow-large page_width">
     <section class="section1">
-        <a id="authorizedLogin">${sessionScope.principal.login}</a>
-        <c:choose>
-            <c:when test="${sessionScope.principal.role=='ROLE_GUEST'}">
-                <a class="abutton" href="${pageContext.request.contextPath}/app/login">
-                    <fmt:message key="sign.in"/></a>
-                <a class="abutton" href="${pageContext.request.contextPath}/app/registration">
-                    <fmt:message key="sign.up"/></a>
-            </c:when>
-            <c:otherwise>
-                <a class="abutton" href="${pageContext.request.contextPath}/app/logout">
-                    <fmt:message key="sign.out"/></a>
-            </c:otherwise>
-        </c:choose>
+        <div style="display:flex; align-items: center">
+            <a class="hbutton" href="${pageContext.request.contextPath}">
+                <fmt:message key="main.main"/></a>
 
-        <a class="abutton" href="${pageContext.request.contextPath}">
-            <fmt:message key="main.main"/></a>
+            <c:if test="${sessionScope.principal.role!='ROLE_GUEST'}">
+                <a class="hbutton" href="${pageContext.request.contextPath}/app/customer/basket">
+                    <fmt:message key="main.basket"/></a>
+                <a class="hbutton" href="${pageContext.request.contextPath}/app/customer/orders">
+                    <fmt:message key="main.orders"/></a>
+            </c:if>
 
-        <c:if test="${sessionScope.principal.role!='ROLE_GUEST'}">
-            <a class="abutton" href="${pageContext.request.contextPath}/app/customer/basket">
-                <fmt:message key="main.basket"/></a>
-            <a class="abutton" href="${pageContext.request.contextPath}/app/customer/orders">
-                <fmt:message key="main.orders"/></a>
-        </c:if>
-
-        <c:if test="${sessionScope.principal.role=='ROLE_MANAGER'}">
-            <a class="abutton" href="${pageContext.request.contextPath}/app/manager/orders_manager">
-                <fmt:message key="main.manager"/></a>
-        </c:if>
-
-        <label for="locales"></label>
-        <select class="abutton" id="locales">
-            <option value=""><fmt:message key="lang.change"/></option>
-            <option value="en"><fmt:message key="lang.en"/></option>
-            <option value="ua"><fmt:message key="lang.ua"/></option>
-        </select>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $("#locales").change(function () {
-                    let selectedOption = $('#locales').val();
-                    if (selectedOption !== ''){
-                        window.location.replace(
-                            "${pageContext.request.contextPath}/app/menu" +
-                            "?page=${requestScope.pageNo}&sort=${requestScope.sort}" +
-                            "&direct=${requestScope.direct}&category=${requestScope.category}" +
-                            '&locale=' + selectedOption);
-                    }
+            <c:if test="${sessionScope.principal.role=='ROLE_MANAGER'}">
+                <a class="mbutton" href="${pageContext.request.contextPath}/app/manager/orders_manager">
+                    <fmt:message key="main.manage.orders"/></a>
+                <a class="mbutton" href="${pageContext.request.contextPath}/app/manager/dishes_manager">
+                    <fmt:message key="main.manage.dishes"/></a>
+            </c:if>
+        </div>
+        <div>
+            <a id="authorizedLogin">${sessionScope.principal.login}</a>
+            <c:choose>
+                <c:when test="${sessionScope.principal.role=='ROLE_GUEST'}">
+                    <a class="abutton" href="${pageContext.request.contextPath}/app/login">
+                        <fmt:message key="sign.in"/></a>
+                    <a class="abutton" href="${pageContext.request.contextPath}/app/registration">
+                        <fmt:message key="sign.up"/></a>
+                </c:when>
+                <c:otherwise>
+                    <a class="abutton" href="${pageContext.request.contextPath}/app/logout">
+                        <fmt:message key="sign.out"/></a>
+                </c:otherwise>
+            </c:choose>
+            <label for="locales"></label>
+            <select class="abutton" id="locales">
+                <option value=""><fmt:message key="lang.change"/></option>
+                <option value="en"><fmt:message key="lang.en"/></option>
+                <option value="ua"><fmt:message key="lang.ua"/></option>
+            </select>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $("#locales").change(function () {
+                        let selectedOption = $('#locales').val();
+                        if (selectedOption !== ''){
+                            window.location.replace(
+                                "${pageContext.request.contextPath}/app/menu" +
+                                "?page=${requestScope.pageNo}&sort=${requestScope.sort}" +
+                                "&direct=${requestScope.direct}&category=${requestScope.category}" +
+                                '&locale=' + selectedOption);
+                        }
+                    });
                 });
-            });
-        </script>
+            </script>
+        </div>
     </section>
 
     <header class="section2">

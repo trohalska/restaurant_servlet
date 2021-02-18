@@ -14,6 +14,10 @@ public class JDBCDaoFactory extends DaoFactory {
         return new JDBCLoginsDao(getConnection());
     }
     @Override
+    public CategoriesDao createCategoriesDao() {
+        return new JDBCCategoriesDao(getConnection());
+    }
+    @Override
     public DishesDao createDishesDao() {
         return new JDBCDishesDao(getConnection());
     }

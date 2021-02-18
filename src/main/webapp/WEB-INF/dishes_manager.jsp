@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix = "parse" uri="custom.tld" %>
 <fmt:setLocale value="${sessionScope.lang}" />
 <fmt:setBundle basename="messages" />
 
@@ -33,13 +34,10 @@
                 <fmt:message key="main.basket"/></a>
             <a class="hbutton" href="${pageContext.request.contextPath}/app/customer/orders">
                 <fmt:message key="main.orders"/></a>
-
-            <c:if test="${sessionScope.principal.role=='ROLE_MANAGER'}">
-                <a class="mbutton" href="${pageContext.request.contextPath}/app/manager/orders_manager">
-                    <fmt:message key="main.manage.orders"/></a>
-                <a class="mbutton" href="${pageContext.request.contextPath}/app/manager/dishes_manager">
-                    <fmt:message key="main.manage.dishes"/></a>
-            </c:if>
+            <a class="mbutton" href="${pageContext.request.contextPath}/app/manager/orders_manager">
+                <fmt:message key="main.manage.orders"/></a>
+            <a class="mbutton" href="${pageContext.request.contextPath}/app/manager/dishes_manager">
+                <fmt:message key="main.manage.dishes"/></a>
         </div>
         <div>
             <a id="authorizedLogin">${sessionScope.principal.login}</a>
@@ -65,7 +63,7 @@
     </section>
 
     <header class="section2">
-        <a><h2><fmt:message key="main.basket"/></h2></a>
+        <a><h2><fmt:message key="main.manage.dishes"/></h2></a>
     </header>
 
     <section class="section4">
@@ -73,8 +71,18 @@
         <div id="errorMsg">${requestScope.errorMsg}</div>
 
         <c:if test="${requestScope.errorMsg==null || requestScope.errorMsg==''}">
+            <div class="page_head">
+                <div>
+                    <h2><fmt:message key="main.menu"/></h2>
+                </div>
+                <div>
+                    <a class="button"
+                       href="${pageContext.request.contextPath}/app/manager/dish/create">
+                        <fmt:message key="button.create"/></a>
+                </div>
+            </div>
 
-            <div id="baskets_block">
+            <div id="dishes_block">
                 <div>
                     <table id="table">
                         <tr>
@@ -83,9 +91,8 @@
                             <th columns="2" onclick="tableSort(this, 'table')"><fmt:message key="menu.price"/></th>
                             <th columns="3" onclick="tableSort(this, 'table')"><fmt:message key="menu.category"/></th>
                             <th columns="4"><fmt:message key="basket.action"/></th>
-
                         </tr>
-                        <tbody id="baskets_table">
+                        <tbody id="dishes_table">
                         <c:forEach var="dish" items="${requestScope.dishes}">
                             <tr class="rows">
                                 <td><c:out value="${dish.id}"/></td>
@@ -93,44 +100,32 @@
                                 <td><c:out value="${dish.price}"/></td>
                                 <td><c:out value="${dish.categories.category}"/></td>
                                 <td>
-                                    <form method="POST" action="${pageContext.request.contextPath}/app/customer/basket/delete">
-                                        <input name="id" class="hidden" type="text"
-                                               value="${dish.id}"/>
-                                        <input class="abutton" type="submit" value="<fmt:message key="button.delete"/>">
-                                    </form>
+                                    <a class="abutton"
+                                       href="${pageContext.request.contextPath}/app/manager/dish/update?id=${dish.id}">
+                                        <fmt:message key="button.update"/></a>
+                                    <a class="abutton" href="#"
+                                       onclick="deleteDish('${dish.name}', '${dish.id}')">
+                                        <fmt:message key="button.delete"/></a>
                                 </td>
-                        </tr>
+                            </tr>
                         </c:forEach>
+                        </tbody>
                     </table>
                 </div>
             </div>
-
-            <div class="page_head">
-                <p style="align-items: end;">
-                    <span><fmt:message key="orders.totalPrice"/> = </span>
-                    <span style="font-weight: 700">${requestScope.totalPrice}</span>
-                </p>
-            </div>
-
-            <div class="page_head">
-                <div style="margin: 20px 0;">
-                    <form method="POST" action="${pageContext.request.contextPath}/app/customer/orders/create">
-                        <input class="button" type="submit" value="<fmt:message key="basket.create"/>">
-                    </form>
-                </div>
-                <div>
-                    <form method="POST" action="${pageContext.request.contextPath}/app/customer/basket/delete_all">
-                        <input class="button" type="submit" value="<fmt:message key="basket.deleteAll"/>">
-                    </form>
-                </div>
-            </div>
         </c:if>
-
-
     </section>
 
 </div>
 </body>
 
+
+<script>
+    let deleteDish = (name, id) => {
+        if (confirm("<fmt:message key="dish.delete.alert"/> " + name)) {
+            location.replace("${pageContext.request.contextPath}/app/manager/dish/delete?id=" + id);
+        }
+    }
+</script>
 
 </html>

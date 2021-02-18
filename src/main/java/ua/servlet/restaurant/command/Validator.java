@@ -15,6 +15,11 @@ public class Validator {
     private final static String LOGIN_REGEX = "^[a-zA-Z0-9]{2,}$";
     private final static String EMAIL_REGEX = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$";
     private final static String PASS_REGEX = "^[a-z0-9._%+-]{2,6}$";
+    private final static String ID_REGEX = "^[1-9]\\d*$";
+    private final static String PRICE_REGEX = "^[1-9]\\d*(.\\d{1,2})?$";
+
+    private final static String NAME_EN_REGEX = "^[a-zA-z0-9 -]+$";
+    private final static String NAME_UA_REGEX = "^[А-ЩЬЮЯҐЄІЇа-щьюяґєії0-9 \\'-]+$";
 
     /**
      * Set errors into request and log it (with validation logger),
@@ -28,6 +33,16 @@ public class Validator {
         request.setAttribute("errorMsg", errorMsg);
         logger.warn(errorMsg);
         return true;
+    }
+
+    private static boolean checkWithMatcher(HttpServletRequest request,
+                                            String regex, String arg, String error) {
+        Matcher m;
+        m = Pattern.compile(regex).matcher(arg);
+        if (!m.matches()) {
+            return setErrorAndLog(request, error);
+        }
+        return false;
     }
 
     /**
@@ -57,15 +72,15 @@ public class Validator {
         }
         Matcher m;
         m = Pattern.compile(LOGIN_REGEX).matcher(user.getLogin());
-        if (!m.find()) {
+        if (!m.matches()) {
             return setErrorAndLog(request, "invalid.login");
         }
         m = Pattern.compile(EMAIL_REGEX).matcher(user.getEmail());
-        if (!m.find()) {
+        if (!m.matches()) {
             return setErrorAndLog(request, "invalid.email");
         }
         m = Pattern.compile(PASS_REGEX).matcher(user.getPassword());
-        if (!m.find()) {
+        if (!m.matches()) {
             return setErrorAndLog(request, "invalid.password");
         }
         return false;
@@ -104,16 +119,25 @@ public class Validator {
         if (valid_EmptyFields(request, args)) {
             return true;
         }
-        long id;
-        try {
-            id = Long.parseLong(args);
-        } catch (Exception e) {
+        Matcher m;
+        m = Pattern.compile(ID_REGEX).matcher(args);
+        if (!m.matches()) {
             return setErrorAndLog(request, "invalid.id");
         }
-        if (id <= 0) {
-            return setErrorAndLog(request, "invalid.positive.id");
-        }
         return false;
+    }
+
+    /**
+     * Validation dish update input
+     * @param request
+     * @param args
+     * @return
+     */
+    static boolean valid_DishCreateUpdate(HttpServletRequest request, String... args) {
+        return valid_EmptyFields(request, args)
+                || checkWithMatcher(request, NAME_EN_REGEX, args[0], "invalid.name_en")
+                || checkWithMatcher(request, NAME_UA_REGEX, args[1], "invalid.name_ua")
+                || checkWithMatcher(request, PRICE_REGEX, args[2], "invalid.price");
     }
 
 }
