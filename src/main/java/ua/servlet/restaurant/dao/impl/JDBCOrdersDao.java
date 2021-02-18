@@ -49,7 +49,6 @@ public class JDBCOrdersDao implements OrdersDao {
 
             if (resultCreate > 0) {
                 rs = pstmt.getGeneratedKeys();
-
                 if (rs.next()) {
                     entity.setId(rs.getLong("id"));
                     entity.setTime(rs.getTimestamp("time").toLocalDateTime());
@@ -104,7 +103,7 @@ public class JDBCOrdersDao implements OrdersDao {
      * @throws DBException if cannot find
      */
     @Override
-    public List<Orders> findAll() throws DBException {
+    public Optional<List<Orders>> findAll() throws DBException {
         final String query = Prop.getDBProperty("select.all.orders.manager");
         try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery(query);
@@ -115,7 +114,7 @@ public class JDBCOrdersDao implements OrdersDao {
                 result.add(ordersMapper.extractFromResultSet(rs));
             }
             rs.close();
-            return result;
+            return result.isEmpty() ? Optional.empty() : Optional.of(result);
         } catch (SQLException e) {
             String errorMsg = Prop.getDBProperty("select.all.orders.manager.dbe");
             log.error(errorMsg);
@@ -178,7 +177,7 @@ public class JDBCOrdersDao implements OrdersDao {
 
     @Deprecated
     @Override
-    public void delete(int id) { }
+    public void delete(Long login_id, Long id) { }
 
     @Override
     public void close()  {

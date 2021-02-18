@@ -10,6 +10,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * Change order status when customer pays for his order.
+ * Get order id as input, make validation.
+ * Update order, set status PAYED.
+ *
+ * Set errorMsg if validation failed or cannot update.
+ */
 public class OrdersPaymentPayController implements Command {
     private final OrdersService ordersService;
     public OrdersPaymentPayController() {
@@ -18,6 +25,7 @@ public class OrdersPaymentPayController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
+        // todo get principal, user cannot pay if order isn't his
         String id = request.getParameter("id");
         if (Validator.valid_ID(request, id)) {
             return "/WEB-INF/payment.jsp";

@@ -10,6 +10,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * Show basket list of dishes for user.
+ * Get user and locale from session.
+ * Get basket list from DB and count total price.
+ *
+ * Set errorMsg if cannot get basket list or if basket is empty.
+ */
 public class BasketController implements Command {
     private final BasketService basketService;
     public BasketController() {

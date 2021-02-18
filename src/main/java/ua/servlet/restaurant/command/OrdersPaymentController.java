@@ -9,6 +9,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * Return payment page.
+ * Get order id as input, make validation.
+ * Get order from DB for payment page
+ *
+ * Set errorMsg if validation failed or cannot get order.
+ */
 public class OrdersPaymentController implements Command {
     private final OrdersService ordersService;
     public OrdersPaymentController() {
@@ -17,6 +24,7 @@ public class OrdersPaymentController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
+        // todo get principal, user cannot pay if order isn't his
         String id = request.getParameter("id");
         if (Validator.valid_ID(request, id)) {
             return "/WEB-INF/payment.jsp";

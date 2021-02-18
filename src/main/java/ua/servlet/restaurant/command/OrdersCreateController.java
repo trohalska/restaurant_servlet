@@ -9,6 +9,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * Create customer's order.
+ * Get user from session.
+ *
+ * Set errorMsg if cannot create order or basket is empty.
+ */
 public class OrdersCreateController implements Command {
     private final OrdersService ordersService;
     public OrdersCreateController() {

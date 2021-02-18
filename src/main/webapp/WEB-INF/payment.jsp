@@ -16,10 +16,9 @@
     <title>restaurant</title>
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon"/>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/general.css"/>
-
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
 </head>
 
 <body>
@@ -29,6 +28,22 @@
         <a id="authorizedLogin">${sessionScope.principal.login}</a>
         <a class="abutton" href="${pageContext.request.contextPath}">
             <fmt:message key="main.main"/></a>
+        <label for="locales"></label>
+        <select class="abutton" id="locales">
+            <option value=""><fmt:message key="lang.change"/></option>
+            <option value="en"><fmt:message key="lang.en"/></option>
+            <option value="ua"><fmt:message key="lang.ua"/></option>
+        </select>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#locales").change(function () {
+                    let selectedOption = $('#locales').val();
+                    if (selectedOption !== ''){
+                        window.location.replace('?id=${requestScope.order.id}&locale=' + selectedOption);
+                    }
+                });
+            });
+        </script>
     </section>
 
     <header class="section2">

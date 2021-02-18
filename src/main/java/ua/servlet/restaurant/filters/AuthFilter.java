@@ -35,7 +35,7 @@ public class AuthFilter implements Filter {
         HttpSession session = request.getSession();
 
         if (session.getAttribute("principal") == null) {
-            CommandUtility.setUserRole(request,
+            CommandUtility.setUserIntoSession(request,
                     Logins.builder().login("guest").role(RoleType.ROLE_GUEST).build());
         }
 

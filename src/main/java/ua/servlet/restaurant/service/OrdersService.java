@@ -26,7 +26,7 @@ public class OrdersService {
      * Find all user orders for user order's page
      * @param id order id
      * @return orders list
-     * @throws DBException if DB throw exception
+     * @throws DBException if DB throw exception or there are no orders
      */
     public List<Orders> getAllByLoginId(Long id) throws DBException {
         List<Orders> list;
@@ -45,7 +45,8 @@ public class OrdersService {
     public List<Orders> getAll() throws DBException {
         List<Orders> list;
         try (OrdersDao dao = daoFactory.createOrdersDao()) {
-            list = dao.findAll();
+            list = dao.findAll().orElseThrow(() ->
+                    new DBException(Prop.getDBProperty("select.all.orders.empty")));
         }
         if (list.isEmpty()) {
             throw new DBException(Prop.getDBProperty("select.all.orders.empty"));

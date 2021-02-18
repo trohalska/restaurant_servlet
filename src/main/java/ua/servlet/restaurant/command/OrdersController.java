@@ -11,6 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Show orders list for user.
+ * Get user from session.
+ *
+ * Set errorMsg if cannot get orders list or if this list is empty.
+ */
 public class OrdersController implements Command {
     private final OrdersService ordersService;
     public OrdersController() {

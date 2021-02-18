@@ -6,6 +6,12 @@ import ua.servlet.restaurant.service.DishesService;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Get internationalized page of dishes for main menu.
+ * Get current page, sort field, sort direction, filter category if as input, make validation.
+ *
+ * Set errorMsg if validation failed or cannot find list (input invalid).
+ */
 public class MainController implements Command {
     private final DishesService dishesService;
     public MainController() {

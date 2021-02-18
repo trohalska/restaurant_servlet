@@ -10,6 +10,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * Change order status when manager manage customers orders
+ * Get order id and status as input, make validation.
+ * Update order.
+ *
+ * Set errorMsg if validation failed or cannot update.
+ */
 public class OrdersConfirmController implements Command {
     private final OrdersService ordersService;
     public OrdersConfirmController() {
@@ -21,7 +28,7 @@ public class OrdersConfirmController implements Command {
         String idStr = request.getParameter("id");
         String statusStr = request.getParameter("status");
 
-        if (!Validator.valid_OrdersConfirm(request, idStr, statusStr)) {
+        if (Validator.valid_OrdersConfirm(request, idStr, statusStr)) {
             return "/WEB-INF/manager/orders_manager.jsp";
         }
 

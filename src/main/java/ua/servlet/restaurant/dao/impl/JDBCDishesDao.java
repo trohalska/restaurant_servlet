@@ -65,7 +65,7 @@ public class JDBCDishesDao implements DishesDao {
      */
     @Deprecated
     @Override
-    public List<Dishes> findAll() throws DBException {
+    public Optional<List<Dishes>> findAll() throws DBException {
         Map<Long, Dishes> dishes = new HashMap<>();
 
         final String query = Prop.getDBProperty("select.all.dishes");
@@ -78,7 +78,8 @@ public class JDBCDishesDao implements DishesDao {
                 dishesMapper.makeUnique(dishes, dish);
             }
             rs.close();
-            return new ArrayList<>(dishes.values());
+            List<Dishes> list = new ArrayList<>(dishes.values());
+            return list.isEmpty() ? Optional.empty() : Optional.of(list);
         } catch (SQLException e) {
             String errorMsg = Prop.getDBProperty("select.all.dishes.dbe");
             log.error(errorMsg);
@@ -230,7 +231,7 @@ public class JDBCDishesDao implements DishesDao {
 
     @Deprecated
     @Override
-    public void delete(int id) {
+    public void delete(Long login_id, Long id) {
         final String query = Prop.getDBProperty("delete.dishes");
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setLong(1, id);

@@ -6,6 +6,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.FileInputStream;
 import java.util.Properties;
 
+/**
+ * Get Strings from properties files
+ */
 public class Prop {
     private static final Logger logger = LogManager.getLogger(Prop.class);
 

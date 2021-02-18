@@ -7,6 +7,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * Deleting all dishes from user's basket.
+ * Get user id from session and deleting all dishes from user's basket.
+ *
+ * DO NOT set errorMsg if cannot delete all, just log it in JDBC.
+ */
 public class BasketDeleteAllController implements Command {
     private final BasketService basketService;
     public BasketDeleteAllController() {

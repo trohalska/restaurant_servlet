@@ -9,6 +9,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * Adding dish to basket.
+ * Get dish id as input, make validation.
+ * Get user from session and add dish to user's basket.
+ *
+ * Set errorMsg if validation failed or cannot add dish (dish id does not exist in DB).
+ */
 public class BasketAddController implements Command {
     private final BasketService basketService;
     public BasketAddController() {
@@ -30,7 +37,7 @@ public class BasketAddController implements Command {
             request.setAttribute("errorMsg", e.getMessage());
             return "/WEB-INF/basket.jsp";
         }
-        return "redirect:/customer/basket"; // "redirect:/"
+        return "redirect:/customer/basket";
     }
 
 }

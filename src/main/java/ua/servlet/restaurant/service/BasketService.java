@@ -59,12 +59,14 @@ public class BasketService {
     }
 
     /**
-     * Delete item from basket.
-     * @param id item id
+     * Delete item from basket by dish id and user id.
+     * @param login_id owner of basket
+     * @param id dish id
+     * @throws DBException if cannot delete
      */
-    public void delete(Long id) {
+    public void delete(Long login_id, Long id) throws DBException {
         try (BasketsDao dao = daoFactory.createBasketsDao()) {
-            dao.delete(id.intValue());
+            dao.delete(login_id, id);
         }
     }
 

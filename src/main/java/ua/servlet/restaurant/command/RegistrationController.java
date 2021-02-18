@@ -36,7 +36,7 @@ public class RegistrationController implements Command {
                 return "/registration.jsp";
             }
             Logins logins = new ObjectMapper().readValue(json, Logins.class);
-            if (!Validator.valid_Registration(logins, request)) {
+            if (Validator.valid_Registration(logins, request)) {
                 return "/registration.jsp";
             }
             logger.info(Prop.getDBProperty("create.user.log") + logins.getLogin());

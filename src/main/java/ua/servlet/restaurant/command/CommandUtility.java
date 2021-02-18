@@ -1,6 +1,8 @@
 package ua.servlet.restaurant.command;
 
+import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.entity.Logins;
+import ua.servlet.restaurant.utils.Prop;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -8,14 +10,24 @@ import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 
 /**
- * context has all loggedUsers, current userName
- * session has current user role
+ * context has all logged users
+ * session has current user as principal and user language
  */
 public class CommandUtility {
-    public static void setUserRole(HttpServletRequest request, Logins user) {
+    /**
+     * Set principal in user session
+     * @param request request
+     * @param user user
+     */
+    public static void setUserIntoSession(HttpServletRequest request, Logins user) {
         request.getSession().setAttribute("principal", user);
     }
 
+    /**
+     * Delete user from context list of logged users
+     * if user logs out or if sessions time goes off.
+     * @param session user session
+     */
     public static void deleteUserFromSession(HttpSession session) {
         Logins principal = (Logins)session.getAttribute("principal");
         HashSet<String> loggedUsers = (HashSet<String>) session.getServletContext().getAttribute("loggedUsers");
@@ -25,7 +37,12 @@ public class CommandUtility {
         session.getServletContext().setAttribute("loggedUsers", loggedUsers);
     }
 
-
+    /**
+     * Checks if user isn't in context "loggedUsers" list when user tries to log in
+     * @param request request
+     * @param userName user login
+     * @return true if user already logged, false if otherwise.
+     */
     static boolean checkUserIsLogged(HttpServletRequest request, String userName){
         ServletContext context = request.getSession().getServletContext();
 
@@ -35,22 +52,21 @@ public class CommandUtility {
         }
         loggedUsers.add(userName);
         context.setAttribute("loggedUsers", loggedUsers);
-
         return false;
     }
 
     /**
-     * Gets principal for converting tables to dao
-     * @param request for context
-     * @return String "en" or "ua"
+     * Gets principal from session.
+     * @param request request
+     * @return Logins user
      */
     public static Logins getPrincipal(HttpServletRequest request) {
         return (Logins)request.getSession().getAttribute("principal");
     }
 
     /**
-     * Gets language for converting tables to dao
-     * @param request for context
+     * Gets language from session for internationalization dao
+     * @param request request
      * @return String "en" or "ua"
      */
     public static String getLocale(HttpServletRequest request) {

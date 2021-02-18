@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.BasketsDao;
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.entity.Baskets;
+import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.mapper.BasketsMapper;
 import ua.servlet.restaurant.utils.Prop;
 
@@ -52,7 +53,7 @@ public class JDBCBasketsDao implements BasketsDao {
 
     @Deprecated
     @Override
-    public List<Baskets> findAll() {
+    public Optional<List<Baskets>> findAll() {
         return null;
     }
 
@@ -91,15 +92,26 @@ public class JDBCBasketsDao implements BasketsDao {
      * Delete item from basket
      * @param id id deleted item
      */
+
+    /**
+     * Delete item from basket by dish id and user id.
+     * @param login_id id basket's owner
+     * @param id dish id
+     * @throws DBException if cannot delete
+     */
     @Override
-    public void delete(int id) {
+    public void delete(Long login_id, Long id) throws DBException {
         final String query = Prop.getDBProperty("delete.basket");
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setLong(1, id);
+            int k = 1;
+            pstmt.setLong(k++, id);
+            pstmt.setLong(k, login_id);
+
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             String errorMsg = Prop.getDBProperty("delete.baskets.dbe") + id;
             log.error(errorMsg);
+            throw new DBException(errorMsg);
         }
     }
 

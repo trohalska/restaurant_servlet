@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Show orders list for manager.
+ *
+ * Set errorMsg if cannot get orders list  or if this list is empty.
+ */
 public class OrdersManagerController implements Command {
     private final OrdersService ordersService;
     public OrdersManagerController() {

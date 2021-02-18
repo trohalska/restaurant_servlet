@@ -5,6 +5,11 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * if session attribute "lang" is absent - set "en"
+ * if request get parameter "lang" - set this parameter in session attribute
+ * dont need validation - basic language is english
+ */
 @WebFilter(filterName = "SessionLocaleFilter", urlPatterns = {"/*"})
 public class SessionLocaleFilter implements Filter {
     @Override
@@ -19,7 +24,7 @@ public class SessionLocaleFilter implements Filter {
 
         if (req.getParameter("locale") != null) {
             req.getSession().setAttribute("lang", req.getParameter("locale"));
-        } else {
+        } else if (req.getSession().getAttribute("lang") == null){
             req.getSession().setAttribute("lang", "en");
         }
         chain.doFilter(request, response);

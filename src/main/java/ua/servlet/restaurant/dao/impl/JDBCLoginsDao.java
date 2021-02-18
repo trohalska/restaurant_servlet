@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.LoginsDao;
+import ua.servlet.restaurant.dao.entity.Dishes;
 import ua.servlet.restaurant.dao.mapper.LoginsMapper;
 import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.entity.RoleType;
@@ -88,7 +89,7 @@ public class JDBCLoginsDao implements LoginsDao {
 
     @Deprecated
     @Override
-    public List<Logins> findAll() throws DBException {
+    public Optional<List<Logins>> findAll() throws DBException {
         Map<Long, Logins> users = new HashMap<>();
 
         final String query = Prop.getDBProperty("select.all.logins");
@@ -101,7 +102,8 @@ public class JDBCLoginsDao implements LoginsDao {
                 loginsMapper.makeUnique(users, login);
             }
             rs.close();
-            return new ArrayList<>(users.values());
+            List<Logins> list = new ArrayList<>(users.values());
+            return list.isEmpty() ? Optional.empty() : Optional.of(list);
         } catch (SQLException e) {
             e.printStackTrace();
 
@@ -119,7 +121,7 @@ public class JDBCLoginsDao implements LoginsDao {
 
     @Deprecated
     @Override
-    public void delete(int id) { }
+    public void delete(Long login_id, Long id) { }
 
     @Override
     public void close()  {

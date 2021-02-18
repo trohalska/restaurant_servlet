@@ -12,11 +12,13 @@ import java.util.regex.Pattern;
 
 public class Validator {
     private static final Logger logger = LogManager.getLogger(Validator.class);
+    private final static String LOGIN_REGEX = "^[a-zA-Z0-9]{2,}$";
     private final static String EMAIL_REGEX = "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$";
     private final static String PASS_REGEX = "^[a-z0-9._%+-]{2,6}$";
 
     /**
-     * Set errors into request and log it for all validation
+     * Set errors into request and log it (with validation logger),
+     * and returns true because it is invalid branch end
      * @param request request
      * @param error error string
      * @return true
@@ -31,30 +33,32 @@ public class Validator {
     /**
      * Validation for null or empty fields
      * @param request request
-     * @param args String varargs
+     * @param args input fields
      * @return true if invalid, false if valid
      */
     static boolean valid_EmptyFields(HttpServletRequest request, String... args) {
         for (String s : args) {
             if (s == null || s.equals("")) {
-                setErrorAndLog(request, "invalid.fields");
-                return true;
+                return setErrorAndLog(request, "invalid.fields");
             }
         }
         return false;
     }
 
     /**
-     *
-     * @param user
-     * @param request
-     * @return
+     * Registration validation (for empty fields and with regex)
+     * @param user input fields
+     * @param request request
+     * @return true if invalid, false if valid
      */
     static boolean valid_Registration(Logins user, HttpServletRequest request) {
+        if (valid_EmptyFields(request, user.getLogin(), user.getEmail(), user.getPassword())) {
+            return true;
+        }
         Matcher m;
-
-        if (user.getLogin().equals("") || user.getEmail().equals("")) {
-            return setErrorAndLog(request, "invalid.fields");
+        m = Pattern.compile(LOGIN_REGEX).matcher(user.getLogin());
+        if (!m.find()) {
+            return setErrorAndLog(request, "invalid.login");
         }
         m = Pattern.compile(EMAIL_REGEX).matcher(user.getEmail());
         if (!m.find()) {
@@ -64,46 +68,50 @@ public class Validator {
         if (!m.find()) {
             return setErrorAndLog(request, "invalid.password");
         }
-        return true;
+        return false;
     }
 
+    /**
+     * Validation for manager confirmation (change order's statuses)
+     * validation id and status
+     * @param request request
+     * @param args input fields
+     * @return true if invalid, false if valid
+     */
     static boolean valid_OrdersConfirm(HttpServletRequest request, String... args) {
-        if (valid_EmptyFields(request, args)) {
-            return false;
+        if (valid_EmptyFields(request, args) || valid_ID(request, args[0])) {
+            return true;
         }
         Status status;
-        long id;
         try {
-            id = Long.parseLong(args[0]);
             status = Status.valueOf(args[1]);
         } catch (Exception e) {
-            setErrorAndLog(request, "invalid.fields");
-            return false;
+            return setErrorAndLog(request, "invalid.status");
         }
-        if (status.equals(Status.DONE)
-                || status.equals(Status.NEW)
-                || id <= 0) {
-            setErrorAndLog(request, "invalid.update.status");
-            return false;
+        if (status.equals(Status.DONE) || status.equals(Status.NEW)) {
+            return setErrorAndLog(request, "invalid.update.status");
         }
-        return true;
+        return false;
     }
 
+    /**
+     * Validation id - not String, not equals zero and not negative number
+     * @param request request
+     * @param args String id
+     * @return true if invalid, false if valid
+     */
     static boolean valid_ID(HttpServletRequest request, String args) {
         if (valid_EmptyFields(request, args)) {
             return true;
         }
-
         long id;
         try {
             id = Long.parseLong(args);
         } catch (Exception e) {
-            setErrorAndLog(request, "invalid.id");
-            return true;
+            return setErrorAndLog(request, "invalid.id");
         }
         if (id <= 0) {
-            setErrorAndLog(request, "invalid.positive.id");
-            return true;
+            return setErrorAndLog(request, "invalid.positive.id");
         }
         return false;
     }
