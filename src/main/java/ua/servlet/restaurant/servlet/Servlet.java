@@ -20,9 +20,9 @@ public class Servlet extends HttpServlet {
         servletConfig.getServletContext()
                 .setAttribute("loggedUsers", new HashSet<String>());
 
-        commands.put("login", new LoginController());
-        commands.put("registration", new RegistrationController());
-        commands.put("logout", new LogOutController());
+        commands.put("login", new LoginController());                                   // get, post
+        commands.put("registration", new RegistrationController());                     // get, post
+        commands.put("logout", new LogOutController());                                 // get
         commands.put("menu", new MainController());                                     // get
 
         commands.put("customer/basket", new BasketController());                        // get

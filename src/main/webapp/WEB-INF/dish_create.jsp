@@ -85,7 +85,7 @@
                         <input name="price" id="price" class="form-styling" type="number" required
                                min="0.01" max="1000.00" step="0.01" value=""/>
 
-                        <label for="category"></label>
+                        <label for="category"><fmt:message key="menu.category"/></label>
                         <select id="category" name="category" class="form-styling">
                             <c:forEach var="c" items="${requestScope.categories}">
                                 <option value="${c.id}">${c.category}</option>

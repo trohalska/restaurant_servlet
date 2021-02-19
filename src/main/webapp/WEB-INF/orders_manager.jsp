@@ -92,7 +92,7 @@
                                 <td><c:out value="${order.login.login}"/></td>
                                 <td>
                                     <c:if test="${order.status.name()!='DONE' && order.status.name()!='NEW'}">
-                                        <form method="POST" action="${pageContext.request.contextPath}/app/customer/orders/confirm">
+                                        <form method="POST" action="${pageContext.request.contextPath}/app/manager/orders/confirm">
                                             <label>
                                                 <input name="id" class="hidden" type="text" value="${order.id}"/>
                                             </label>
