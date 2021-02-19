@@ -1,30 +1,26 @@
 package ua.servlet.restaurant.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.junit.Test;
+import javax.servlet.ServletException;
+import java.io.IOException;
 
-import java.io.FileInputStream;
-import java.util.Properties;
+import static org.junit.Assert.*;
 
 public class PropTest {
-    private static final Logger logger = LogManager.getLogger(Prop.class);
 
-    private static final String PATH   = "src/test/resources/";
-    private static final String APP    = PATH + "test.properties";
+    @Test
+    public void success() throws ServletException, IOException {
+        String result = Prop.getDBProperty("invalid.fields");
+        assertEquals(Prop.getDBProperty("invalid.fields"), result);
 
-    private static String getter(String propName) {
-        try (FileInputStream fis = new FileInputStream(APP)) {
-            Properties p = new Properties();
-            p.load(fis);
-            return (String)p.get(propName);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-        return null;
+        String result2 = Prop.getProperty("connection.pass");
+        assertEquals(Prop.getProperty("connection.pass"), result2);
     }
 
-    public static String getProperty(String propName) {
-        return getter(propName);
+    @Test
+    public void error() throws ServletException, IOException {
+        String result = Prop.getDBProperty("invalid.fields.test");
+        assertNull(result);
     }
 
 }

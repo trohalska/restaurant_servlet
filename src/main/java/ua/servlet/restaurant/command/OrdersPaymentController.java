@@ -24,7 +24,6 @@ public class OrdersPaymentController implements Command {
 
     @Override
     public String execute(HttpServletRequest request) throws IOException, ServletException {
-        // todo get principal, user cannot pay if order isn't his
         String id = request.getParameter("id");
         if (Validator.valid_ID(request, id)) {
             return "/WEB-INF/payment.jsp";

@@ -67,23 +67,10 @@ public class Validator {
      * @return true if invalid, false if valid
      */
     static boolean valid_Registration(Logins user, HttpServletRequest request) {
-        if (valid_EmptyFields(request, user.getLogin(), user.getEmail(), user.getPassword())) {
-            return true;
-        }
-        Matcher m;
-        m = Pattern.compile(LOGIN_REGEX).matcher(user.getLogin());
-        if (!m.matches()) {
-            return setErrorAndLog(request, "invalid.login");
-        }
-        m = Pattern.compile(EMAIL_REGEX).matcher(user.getEmail());
-        if (!m.matches()) {
-            return setErrorAndLog(request, "invalid.email");
-        }
-        m = Pattern.compile(PASS_REGEX).matcher(user.getPassword());
-        if (!m.matches()) {
-            return setErrorAndLog(request, "invalid.password");
-        }
-        return false;
+        return valid_EmptyFields(request, user.getLogin(), user.getEmail(), user.getPassword())
+                || checkWithMatcher(request, LOGIN_REGEX, user.getLogin(), "invalid.login")
+                || checkWithMatcher(request, EMAIL_REGEX, user.getEmail(), "invalid.email")
+                || checkWithMatcher(request, PASS_REGEX, user.getPassword(), "invalid.password");
     }
 
     /**
@@ -116,15 +103,8 @@ public class Validator {
      * @return true if invalid, false if valid
      */
     static boolean valid_ID(HttpServletRequest request, String args) {
-        if (valid_EmptyFields(request, args)) {
-            return true;
-        }
-        Matcher m;
-        m = Pattern.compile(ID_REGEX).matcher(args);
-        if (!m.matches()) {
-            return setErrorAndLog(request, "invalid.id");
-        }
-        return false;
+        return valid_EmptyFields(request, args)
+                || checkWithMatcher(request, ID_REGEX, args, "invalid.id");
     }
 
     /**

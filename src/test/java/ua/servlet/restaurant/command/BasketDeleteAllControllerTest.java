@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.*;
 
-public class BasketDeleteControllerTest {
+public class BasketDeleteAllControllerTest {
     @Mock
     HttpServletRequest request;
     @Mock
@@ -37,34 +37,9 @@ public class BasketDeleteControllerTest {
 
     @Test
     public void success() throws ServletException, IOException {
-        when(request.getParameter("id")).thenReturn(PropUtil.getProperty("exist.dish.id"));
-
-        String result = new BasketDeleteController().execute(request);
-
+        String result = new BasketDeleteAllController().execute(request);
         assertEquals("redirect:/customer/basket", result);
         assertNull(request.getAttribute("errorMsg"));
-    }
-
-    @Test
-    public void errorInvalidDishId() throws ServletException, IOException {
-        when(request.getParameter("id")).thenReturn(PropUtil.getProperty("wrong.input.id"));
-
-        String result = new BasketDeleteController().execute(request);
-
-        assertEquals("/WEB-INF/basket.jsp", result);
-        verify(request, times(1))
-                .setAttribute("errorMsg", Prop.getDBProperty("invalid.id"));
-    }
-
-
-    @Test
-    public void errorDishId() throws ServletException, IOException {
-        when(request.getParameter("id")).thenReturn(
-                PropUtil.getProperty("unreal.dish.id"));
-
-        String result = new BasketDeleteController().execute(request);
-
-        assertEquals("redirect:/customer/basket", result);
     }
 
 }

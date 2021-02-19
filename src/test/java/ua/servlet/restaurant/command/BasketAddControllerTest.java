@@ -6,7 +6,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.utils.Prop;
-import ua.servlet.restaurant.utils.PropTest;
+import ua.servlet.restaurant.utils.PropUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,14 +30,14 @@ public class BasketAddControllerTest {
         when(request.getSession().getAttribute("lang")).thenReturn("en");
         when(request.getSession().getAttribute("principal")).
                 thenReturn(Logins.builder()
-                        .id(Long.parseLong(PropTest.getProperty("test.id")))
-                        .login(PropTest.getProperty("test.user"))
+                        .id(Long.parseLong(PropUtil.getProperty("test.id")))
+                        .login(PropUtil.getProperty("test.user"))
                         .build());
     }
 
     @Test
     public void success() throws ServletException, IOException {
-        when(request.getParameter("id")).thenReturn(PropTest.getProperty("exist.dish.id"));
+        when(request.getParameter("id")).thenReturn(PropUtil.getProperty("exist.dish.id"));
 
         String result = new BasketAddController().execute(request);
 
@@ -47,18 +47,18 @@ public class BasketAddControllerTest {
 
     @Test
     public void errorInvalidDishId() throws ServletException, IOException {
-        when(request.getParameter("id")).thenReturn(PropTest.getProperty("wrong.input.id"));
+        when(request.getParameter("id")).thenReturn(PropUtil.getProperty("wrong.input.id"));
 
         String result = new BasketAddController().execute(request);
 
         assertEquals("/WEB-INF/basket.jsp", result);
         verify(request, times(1))
-                .setAttribute("errorMsg", Prop.getDBProperty("invalid.positive.id"));
+                .setAttribute("errorMsg", Prop.getDBProperty("invalid.id"));
     }
 
     @Test
     public void errorDishId() throws ServletException, IOException {
-        when(request.getParameter("id")).thenReturn(PropTest.getProperty("unreal.dish.id"));
+        when(request.getParameter("id")).thenReturn(PropUtil.getProperty("unreal.dish.id"));
 
         String result = new BasketAddController().execute(request);
 
@@ -66,7 +66,7 @@ public class BasketAddControllerTest {
         verify(request, times(1))
                 .setAttribute("errorMsg",
                         Prop.getDBProperty("create.basket.dbe") +
-                                PropTest.getProperty("unreal.dish.id"));
+                                PropUtil.getProperty("unreal.dish.id"));
     }
 
 }

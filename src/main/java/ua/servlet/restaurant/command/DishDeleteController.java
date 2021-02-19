@@ -29,7 +29,7 @@ public class DishDeleteController implements Command {
         String id = request.getParameter("id");
         Logins user = CommandUtility.getPrincipal(request);
         if (Validator.valid_ID(request, id)) {
-            return "/WEB_INF/dish_update.jsp";
+            return "/WEB-INF/dish_update.jsp";
         }
         logger.info(Prop.getDBProperty("delete.dishes.log") + id);
         try {
@@ -41,7 +41,7 @@ public class DishDeleteController implements Command {
             String errorMsg = Prop.getDBProperty("error.denied");
             logger.warn(errorMsg);
             request.setAttribute("errorMsg", errorMsg);
-            return "/WEB_INF/dish_update.jsp";
+            return "/WEB-INF/dish_update.jsp";
         }
         return "redirect:/manager/dishes_manager";
     }

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import ua.servlet.restaurant.utils.PropTest;
+import ua.servlet.restaurant.utils.PropUtil;
 
 import static org.mockito.Mockito.*;
 
@@ -50,8 +50,8 @@ public class ServletTest {
         when(request.getSession().getServletContext().getAttribute("loggedUsers")).thenReturn(new HashSet<String>());
 
         when(request.getRequestURI()).thenReturn("restaurant/app/login");
-        when(request.getParameter("username")).thenReturn(PropTest.getProperty("test.user"));
-        when(request.getParameter("password")).thenReturn(PropTest.getProperty("test.pass"));
+        when(request.getParameter("username")).thenReturn(PropUtil.getProperty("test.user"));
+        when(request.getParameter("password")).thenReturn(PropUtil.getProperty("test.pass"));
 
         when(request.getRequestDispatcher("/login.jsp")).thenReturn(dispatcher);
 

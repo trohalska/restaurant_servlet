@@ -39,7 +39,6 @@ public class Servlet extends HttpServlet {
         commands.put("manager/orders_manager", new OrdersManagerController());          // get
         commands.put("manager/dishes_manager", new DishesManagerController());          // get
 
-
         commands.put("manager/dish/create", new DishCreateController());                // get
         commands.put("manager/dish/create/do", new DishCreateDoController());           // post
         commands.put("manager/dish/update", new DishUpdateController());                // get

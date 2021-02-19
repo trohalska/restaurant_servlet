@@ -28,7 +28,7 @@ public class BasketDeleteController implements Command {
         Long login_id = CommandUtility.getPrincipal(request).getId();
 
         if (Validator.valid_ID(request, id)) {
-            return "/WEB_INF/basket.jsp";
+            return "/WEB-INF/basket.jsp";
         }
         logger.info(Prop.getDBProperty("delete.basket.log") + id);
         try {

@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.utils.Prop;
-import ua.servlet.restaurant.utils.PropTest;
+import ua.servlet.restaurant.utils.PropUtil;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -34,8 +34,8 @@ public class BasketControllerTest {
     public void success() throws ServletException, IOException {
         when(request.getSession().getAttribute("principal")).
                 thenReturn(Logins.builder()
-                        .id(Long.parseLong(PropTest.getProperty("test.id")))
-                        .login(PropTest.getProperty("test.user"))
+                        .id(Long.parseLong(PropUtil.getProperty("test.id")))
+                        .login(PropUtil.getProperty("test.user"))
                         .build());
 
         String result = new BasketController().execute(request);
@@ -49,7 +49,7 @@ public class BasketControllerTest {
         when(request.getSession().getAttribute("principal")).
                 thenReturn(Logins.builder()
                         .id(0L)
-                        .login(PropTest.getProperty("errorUser"))
+                        .login(PropUtil.getProperty("errorUser"))
                         .build());
 
         String result = new BasketController().execute(request);
