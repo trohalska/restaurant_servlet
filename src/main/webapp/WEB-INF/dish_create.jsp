@@ -91,15 +91,6 @@
                                 <option value="${c.id}">${c.category}</option>
                             </c:forEach>
                         </select>
-                        <script type="text/javascript">
-                            $(document).ready(function() {
-                                $("#category").change(function () {
-
-                                    <%--location.replace("${pageContext.request.contextPath}/app/menu?page=1&sort=${requestScope.sort}&direct=${requestScope.direct}&category="--%>
-                                    <%--    + $('#category').val());--%>
-                                });
-                            });
-                        </script>
 
                         <input class="btn-signin" type="submit" value="<fmt:message key="button.create"/>">
                     </form>

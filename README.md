@@ -24,30 +24,32 @@ After delivery and receipt of payment, the manager transfers the status of the o
 ### Technologies:
 - Java EE (JSP, JDBC, Servlets)
 - Apache Tomcat 7
-- PastgreSQL
+- PostgreSQL
 - Maven
 
 ### Usage:
-```
-1. git clone https://github.com/trohalska/restaurant_servlet
-2. apply maven wrapper: mvn -N io.takari:maven:wrapper
+
+1. ```git clone https://github.com/trohalska/restaurant_servlet```
+2. apply maven wrapper: ```mvn -N io.takari:maven:wrapper```
 3. postgreSQL database:
 
-    3.1. Install PostgreSQL.
+    - install PostgreSQL.
 
-    3.2. Create user and databases: 
-        ``` psql postgres; 
-            CREATE USER root WITH PASSWORD [your password];
-            CREATE DATABASE [your login];
-            CREATE DATABASE reataurant;
-            exit;```
-    3.3. Write postgresql login and password in application.properties (src/main/resources/application.properties) as connection.user and connection.pass fields.
+    - create user and databases: 
+   ```
+   psql postgres;
+   CREATE USER root WITH PASSWORD [your password];
+   CREATE DATABASE [your login];
+   CREATE DATABASE restaurant;
+   exit;
+   ```
+    
+    - write postgresql password (for root) in ```application.properties``` (src/main/resources/application.properties) as ```connection.pass``` fields.
 
-    3.4. Create database tables from data.sql file.
+    - create database tables from ```data.sql``` file.
 
-4. run server: ./mvnw tomcat7:run
-5. open website: http://localhost:8080/restaurant
-```
+4. run application: ```./mvnw tomcat7:run```
+5. open website: ```http://localhost:8080/restaurant```
 
 ### View:
 ![view game](https://raw.githubusercontent.com/trohalska/restaurant_servlet/main/src/main/resources/pic/pic01.png?token=ANJGP2CHFPRKSGMDUIYG7UTAHEMLE)

@@ -245,6 +245,7 @@ public class JDBCDishesDao implements DishesDao {
             pstmt.setString(k++, entity.getNameEn());
             pstmt.setString(k++, entity.getNameUa());
             pstmt.setBigDecimal(k++, entity.getPrice());
+            pstmt.setTimestamp(k++, Timestamp.valueOf(LocalDateTime.now()));
             pstmt.setLong(k, entity.getId());
 
             pstmt.executeUpdate();
