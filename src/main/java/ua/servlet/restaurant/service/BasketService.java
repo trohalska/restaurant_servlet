@@ -2,7 +2,7 @@ package ua.servlet.restaurant.service;
 
 import ua.servlet.restaurant.dao.BasketsDao;
 import ua.servlet.restaurant.dao.DBException;
-import ua.servlet.restaurant.dao.DaoFactory;;
+import ua.servlet.restaurant.dao.DaoFactory;
 import ua.servlet.restaurant.dao.entity.Baskets;
 import ua.servlet.restaurant.dao.entity.Dishes;
 import ua.servlet.restaurant.dao.entity.Logins;

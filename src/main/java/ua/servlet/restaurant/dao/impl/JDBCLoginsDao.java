@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.LoginsDao;
-import ua.servlet.restaurant.dao.entity.Dishes;
 import ua.servlet.restaurant.dao.mapper.LoginsMapper;
 import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.entity.RoleType;

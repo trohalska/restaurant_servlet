@@ -44,7 +44,7 @@ After delivery and receipt of payment, the manager transfers the status of the o
    exit;
    ```
     
-    - write postgresql password (for root) in ```application.properties``` (src/main/resources/application.properties) as ```connection.pass``` fields.
+    - write postgresql password (for root) in ```application.properties``` (src/main/resources/application.properties) as ```connection.pass``` field.
 
     - create database tables from ```data.sql``` file.
 

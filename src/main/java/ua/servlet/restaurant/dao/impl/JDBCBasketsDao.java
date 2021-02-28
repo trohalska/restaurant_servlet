@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.BasketsDao;
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.entity.Baskets;
-import ua.servlet.restaurant.dao.entity.Logins;
 import ua.servlet.restaurant.dao.mapper.BasketsMapper;
 import ua.servlet.restaurant.utils.Prop;
 
@@ -54,7 +53,7 @@ public class JDBCBasketsDao implements BasketsDao {
     @Deprecated
     @Override
     public Optional<List<Baskets>> findAll() {
-        return null;
+        return Optional.empty();
     }
 
     /**
@@ -87,11 +86,6 @@ public class JDBCBasketsDao implements BasketsDao {
     @Deprecated
     @Override
     public void update(Baskets entity) { }
-
-    /**
-     * Delete item from basket
-     * @param id id deleted item
-     */
 
     /**
      * Delete item from basket by dish id and user id.

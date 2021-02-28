@@ -5,9 +5,7 @@ import org.apache.logging.log4j.Logger;
 import ua.servlet.restaurant.dao.CategoriesDao;
 import ua.servlet.restaurant.dao.DBException;
 import ua.servlet.restaurant.dao.entity.Categories;
-import ua.servlet.restaurant.dao.entity.Dishes;
 import ua.servlet.restaurant.dao.mapper.CategoriesMapper;
-import ua.servlet.restaurant.dao.mapper.DishesMapper;
 import ua.servlet.restaurant.utils.Prop;
 
 import java.sql.Connection;

@@ -59,7 +59,7 @@ public class Servlet extends HttpServlet {
 
         String path = request.getRequestURI();
         logger.info(path);
-        path = path.replaceAll(".*/app/" , ""); // .*/app/((manager|customer)/)?
+        path = path.replaceAll(".*/app/" , "");
         logger.info(path);
 
         Command command = commands.getOrDefault(path, (r)->"/index.jsp");
