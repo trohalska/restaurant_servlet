@@ -14,8 +14,10 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class JDBCLoginsDao implements LoginsDao {
-    Logger log = LogManager.getLogger(JDBCLoginsDao.class);
+    // todo loggers - private static final everywhere
+    private static final Logger log = LogManager.getLogger(JDBCLoginsDao.class);
     private final Connection connection;
+    // todo make factory for returning connection (NOT create classes with all functions)
     public JDBCLoginsDao(Connection connection) {
         this.connection = connection;
     }
@@ -26,6 +28,7 @@ public class JDBCLoginsDao implements LoginsDao {
      * @return login
      * @throws DBException if cannot create
      */
+    // todo return login (NOT return optional if there are no nulls)
     @Override
     public Optional<Logins> create(Logins entity) throws DBException {
         ResultSet rs;
@@ -33,12 +36,14 @@ public class JDBCLoginsDao implements LoginsDao {
         final String query = Prop.getDBProperty("create.user");
         try (PreparedStatement pstmt =
                      connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            int k = 1;
-            pstmt.setString(k++, entity.getLogin());
-            pstmt.setString(k++, entity.getEmail());
-            pstmt.setString(k++, entity.getPassword());
-            pstmt.setString(k++, RoleType.ROLE_CUSTOMER.name());
-            pstmt.setTimestamp(k, Timestamp.valueOf(LocalDateTime.now()));
+
+            // todo do not use k++ anywhere
+            // todo close to finally or try with resources
+            pstmt.setString(1, entity.getLogin());
+            pstmt.setString(2, entity.getEmail());
+            pstmt.setString(3, entity.getPassword());
+            pstmt.setString(4, RoleType.ROLE_CUSTOMER.name());
+            pstmt.setTimestamp(5, Timestamp.valueOf(LocalDateTime.now()));
 
             if (pstmt.executeUpdate() > 0) {
                 rs = pstmt.getGeneratedKeys();
@@ -91,16 +96,16 @@ public class JDBCLoginsDao implements LoginsDao {
     public Optional<List<Logins>> findAll() throws DBException {
         Map<Long, Logins> users = new HashMap<>();
 
+        // todo close to finally or make try with resources
         final String query = Prop.getDBProperty("select.all.logins");
-        try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery(query);
+        try (Statement st = connection.createStatement();
+             ResultSet rs = st.executeQuery(query)) {
 
             LoginsMapper loginsMapper = new LoginsMapper();
             while (rs.next()) {
                 Logins login = loginsMapper.extractFromResultSet(rs);
                 loginsMapper.makeUnique(users, login);
             }
-            rs.close();
             List<Logins> list = new ArrayList<>(users.values());
             return list.isEmpty() ? Optional.empty() : Optional.of(list);
         } catch (SQLException e) {

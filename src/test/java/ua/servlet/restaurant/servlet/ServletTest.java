@@ -2,8 +2,10 @@ package ua.servlet.restaurant.servlet;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import ua.servlet.restaurant.utils.PropUtil;
 
 import static org.mockito.Mockito.*;
@@ -18,6 +20,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashSet;
 
+// todo test on test DB not real one
+@RunWith(MockitoJUnitRunner.class)
 public class ServletTest {
     @Mock
     HttpServletRequest request;
@@ -36,7 +40,6 @@ public class ServletTest {
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
         servlet = new Servlet();
         when(servletConfig.getServletContext()).thenReturn(servletContext);
         servlet.init(servletConfig);
@@ -58,8 +61,7 @@ public class ServletTest {
         servlet.init(servletConfig);
         servlet.doPost(request, response);
 
-        verify(response, times(1)).sendRedirect("app/customer/");
-        verify(request, times(5)).getSession();
+        verify(response).sendRedirect("app/customer/");
     }
 
     @Test

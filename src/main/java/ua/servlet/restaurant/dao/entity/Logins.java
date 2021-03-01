@@ -16,6 +16,9 @@ public class Logins {
 
     public Logins() {}
 
+    // todo delete constructors if they not necessary
+    // todo use builders if there are more than tree fields
+
     public Logins(Long id, String login, String password,
                   String email, RoleType role, LocalDateTime time) {
         this.id = id;

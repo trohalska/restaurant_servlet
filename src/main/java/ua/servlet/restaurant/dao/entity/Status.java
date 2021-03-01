@@ -1,5 +1,6 @@
 package ua.servlet.restaurant.dao.entity;
 
+// todo make it table in DB
 public enum Status {
     NEW,
     PAYED,
