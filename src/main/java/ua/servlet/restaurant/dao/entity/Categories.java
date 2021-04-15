@@ -5,14 +5,6 @@ public class Categories {
     private String categoryEn;
     private String categoryUa;
 
-    public Categories() {}
-
-    public Categories(Long id, String categoryEn, String categoryUa) {
-        this.id = id;
-        this.categoryEn = categoryEn;
-        this.categoryUa = categoryUa;
-    }
-
     public Long getId() {
         return id;
     }

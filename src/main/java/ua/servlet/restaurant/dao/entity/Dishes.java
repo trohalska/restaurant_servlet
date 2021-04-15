@@ -11,18 +11,6 @@ public class Dishes {
     private Categories categories;
     private LocalDateTime time;
 
-    public Dishes() {}
-
-    public Dishes(Long id, String nameEn, String nameUa,
-                  BigDecimal price, Categories categories, LocalDateTime time) {
-        this.id = id;
-        this.nameEn = nameEn;
-        this.nameUa = nameUa;
-        this.price = price;
-        this.categories = categories;
-        this.time = time;
-    }
-
     public Long getId() {
         return id;
     }

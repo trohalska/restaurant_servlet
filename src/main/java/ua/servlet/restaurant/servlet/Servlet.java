@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class Servlet extends HttpServlet {
-    Logger logger = LogManager.getLogger(Command.class);
+    private static final Logger logger = LogManager.getLogger(Command.class);
     private final Map<String, Command> commands = new HashMap<>();
 
     public void init(ServletConfig servletConfig){

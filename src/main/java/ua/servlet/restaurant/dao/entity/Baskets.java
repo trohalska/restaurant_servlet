@@ -5,13 +5,6 @@ public class Baskets {
     private Dishes dish;
     private Logins login;
 
-    public Baskets() {}
-    public Baskets(Long id, Dishes dish, Logins login) {
-        this.id = id;
-        this.dish = dish;
-        this.login = login;
-    }
-
     public Long getId() {
         return id;
     }

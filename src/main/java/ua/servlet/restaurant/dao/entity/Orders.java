@@ -10,15 +10,6 @@ public class Orders {
     private BigDecimal totalPrice;
     private Logins login;
 
-    public Orders() {}
-    public Orders(Long id, Status status, LocalDateTime time, BigDecimal totalPrice, Logins login) {
-        this.id = id;
-        this.status = status;
-        this.time = time;
-        this.totalPrice = totalPrice;
-        this.login = login;
-    }
-
     public Long getId() {
         return id;
     }

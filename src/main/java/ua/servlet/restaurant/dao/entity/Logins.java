@@ -14,21 +14,6 @@ public class Logins {
     private RoleType role;
     private LocalDateTime time;
 
-    public Logins() {}
-
-    // todo delete constructors if they not necessary
-    // todo use builders if there are more than tree fields
-
-    public Logins(Long id, String login, String password,
-                  String email, RoleType role, LocalDateTime time) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.role = role;
-        this.time = time;
-    }
-
     public Long getId() {
         return id;
     }
@@ -102,9 +87,7 @@ public class Logins {
     }
 
     public class Builder {
-        private Builder() {
-            // private constructor
-        }
+        private Builder() {}
         public Builder id(Long userId) {
             Logins.this.id = userId;
             return this;
